@@ -79,7 +79,7 @@ A new family is named `aarch64-<family>` (e.g. `aarch64-qualcomm`, `aarch64-n1x`
 Ask a helper; don't read `uname -m` or the device tree in feature code:
 
 - `omarchy-hw-x86` / `omarchy-hw-aarch64` - the CPU architecture. Use them for binary and ABI availability: a package with no aarch64 build, an x86 guest VM, multilib.
-- `omarchy-hw-aarch64-apple`, `omarchy-hw-aarch64-qualcomm`, `omarchy-hw-aarch64-n1x`, `omarchy-hw-aarch64-gb10` (one per family) - built on `omarchy-hw-platform`, image-build aware. Use them for hardware behaviour that the whole family shares; a single model's quirks stay behind `omarchy-hw-match` on its DMI name. `omarchy-hw-apple-silicon` and `omarchy-hw-n1x` are hidden aliases kept for the omarchy-mac packages and older N1x images; don't use them in new code.
+- `omarchy-hw-aarch64-apple`, `omarchy-hw-aarch64-qualcomm`, `omarchy-hw-aarch64-n1x`, `omarchy-hw-aarch64-gb10` (one per family) - built on `omarchy-hw-platform`, image-build aware. Use them for hardware behaviour that the whole family shares; a single model's quirks stay behind `omarchy-hw-match` on its DMI name, or behind `omarchy-hw-match-device-tree` on its device-tree compatible string where models share a DMI name. `omarchy-hw-apple-silicon` and `omarchy-hw-n1x` are hidden aliases kept for the omarchy-mac packages and older N1x images; don't use them in new code.
 
 Where platform code lives:
 
