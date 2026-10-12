@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=DecentralChain Node
-Comment=Set up and monitor this computer's DecentralChain node
-Exec=decentralos-node
-Terminal=true
+Comment=See how this computer's DecentralChain node is doing
+Exec=decentralos-node open
+Terminal=false
 Icon=network-server
 Categories=System;Network;

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# A node appliance has to come back by itself after a power cut, so sign the
+# owner in automatically at every boot. Create /etc/decentralos/no-autologin
+# to turn this off.
+
+[[ -f /etc/decentralos/no-autologin ]] && exit 0
+user=$(getent passwd 1000 | cut -d: -f1)
+[[ -n $user ]] || exit 0
+
+mkdir -p /etc/sddm.conf.d
+printf '[Autologin]\nUser=%s\nSession=omarchy.desktop\n' "$user" >/etc/sddm.conf.d/autologin.conf

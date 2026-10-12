@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Install a newer DecentralChain node when one is published. Only this one
+# package is touched, from the DecentralOS repository alone, so an unattended
+# run can never start a full system upgrade.
+
+set -euo pipefail
+
+pkg=decentralchain-node
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+mkdir -p "$work/db/local"
+cat >"$work/pacman.conf" <<CONF
+[options]
+Architecture = auto
+
+[decentralos]
+SigLevel = Optional TrustAll
+Server = https://github.com/Decentral-America/DecentralOS/releases/download/packages
+CONF
+
+pacman --config "$work/pacman.conf" --dbpath "$work/db" --disable-sandbox -Sy >/dev/null
+read -r new url < <(pacman --config "$work/pacman.conf" --dbpath "$work/db" -Spdd --print-format '%v %l' "$pkg")
+current=$(pacman -Q "$pkg" | cut -d' ' -f2)
+
+if (($(vercmp "$new" "$current") > 0)); then
+  echo "Updating $pkg $current -> $new"
+  pacman -U --noconfirm "$url"
+else
+  echo "$pkg $current is up to date"
+fi

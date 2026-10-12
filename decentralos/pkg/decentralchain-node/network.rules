@@ -1,0 +1,6 @@
+// Lets the dashboard join a Wi-Fi network the owner picks on the box's own screen.
+polkit.addRule(function(action, subject) {
+  if (action.id.indexOf("org.freedesktop.NetworkManager.") === 0 && subject.user === "decentralchain") {
+    return polkit.Result.YES;
+  }
+});

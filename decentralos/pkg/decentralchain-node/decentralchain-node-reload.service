@@ -1,0 +1,6 @@
+[Unit]
+Description=Apply new DecentralChain node configuration
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl restart decentralchain-node.service

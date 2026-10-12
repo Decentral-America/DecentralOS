@@ -1,0 +1,18 @@
+[Unit]
+Description=DecentralOS node dashboard
+After=network.target
+
+[Service]
+User=decentralchain
+Group=decentralchain
+ExecStart=/usr/bin/python3 /usr/share/decentralos/dashboard/server.py
+Restart=always
+RestartSec=3
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/etc/decentralchain /var/lib/decentralchain
+
+[Install]
+WantedBy=multi-user.target

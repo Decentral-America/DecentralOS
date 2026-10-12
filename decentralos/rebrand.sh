@@ -18,16 +18,16 @@ git grep -lIz -e 'Omarchy' -e 'OMARCHY INSTALL LOG' -e 'Linux by DHH' -- . ':!de
 cp -r decentralos/overlay/. .
 
 # Ship the DecentralChain node: make our package repository known to pacman and
-# add the node to the default package set.
+# add the node to the default package set. Our repository goes first, so the
+# DecentralOS builds of the OS packages win over upstream's on every update.
 for conf in $(git ls-files 'default/pacman/**pacman*.conf'); do
-  grep -q '^\[decentralos\]' "$conf" || cat >>"$conf" <<'REPO'
-
-[decentralos]
-SigLevel = Optional TrustAll
-Server = https://github.com/Decentral-America/DecentralOS/releases/download/packages
-REPO
+  grep -q '^\[decentralos\]' "$conf" && continue
+  perl -0pi -e 's/^\[omarchy\]/[decentralos]\nSigLevel = Optional TrustAll\nServer = https:\/\/github.com\/Decentral-America\/DecentralOS\/releases\/download\/packages\n\n[omarchy]/m' "$conf"
 done
 grep -qx 'decentralchain-node' install/omarchy-base.packages || echo 'decentralchain-node' >>install/omarchy-base.packages
+
+# A node appliance shows its dashboard all day: never blank or lock the screen.
+perl -pi -e 's/"screensaver": 150/"screensaver": 0/; s/"lock": 300/"lock": 0/' config/omarchy/shell.json
 
 # DecentralOS ships on appliances whose owner plugs in their own keyboard and
 # mouse after install, so USB approval stays off unless they turn it on in

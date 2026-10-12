@@ -1,42 +1,18 @@
 #!/bin/bash
 
-# Set up and monitor this computer's DecentralChain node.
-# Usage: decentralos-node [setup|status|logs|seed|bar]
-# With no argument: runs setup on an unconfigured machine, status otherwise.
+# Check on this computer's DecentralChain node from a terminal. The owner's
+# everyday view is the dashboard (decentralos-node open); this is for support.
+# Usage: decentralos-node [open|status|logs|seed|bar]
 
 set -euo pipefail
 
-CONF_DIR=/etc/decentralchain
-CONF=$CONF_DIR/dcc.conf
-API_KEY_FILE=$CONF_DIR/api-key
+CONF=/etc/decentralchain/dcc.conf
+API_KEY_FILE=/etc/decentralchain/api-key
 SERVICE=decentralchain-node.service
 API=http://127.0.0.1:6869
-SHARE=/usr/share/decentralchain
+DASHBOARD=http://127.0.0.1:6870/
 
-declare -A P2P_PORT=([mainnet]=6868 [testnet]=6863)
-
-say() { gum style --margin "1 2" "$@"; }
-title() { gum style --margin "1 2" --bold --border rounded --padding "0 2" "$@"; }
 api() { curl -fsS --max-time 5 "$API$1" "${@:2}"; }
-
-base58() {
-  python3 -c '
-import sys
-a = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-b = sys.stdin.buffer.read().rstrip(b"\n")
-n, s = int.from_bytes(b, "big"), ""
-while n:
-    n, r = divmod(n, 58)
-    s = a[r] + s
-print("1" * (len(b) - len(b.lstrip(b"\0"))) + s)'
-}
-
-new_phrase() {
-  python3 -c '
-import secrets, sys
-words = open(sys.argv[1]).read().split()
-print(" ".join(secrets.choice(words) for _ in range(15)))' "$SHARE/seed-words.txt"
-}
 
 unbase58() {
   python3 -c '
@@ -48,180 +24,29 @@ for c in sys.stdin.read().strip():
 print(n.to_bytes((n.bit_length() + 7) // 8, "big").decode(errors="replace"))'
 }
 
-wait_for_api() {
-  local i
-  for ((i = 0; i < 90; i++)); do
-    api /node/status >/dev/null 2>&1 && return 0
-    sleep 2
-  done
-  return 1
-}
-export -f wait_for_api api
-export API
-
-write_conf() {
-  local tmp
-  tmp=$(mktemp)
-  cat >"$tmp" <<EOF
-# Written by decentralos-node setup. Re-run it to change these settings.
-# The chain itself (genesis, peers, protocol settings) comes from the packaged file.
-include file("$SHARE/conf/$network.conf")
-
-dcc {
-  network.node-name = "$node_name"
-
-  wallet {
-    password = "$wallet_password"
-    seed = "$seed"
-  }
-
-  rest-api {
-    enable = yes
-    bind-address = "127.0.0.1"
-    port = 6869
-    api-key-hash = "$api_key_hash"
-  }
-
-  miner.enable = $mining
-}
-EOF
-  sudo install -m 640 -o root -g decentralchain "$tmp" "$CONF"
-  rm -f "$tmp"
-}
-
-setup() {
-  if [[ -f $CONF ]]; then
-    say "This node is already set up."
-    say "Reconfiguring replaces this node's wallet. Make sure its seed phrase is"       "written down first (decentralos-node seed), or its funds are lost."
-    gum confirm --default=false "Reconfigure and replace the wallet?" || return 0
-  fi
-
-  title "Welcome to your DecentralChain node"
-  say "This computer is about to join the DecentralChain network." \
-    "" \
-    "A node keeps a full copy of the blockchain, checks every block and" \
-    "transaction, and relays them to other nodes. With enough DCC staked" \
-    "it can also generate blocks and earn rewards." \
-    "" \
-    "Setup takes about two minutes. After that the node downloads the" \
-    "blockchain in the background, which can take hours on first run." \
-    "Keep this computer powered on and connected."
-  gum confirm "Ready to begin?" || return 130
-
-  say "You may be asked for your password so the node can be installed as a system service."
-  sudo -v
-
-  title "1/4  Network"
-  say "Mainnet is the real network with real DCC. Testnet is for experiments."
-  network=$(gum choose --selected=mainnet mainnet testnet)
-
-  title "2/4  Node name"
-  say "A public nickname other nodes see. Letters, numbers, spaces and dashes."
-  node_name=$(gum input --value "$(hostnamectl hostname 2>/dev/null || echo decentralos)" --char-limit 40 | tr -cd 'A-Za-z0-9 _-')
-  node_name=${node_name:-DecentralOS node}
-
-  title "3/4  Wallet"
-  say "The node needs a wallet. Its address receives block rewards and is" \
-    "where DCC is leased to. A wallet is defined by its secret seed:" \
-    "whoever has the seed controls the funds."
-  if [[ $(gum choose "Create a new wallet for me" "Import a seed phrase I already have") == Import* ]]; then
-    phrase=$(gum input --password --placeholder "Seed phrase" --width 100)
-    [[ -n $phrase ]] || { say "No seed phrase entered."; return 1; }
-  else
-    phrase=$(new_phrase)
-    title "Your new wallet's seed phrase"
-    say "These 15 words ARE the wallet. They are the only way to recover it if"       "this computer dies, and anyone who has them can take its funds."       "Write them down on paper, in order, and keep them somewhere safe."       "They also open this wallet in the DecentralChain wallet apps."
-    gum style --margin "0 2" --border double --padding "1 2" --width 60 "$phrase"
-    if command -v wl-copy >/dev/null && gum confirm --default=false "Also copy it to the clipboard?"; then
-      printf '%s' "$phrase" | wl-copy
-      say "Copied. Paste it somewhere safe, then clear your clipboard."
-    fi
-    until gum confirm --default=false "I have saved the seed phrase"; do :; done
-    command -v wl-copy >/dev/null && wl-copy --clear || true
-    clear
-  fi
-  seed=$(printf '%s' "$phrase" | base58)
-  unset phrase
-  sudo rm -f /var/lib/decentralchain/wallet/wallet.dat
-
-  title "4/4  Block generation"
-  say "Generating blocks earns rewards but needs at least 1000 DCC held or" \
-    "leased to this node's address. It is safe to leave on: the node simply" \
-    "waits until the balance is there."
-  mining=yes
-  gum confirm "Enable block generation?" || mining=no
-
-  wallet_password=$(openssl rand -hex 24)
-  api_key=$(openssl rand -hex 24)
-  api_key_hash=""
-
-  # First start without an API key hash: the node itself computes the hash.
-  write_conf
-  printf '%s\n' "$api_key" | sudo install -m 640 -o root -g decentralchain /dev/stdin "$API_KEY_FILE"
-
-  if command -v ufw >/dev/null && sudo ufw status | grep -q "Status: active"; then
-    sudo ufw allow "${P2P_PORT[$network]}/tcp" comment "DecentralChain P2P" >/dev/null
-  fi
-
-  sudo systemctl enable "$SERVICE" >/dev/null 2>&1
-  sudo systemctl restart "$SERVICE"
-  if ! gum spin --title "Starting the node..." -- bash -c wait_for_api; then
-    say "The node did not start. Run 'decentralos-node logs' to see why."
-    return 1
-  fi
-
-  api_key_hash=$(api /utils/hash/secure -X POST -H 'Content-Type: text/plain' -d "$api_key" | jq -r .hash)
-  write_conf
-  sudo systemctl restart "$SERVICE"
-  gum spin --title "Securing the node's API..." -- bash -c 'sleep 5; wait_for_api' || true
-
-  address=$(api /addresses | jq -r '.[0] // empty' || true)
-
-  title "Your node is running"
-  say "Address:  ${address:-unavailable, check 'decentralos-node status'}" \
-    "Network:  $network" \
-    "" \
-    "It is now syncing the blockchain and starts automatically on every boot." \
-    "Open 'DecentralChain Node' from the app launcher any time to check on it." \
-    "" \
-    "For other nodes to reach yours, forward TCP port ${P2P_PORT[$network]} on your" \
-    "router to this computer. The node works without it, with fewer peers."
-  gum confirm "Show live status now?" && status
+open_dashboard() {
+  systemctl --user start decentralos-kiosk.service 2>/dev/null || xdg-open "$DASHBOARD"
 }
 
 status() {
   if [[ ! -f $CONF ]]; then
-    say "The node is not set up yet. Run: decentralos-node setup"
+    echo "The node is not set up yet. Open the dashboard to start it: decentralos-node open"
     return 1
   fi
-  while true; do
-    state=$(systemctl is-active "$SERVICE" || true)
-    height=$(api /node/status 2>/dev/null | jq -r .blockchainHeight || true)
-    peers=$(api /peers/connected 2>/dev/null | jq -r '.peers | length' || true)
-    last=$(api /blocks/headers/last 2>/dev/null | jq -r .timestamp || true)
-    address=$(api /addresses 2>/dev/null | jq -r '.[0] // empty' || true)
-
-    sync="waiting for the node"
-    if [[ $last =~ ^[0-9]+$ ]]; then
-      behind=$(($(date +%s) - last / 1000))
-      if ((behind < 180)); then
-        sync="in sync"
-      else
-        sync="syncing, $((behind / 86400))d $((behind % 86400 / 3600))h of history left"
-      fi
-    fi
-
-    clear
-    title "DecentralChain Node"
-    say "Service:  $state" \
-      "Sync:     $sync" \
-      "Height:   ${height:--}" \
-      "Peers:    ${peers:--}" \
-      "Address:  ${address:--}" \
-      "" \
-      "Ctrl+C to close. The node keeps running in the background."
-    sleep 5
-  done
+  local height peers last behind sync
+  height=$(api /node/status 2>/dev/null | jq -r .blockchainHeight || true)
+  peers=$(api /peers/connected 2>/dev/null | jq -r '.peers | length' || true)
+  last=$(api /blocks/headers/last 2>/dev/null | jq -r .timestamp || true)
+  sync="waiting for the node"
+  if [[ $last =~ ^[0-9]+$ ]]; then
+    behind=$(($(date +%s) - last / 1000))
+    if ((behind < 180)); then sync="in sync"; else sync="syncing, $((behind / 86400))d $((behind % 86400 / 3600))h behind"; fi
+  fi
+  echo "Service:  $(systemctl is-active "$SERVICE" || true)"
+  echo "Sync:     $sync"
+  echo "Height:   ${height:--}"
+  echo "Peers:    ${peers:--}"
+  echo "Address:  $(api /addresses 2>/dev/null | jq -r '.[0] // "-"' || echo -)"
 }
 
 # One line of JSON for the bar widget. Short timeouts: it is polled every few seconds.
@@ -239,18 +64,18 @@ bar_status() {
   last=$(curl -fsS --max-time 2 "$API/blocks/headers/last" 2>/dev/null | jq -r .timestamp || echo 0)
   behind=$(($(date +%s) - ${last:-0} / 1000))
   ((behind < 180)) && state=synced
-  jq -cn --arg state "$state" --argjson height "$height" --argjson peers "${peers:-0}" --argjson behind "$behind"     '{state: $state, height: $height, peers: $peers, behind: $behind}'
+  jq -cn --arg state "$state" --argjson height "$height" --argjson peers "${peers:-0}" --argjson behind "$behind" '{state: $state, height: $height, peers: $peers, behind: $behind}'
 }
 
 case "${1:-}" in
-  setup) setup ;;
-  bar) bar_status ;;
+  open | setup) open_dashboard ;;
   status) status ;;
   logs) journalctl -u "$SERVICE" -f -n 200 ;;
   seed) api /wallet/seed -H "X-API-Key: $(sudo cat "$API_KEY_FILE")" | jq -r .seed | unbase58 ;;
-  "") if [[ -f $CONF ]]; then status; else setup; fi ;;
+  bar) bar_status ;;
+  "") if [[ -n ${WAYLAND_DISPLAY:-} ]]; then open_dashboard; else status; fi ;;
   *)
-    echo "Usage: decentralos-node [setup|status|logs|seed]" >&2
+    echo "Usage: decentralos-node [open|status|logs|seed|bar]" >&2
     exit 1
     ;;
 esac
