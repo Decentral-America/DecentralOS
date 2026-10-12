@@ -1,0 +1,41 @@
+name: DecentralOS packages
+
+# Builds decentralos/pkg into a pacman repository and publishes it as the
+# assets of the `packages` release, which is what the [decentralos] pacman
+# repository on every DecentralOS machine points at.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['decentralos/pkg/**']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install build tools
+        run: |
+          pacman -Syu --noconfirm --needed base-devel git sudo github-cli
+          useradd -m build
+          echo "build ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/build
+      - uses: actions/checkout@v4
+      - name: Build packages
+        run: |
+          cp -r decentralos/pkg /home/build/pkg
+          chown -R build /home/build/pkg
+          sudo -u build bash /home/build/pkg/build-repo.sh /home/build/repo
+      - name: Publish repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd /home/build/repo
+          # Release assets can't be symlinks; pacman asks for decentralos.db.
+          for f in decentralos.db decentralos.files; do cp --remove-destination "$(readlink -f $f)" $f; done
+          gh release view packages -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 ||
+            gh release create packages -R "$GITHUB_REPOSITORY" --title "Package repository" --notes "pacman repository for DecentralOS. Not a versioned release."
+          gh release upload packages -R "$GITHUB_REPOSITORY" --clobber decentralos.db decentralos.files *.pkg.tar.zst
