@@ -1,9 +1,9 @@
-# Omarchy Icon Font
+# DecentralOS Icon Font
 
 Read this before adding a branded glyph to `default/fonts/omarchy/omarchy.ttf`.
 
-The Omarchy icon font is a small private-use font carrying the marks Nerd
-Fonts does not have: the Omarchy logo and the agent and app brand marks. The
+The DecentralOS icon font is a small private-use font carrying the marks Nerd
+Fonts does not have: the DecentralOS logo and the agent and app brand marks. The
 menu draws one by naming the font on an entry:
 
 ```jsonc

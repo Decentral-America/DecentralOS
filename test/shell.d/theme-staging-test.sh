@@ -103,14 +103,14 @@ assert_staged btop.theme "the theme's btop colours are staged"
 grep -q 'main_bg' "$(staged btop.theme)" || fail "the staged btop.theme is the theme's"
 assert_not_staged .git "the clone's own git directory is never staged"
 
-# These run code, so the theme's versions must lose to Omarchy's generated ones
+# These run code, so the theme's versions must lose to DecentralOS's generated ones
 # rather than merely be absent.
 for generated in hyprland.lua neovim.lua gum_env.lua kitty.conf alacritty.toml foot.ini ghostty.conf; do
-  assert_staged "$generated" "$generated is generated from Omarchy's template"
+  assert_staged "$generated" "$generated is generated from DecentralOS's template"
   assert_no_marker "$generated" "an installed theme cannot supply $generated"
 done
 
-# Colour is kept, including a file Omarchy would otherwise have generated.
+# Colour is kept, including a file DecentralOS would otherwise have generated.
 assert_staged shell.toml "shell.toml is staged"
 grep -q '000000' "$(staged shell.toml)" || fail "an installed theme's shell.toml colours are kept"
 
@@ -225,4 +225,4 @@ for tpl in "$ROOT"/default/themed/*.tpl; do
       "$generated has a template but is in neither list in $(basename "$0"); decide whether an installed theme may ship it"
 done
 
-pass "every file Omarchy generates is classified as code or colour"
+pass "every file DecentralOS generates is classified as code or colour"

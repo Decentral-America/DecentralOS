@@ -10,7 +10,7 @@
 # the user owns, which `openclaw update` and the Control UI's Update button
 # replace in place. A copy in /usr belongs to pacman, and upstream's updater
 # refuses to touch it. The openclaw package is therefore the seed rather than
-# the runtime: the release Omarchy ships and the installer that came with it.
+# the runtime: the release DecentralOS ships and the installer that came with it.
 # The CLI, the gateway service and the Install > AI web app all run this copy.
 #
 # Each mode is named outright, like omarchy-install-hermes-cli: the default
@@ -26,7 +26,7 @@ if (( EUID == 0 )); then
   exit 1
 fi
 
-# Omarchy's OpenClaw is the default one, in ~/.openclaw with the default unit,
+# DecentralOS's OpenClaw is the default one, in ~/.openclaw with the default unit,
 # whatever another profile, unit or state directory a shell selects; a service
 # installed from here would otherwise carry that selection.
 unset OPENCLAW_PROFILE OPENCLAW_SYSTEMD_UNIT OPENCLAW_WRAPPER OPENCLAW_HOME OPENCLAW_STATE_DIR OPENCLAW_CONFIG_PATH
@@ -44,14 +44,14 @@ runtime_runs() {
 }
 
 # The name on PATH is a link to the runtime's command. A link already aimed
-# there, even one left dangling by a removed runtime, is Omarchy's to rewrite;
+# there, even one left dangling by a removed runtime, is DecentralOS's to rewrite;
 # anything else at the path is the user's.
 command_ours() {
   [[ ! -e $command_path && ! -L $command_path ]] || [[ $(readlink -- "$command_path") == "$runtime_command" ]]
 }
 
 # What omarchy-agent, the web app and a terminal run is whichever openclaw is
-# first on PATH, and Omarchy puts /usr/bin and the mise shims ahead of
+# first on PATH, and DecentralOS puts /usr/bin and the mise shims ahead of
 # ~/.local/bin, so the command has to resolve to the runtime from there.
 on_path() {
   local found
@@ -197,11 +197,11 @@ esac
 # Refused before anything is installed or touched: the command's name, what
 # PATH finds, and a gateway running another OpenClaw all have to be clear.
 if ! command_ours; then
-  echo "$command_path is not the OpenClaw Omarchy set up. Move it aside, then run omarchy-install-openclaw-cli --now again." >&2
+  echo "$command_path is not the OpenClaw DecentralOS set up. Move it aside, then run omarchy-install-openclaw-cli --now again." >&2
   exit 1
 fi
 if ! path_clear; then
-  echo "'openclaw' on PATH is $(type -P openclaw), which is what Omarchy would run instead of $runtime_command." >&2
+  echo "'openclaw' on PATH is $(type -P openclaw), which is what DecentralOS would run instead of $runtime_command." >&2
   echo "Remove it or reorder PATH, then run omarchy-install-openclaw-cli --now again." >&2
   exit 1
 fi
@@ -265,7 +265,7 @@ ln -sfn "$runtime_command" "$command_path"
 rehome_services
 
 if ! on_path; then
-  echo "$runtime_command is ready, but 'openclaw' on PATH is $(type -P openclaw || echo missing), which is what Omarchy runs." >&2
+  echo "$runtime_command is ready, but 'openclaw' on PATH is $(type -P openclaw || echo missing), which is what DecentralOS runs." >&2
   echo "Put ~/.local/bin on PATH, then run omarchy-install-openclaw-cli --now again." >&2
   exit 1
 fi

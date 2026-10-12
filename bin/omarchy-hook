@@ -12,7 +12,7 @@ fi
 
 HOOK=$1
 
-# Hook names are fixed labels chosen by Omarchy code (post-update, theme-set,
+# Hook names are fixed labels chosen by DecentralOS code (post-update, theme-set,
 # font-set). The name becomes a filename under the hooks directory. A slash
 # would turn it into directory levels, and a bare `.` or `..` would point bash
 # at the directory itself or its parent. Refuse those rather than follow them.

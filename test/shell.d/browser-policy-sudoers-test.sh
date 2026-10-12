@@ -66,7 +66,7 @@ SH
 chmod +x "$stub_bin/pkexec"
 
 # STUB_GRANTED empty stands for an install whose omarchy-settings predates the
-# sudoers file. The default is granted, matching a current Omarchy.
+# sudoers file. The default is granted, matching a current DecentralOS.
 cat >"$stub_bin/sudo" <<'SH'
 #!/bin/bash
 if [[ $1 == -n && $2 == -l ]]; then

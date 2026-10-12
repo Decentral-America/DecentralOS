@@ -12,7 +12,7 @@ IFS=: read -ra config_dirs <<<"${XDG_CONFIG_HOME:-$HOME/.config}:${XDG_CONFIG_DI
 IFS=: read -ra desktops <<<"${XDG_CURRENT_DESKTOP:-}"
 
 # Installed means the command of the entry the launchers will read, the first
-# one found, still resolves: an entry of Omarchy's own can outlive the browser
+# one found, still resolves: an entry of DecentralOS's own can outlive the browser
 # it launched.
 installed() {
   local data_dir command

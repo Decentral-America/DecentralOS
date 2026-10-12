@@ -3,7 +3,7 @@
   "id": "omarchy.reminders",
   "name": "Reminders",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Interactive reminder setup flow",
   "kinds": [
     "overlay"

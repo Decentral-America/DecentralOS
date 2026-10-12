@@ -3,7 +3,7 @@
   "id": "omarchy.spacer",
   "name": "Spacer",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Configurable blank space",
   "kinds": [
     "bar-widget"

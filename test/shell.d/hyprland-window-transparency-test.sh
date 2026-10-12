@@ -91,11 +91,11 @@ chmod u+w "$gtk_css"
 run omarchy-hyprland-window-transparency transparent
 pass "glassy GTK apps get a backdrop blur, and leaving glassy takes it out"
 
-# Opaque reaches the windows Omarchy makes transparent through their tag.
+# Opaque reaches the windows DecentralOS makes transparent through their tag.
 grep -qF 'tag = "+transparent-window"' "$ROOT/default/hypr/helpers.lua" || fail "transparent windows carry a tag"
 grep -qF 'o.window({ tag = "transparent-window" }, { opacity = "1 1" })' "$ROOT/default/hypr/toggles/window-opaque.lua" ||
   fail "opaque windows apply to the tagged windows"
-pass "opaque windows apply to the windows Omarchy makes transparent"
+pass "opaque windows apply to the windows DecentralOS makes transparent"
 
 # Terminals turn compositor blur down and fade their text with the window, so
 # glassy gives each theme terminal file a see-through, blurred background.

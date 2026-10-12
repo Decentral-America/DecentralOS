@@ -62,7 +62,7 @@ SH
 
 chmod +x "$mock_bin"/*
 
-# ~/.local/bin is on PATH the way Omarchy puts it there, after the mocks, so
+# ~/.local/bin is on PATH the way DecentralOS puts it there, after the mocks, so
 # `hermes` resolves to the command under test unless a test shadows it.
 run_installer() {
   OMARCHY_TEST_DESKTOP_INSTALLED="${OMARCHY_TEST_DESKTOP_INSTALLED:-0}" \
@@ -220,7 +220,7 @@ run_installer_bare_path() {
 OMARCHY_TEST_DESKTOP_INSTALLED=1 run_installer_bare_path --check || fail "--check from a PATH without ~/.local/bin still follows a finished install" "$(cat "$test_tmp/output")"
 pass "--check does not need ~/.local/bin on the caller's PATH"
 
-# What omarchy-agent runs is whichever hermes PATH finds first, and Omarchy
+# What omarchy-agent runs is whichever hermes PATH finds first, and DecentralOS
 # puts mise's shims ahead of ~/.local/bin. A command ahead of the one the probe
 # vets means the agent would run something else, so it is not installed, and
 # --now says what is in the way rather than reporting a Hermes that is not the
@@ -242,8 +242,8 @@ OMARCHY_TEST_MISE_BUILT=1 run_installer --retire-mise || fail "--retire-mise suc
 grep -qF "mise rm -g pipx:hermes-agent[extras=all]" "$mise_log" || fail "--retire-mise removes the global mise Hermes" "$(cat "$mise_log")"
 grep -qF "mise uninstall --all pipx:hermes-agent[extras=all]" "$mise_log" || fail "--retire-mise uninstalls the mise Hermes" "$(cat "$mise_log")"
 : >"$mise_log"
-run_installer --retire-mise || fail "--retire-mise succeeds with nothing of Omarchy's"
-[[ ! -s $mise_log ]] || fail "--retire-mise asks mise about an environment nothing proves Omarchy's" "$(cat "$mise_log")"
+run_installer --retire-mise || fail "--retire-mise succeeds with nothing of DecentralOS's"
+[[ ! -s $mise_log ]] || fail "--retire-mise asks mise about an environment nothing proves DecentralOS's" "$(cat "$mise_log")"
 pass "--retire-mise removes the wrapper and the environment it built, and only with proof"
 
 # A global tool whose name merely starts the same way is not the retired one;

@@ -3,9 +3,9 @@
   "id": "omarchy.tailscale",
   "name": "Tailscale",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "license": "MIT",
-  "description": "Tailscale status, connection switching, machine browsing, and quick copy actions in the Omarchy bar.",
+  "description": "Tailscale status, connection switching, machine browsing, and quick copy actions in the DecentralOS bar.",
   "kinds": [
     "bar-widget"
   ],

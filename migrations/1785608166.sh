@@ -1,7 +1,7 @@
 echo "Repair the pre-suspend lock monitor's graphical session environment"
 
 # The old unit started before UWSM finished importing OMARCHY_PATH and
-# WAYLAND_DISPLAY. A full unit retained from before Omarchy 4 also shadows the
+# WAYLAND_DISPLAY. A full unit retained from before DecentralOS 4 also shadows the
 # corrected package unit, so add the lifecycle constraints as a drop-in without
 # discarding any user customizations.
 user_config_home="${XDG_CONFIG_HOME:-$HOME/.config}"

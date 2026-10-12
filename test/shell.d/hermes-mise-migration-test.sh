@@ -74,7 +74,7 @@ rm -f "$test_tmp/usr-bin-without-mise/mise"
 
 # The real installer is on PATH: the migration asks it what to retire and
 # whether a Hermes still answers before telling the user how to get one back.
-# ~/.local/bin is on PATH the way Omarchy puts it there, after the mocks.
+# ~/.local/bin is on PATH the way DecentralOS puts it there, after the mocks.
 run_migration() {
   : >"$mise_log"
   rm -f "$mise_log.removed" "$mise_log.unrequested"
@@ -90,8 +90,8 @@ write_stub() {
 }
 
 write_stub
-OMARCHY_TEST_MISE_BUILT=1 run_migration || fail "the migration succeeds over the Omarchy wrapper" "$(cat "$test_tmp/output")"
-[[ ! -e $hermes ]] || fail "the migration removes the wrapper Omarchy wrote"
+OMARCHY_TEST_MISE_BUILT=1 run_migration || fail "the migration succeeds over the DecentralOS wrapper" "$(cat "$test_tmp/output")"
+[[ ! -e $hermes ]] || fail "the migration removes the wrapper DecentralOS wrote"
 grep -qxF "rm -g $tool" "$mise_log" || fail "the migration removes the global mise Hermes" "$(cat "$mise_log")"
 grep -qxF "uninstall --all $tool" "$mise_log" || fail "the migration uninstalls the mise Hermes" "$(cat "$mise_log")"
 pass "the migration retires the wrapper and the Hermes mise built"
@@ -103,11 +103,11 @@ run_migration || fail "the migration succeeds over a wrapper nobody ran"
 pass "a wrapper nobody ran goes without an uninstall"
 
 run_migration || fail "the migration succeeds with nothing to do"
-[[ ! -s $mise_log ]] || fail "with nothing of Omarchy's left, mise is not asked" "$(cat "$mise_log")"
+[[ ! -s $mise_log ]] || fail "with nothing of DecentralOS's left, mise is not asked" "$(cat "$mise_log")"
 pass "the migration is a no-op once the wrapper is gone"
 
 # Anyone else's hermes stays exactly where it is, is not run, and does not vouch
-# for a mise environment being Omarchy's.
+# for a mise environment being DecentralOS's.
 foreign_ran="$test_tmp/foreign-ran"
 foreign_body="#!/bin/bash
 touch $foreign_ran
@@ -144,7 +144,7 @@ run_migration || fail "the migration succeeds over a directory at the command's 
 rmdir "$hermes"
 pass "the migration leaves links and directories at the command's path alone"
 
-# Without the wrapper nothing proves a mise environment is Omarchy's, the app
+# Without the wrapper nothing proves a mise environment is DecentralOS's, the app
 # being installed included: a user who built the same spec keeps it.
 rm -f "$hermes"
 OMARCHY_TEST_DESKTOP_INSTALLED=1 OMARCHY_TEST_MISE_BUILT=1 run_migration || fail "the migration succeeds with the app installed and no wrapper"
@@ -203,7 +203,7 @@ printf '%s\n' "#!/bin/bash" "exec $test_home/.hermes/hermes-agent/venv/bin/pytho
 chmod +x "$hermes"
 runtime_command=$(cat "$hermes")
 OMARCHY_TEST_MISE_BUILT=1 run_migration || fail "the migration succeeds over a saved wrapper" "$(cat "$test_tmp/output")"
-grep -qxF "rm -g $tool" "$mise_log" || fail "a saved wrapper proves the environment Omarchy's" "$(cat "$mise_log")"
+grep -qxF "rm -g $tool" "$mise_log" || fail "a saved wrapper proves the environment DecentralOS's" "$(cat "$mise_log")"
 [[ ! -e $saved_dir/hermes && ! -d $saved_dir ]] || fail "the saved copy and its empty directory go once the environment is gone"
 [[ $(cat "$hermes") == "$runtime_command" ]] || fail "the runtime's command is left alone"
 pass "a wrapper saved aside by the runtime installer still retires the environment"

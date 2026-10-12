@@ -38,7 +38,7 @@ install_from_package() {
   mv -fT -- "$staged" "$config/$1"
 }
 
-# Only a transparency file still as Omarchy shipped it is replaced, so one the
+# Only a transparency file still as DecentralOS shipped it is replaced, so one the
 # user changed is kept.
 if [[ -f $config/${files[0]} ]]; then
   case $(sha256sum <"$config/${files[0]}") in

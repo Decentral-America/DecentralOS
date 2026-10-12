@@ -13,7 +13,7 @@ as_root() {
 command -v snapper >/dev/null || exit 0
 [[ -f $SNAPPER_CONFIG_PATH ]] || exit 0
 
-# Only clean up when timeline snapshotting is off, as Omarchy configures it.
+# Only clean up when timeline snapshotting is off, as DecentralOS configures it.
 # Anyone who deliberately turned it back on keeps their snapshots. Snapper's
 # own create-config leaves the file readable by root alone, and a config this
 # user cannot read must not pass for one that wants its snapshots kept.

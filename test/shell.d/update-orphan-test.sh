@@ -45,7 +45,7 @@ write_stub sudo '"$@"'
 run_orphan_checker -y >"$test_tmp/approved.out" 2>"$test_tmp/approved.err"
 diff <(printf '%s\n' -Rns --noconfirm old-lib unused-tool) "$REMOVAL_LOG" ||
   fail "approved cleanup removes the orphan packages without pacman confirmation"
-pass "approved cleanup removes orphans without Omarchy or pacman confirmation"
+pass "approved cleanup removes orphans without DecentralOS or pacman confirmation"
 
 write_stub sudo 'exit 42'
 if run_orphan_checker -y >"$test_tmp/failure.out" 2>"$test_tmp/failure.err"; then

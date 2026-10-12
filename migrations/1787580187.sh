@@ -1,7 +1,7 @@
 echo "Move this install to the opt-in docker group default (the group is root-equivalent)"
 
 # The docker group grants passwordless root (a container can bind-mount / and
-# rewrite the host), so Omarchy no longer puts users in it by default. Bring
+# rewrite the host), so DecentralOS no longer puts users in it by default. Bring
 # existing installs in line: remove this user from the group if present. The
 # change applies after a reboot, so it stays reachable until then. Anyone who
 # wants passwordless docker back can opt in, behind a warning, with

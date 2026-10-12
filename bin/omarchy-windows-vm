@@ -1475,7 +1475,7 @@ To stop: omarchy-windows-vm stop"
     /microphone
     /clipboard
     /cert:ignore
-    "/title:Windows VM - Omarchy"
+    "/title:Windows VM - DecentralOS"
     /dynamic-resolution
     /gfx:AVC444
     /floatbar:sticky:off,default:visible,show:fullscreen

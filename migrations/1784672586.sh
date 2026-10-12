@@ -1,4 +1,4 @@
-echo "Switch to the Omarchy quickshell-git build so shell restarts wait for instance exit"
+echo "Switch to the DecentralOS quickshell-git build so shell restarts wait for instance exit"
 
 if ! omarchy-pkg-present quickshell-git; then
   # One transaction with --ask 4 so pacman accepts replacing the conflicting

@@ -124,7 +124,7 @@ grep -qx "stray content" "$replaced$stray" ||
   fail "the replaced file is destroyed rather than kept out of the way"
 pass "the replaced file is quarantined outside the directory it came from"
 
-# A real fight between packages, not Omarchy's leftovers. pacman appends
+# A real fight between packages, not DecentralOS's leftovers. pacman appends
 # "(owned by ...)" here.
 fresh_work
 echo "theirs" >"$stray"
@@ -157,14 +157,14 @@ if run_update >"$test_tmp/out" 2>"$test_tmp/err"; then
 fi
 pass "only the packages that own system paths get their conflicts resolved"
 
-# Not Omarchy's conflict to resolve.
+# Not DecentralOS's conflict to resolve.
 fresh_work
 echo "stray" >"$stray"
 write_report some-other-pkg "$stray"
 if run_update >"$test_tmp/out" 2>"$test_tmp/err"; then
   fail "a conflict from an unrelated package is auto-resolved"
 fi
-pass "a conflict from a non-Omarchy package is left for a human"
+pass "a conflict from a non-DecentralOS package is left for a human"
 
 # The path is used literally, so glob characters in a name mean nothing.
 fresh_work

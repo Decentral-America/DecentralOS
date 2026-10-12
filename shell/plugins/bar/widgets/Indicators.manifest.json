@@ -3,7 +3,7 @@
   "id": "omarchy.indicators",
   "name": "Indicators",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Manual state indicators",
   "kinds": [
     "bar-widget"

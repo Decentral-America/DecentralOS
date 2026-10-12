@@ -24,11 +24,11 @@ else
   sudo omarchy-bluetooth-power off
 fi
 
-# Omarchy set AutoEnable=false believing bluetoothd would then restore the last
+# DecentralOS set AutoEnable=false believing bluetoothd would then restore the last
 # power state. It has no such behaviour, so all the flag ever did was keep
 # Bluetooth off at every boot. Left in place it would also stop bluetoothd from
 # powering the adapter up when the block above is lifted. Only the exact line
-# Omarchy wrote is reverted, so a hand-edited opt-out survives.
+# DecentralOS wrote is reverted, so a hand-edited opt-out survives.
 if [[ -f $main_conf ]]; then
   sudo sed -i 's/^AutoEnable=false$/#AutoEnable=true/' "$main_conf"
 fi

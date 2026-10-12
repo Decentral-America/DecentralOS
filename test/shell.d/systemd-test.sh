@@ -21,7 +21,7 @@ grep -Fx 'After=dbus.socket wayland-session-waitenv.service' "$sleep_service" >/
 grep -Fx 'PartOf=graphical-session.target' "$sleep_service" >/dev/null ||
   fail "sleep lock monitor survives logout with a stale Wayland environment"
 grep -Fx 'ConditionEnvironment=OMARCHY_PATH' "$sleep_service" >/dev/null ||
-  fail "sleep lock monitor can start without the Omarchy shell path"
+  fail "sleep lock monitor can start without the DecentralOS shell path"
 grep -Fx 'ConditionEnvironment=WAYLAND_DISPLAY' "$sleep_service" >/dev/null ||
   fail "sleep lock monitor can start without a Wayland display"
 pass "sleep lock service follows the initialized graphical session"
@@ -37,7 +37,7 @@ grep -F 'bcd1a76cb5c63514922bc5e11af22ae480fc6d06a99863364e02bdf3c7bdceaf' "$upg
 grep -F 'ExecStart=%h/.local/share/omarchy/bin/omarchy-system-sleep-monitor' "$upgrade_to_quattro" >/dev/null
 grep -F 'ExecStart=/usr/bin/omarchy-system-sleep-monitor' "$upgrade_to_quattro" >/dev/null
 grep -F 'reset-failed omarchy-sleep-lock.service' "$upgrade_to_quattro" >/dev/null
-pass "Omarchy 4 upgrade repairs the legacy sleep lock unit path"
+pass "DecentralOS 4 upgrade repairs the legacy sleep lock unit path"
 
 [[ -e $ROOT/default/systemd/user/omarchy-update-user-notify.path ]] &&
   fail "the retired migration watcher is back; pacman writing the migration directory during omarchy update would notify about migrations that update is already applying"

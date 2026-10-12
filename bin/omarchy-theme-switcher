@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Open the Omarchy theme switcher
+# omarchy:summary=Open the DecentralOS theme switcher
 
 print_rows=false
 

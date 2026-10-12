@@ -72,8 +72,8 @@ done
 # they have; it must use the detector shipped beside it.
 fixture="$test_tmp/aarch64-apple"
 OMARCHY_PROC_ROOT="$fixture/proc" PATH="$fixture/bin:/usr/bin:/bin" "$ROOT/bin/omarchy-hw-aarch64-apple" ||
-  fail "the Apple predicate finds its detector without Omarchy on PATH"
-pass "the Apple predicate finds its detector without Omarchy on PATH"
+  fail "the Apple predicate finds its detector without DecentralOS on PATH"
+pass "the Apple predicate finds its detector without DecentralOS on PATH"
 
 stub_bin="$test_tmp/bin"
 mkdir -p "$stub_bin"

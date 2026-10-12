@@ -77,7 +77,7 @@ if epilogue ~= "" then
   assert(load(epilogue))()
 end
 
--- X11 keycodes are evdev codes plus 8. Only the rows Omarchy binds by code
+-- X11 keycodes are evdev codes plus 8. Only the rows DecentralOS binds by code
 -- need naming; anything else keeps its code: form and still compares exactly.
 local keycode_keysyms = {
   [10] = "1", [11] = "2", [12] = "3", [13] = "4", [14] = "5",

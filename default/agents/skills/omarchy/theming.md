@@ -25,7 +25,7 @@ Additional user backgrounds for any theme (stock or custom) go in
 ## What a Theme Installed From a Repo May Not Contain
 
 A theme the user wrote by hand in `~/.config/omarchy/themes` is unrestricted, as
-are Omarchy's own themes. From a theme cloned by `omarchy theme install`, Omarchy
+are DecentralOS's own themes. From a theme cloned by `omarchy theme install`, DecentralOS
 drops only what runs code: any `*.lua` (Hyprland requires a theme's
 `hyprland.lua` and `gum_env.lua` at login, Neovim loads `neovim.lua` at startup),
 the terminal configs `alacritty.toml`, `foot.ini`, `ghostty.conf` and
@@ -35,12 +35,12 @@ through `$OMARCHY_PATH/default/themed/*.tpl`, and named on stderr.
 
 Everything else a cloned theme ships is kept, including `btop.theme`,
 `chromium.theme`, `helix.toml`, `icons.theme`, `keyboard.rgb` and `shell.toml`.
-Omarchy tells a cloned theme from the user's own by the `.git` directory a clone
+DecentralOS tells a cloned theme from the user's own by the `.git` directory a clone
 leaves behind.
 
-To change how Omarchy themes an app for every theme, write the template rather
+To change how DecentralOS themes an app for every theme, write the template rather
 than the theme: `~/.config/omarchy/themed/<config-name>.tpl` overrides the
-built-in one. See `docs/theming.md` in the Omarchy repo.
+built-in one. See `docs/theming.md` in the DecentralOS repo.
 
 ## Customizing a Stock Theme
 

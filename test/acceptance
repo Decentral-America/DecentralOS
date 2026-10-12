@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# In-guest acceptance suite. Runs inside a live Omarchy session (typically a
+# In-guest acceptance suite. Runs inside a live DecentralOS session (typically a
 # VM installed by omarchy-iso-test, reached over SSH) and verifies that the
 # desktop actually works: session health, application launches, and shell
 # surfaces (launcher, emoji picker, menu).

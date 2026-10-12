@@ -122,7 +122,7 @@ configure_timezone >/dev/null || fail "setup goes on on a machine without Wi-Fi"
 pass "a machine without Wi-Fi finishes setup with the domain persisted for its next boot"
 
 fresh_root
-timezone=Omarchy/Nowhere
+timezone=DecentralOS/Nowhere
 configure_timezone >/dev/null || fail "setup goes on after a timezone it cannot apply"
 [[ -z $(regdom_lines) && ! -s $calls ]] || fail "a timezone that did not apply sets no domain" "$(cat "$conf" "$calls")"
 pass "a timezone that could not be applied sets no regulatory domain"

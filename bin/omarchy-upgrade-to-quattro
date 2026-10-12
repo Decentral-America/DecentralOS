@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Upgrade a legacy Omarchy install to the package-backed Omarchy quattro layout.
+# omarchy:summary=Upgrade a legacy DecentralOS install to the package-backed DecentralOS quattro layout.
 # omarchy:args=[--yes] [--reboot] [--dev] [--channel stable|rc|edge] [--user USER]
 # omarchy:examples=omarchy upgrade to quattro | omarchy upgrade to quattro --dev
 # omarchy:requires-sudo=true
@@ -11,15 +11,15 @@ usage() {
   cat <<'USAGE'
 Usage: omarchy-upgrade-to-quattro [--yes] [--reboot] [--dev] [--channel stable|rc|edge] [--user USER]
 
-Upgrade any pre-quattro Omarchy install to the package-backed Omarchy quattro layout.
+Upgrade any pre-quattro DecentralOS install to the package-backed DecentralOS quattro layout.
 This script is intentionally self-contained so it can be shipped as a command
-in Omarchy 3.8.x or run directly with curl | bash on older systems.
+in DecentralOS 3.8.x or run directly with curl | bash on older systems.
 
 Options:
   -y, --yes                 Do not prompt before upgrading
   --reboot                  Reboot automatically after a successful upgrade
   --dev                     Use dev packages [omarchy-dev / omarchy-settings-dev] (uses edge channel)
-  --channel stable|rc|edge  Override the default stable Omarchy package channel
+  --channel stable|rc|edge  Override the default stable DecentralOS package channel
   --user USER               User account to refresh after package install
   -h, --help                Show this help
 USAGE
@@ -149,7 +149,7 @@ if { [[ -n $channel_override ]] || (( channel_override_cli )); } && ! valid_chan
 fi
 
 if ! command -v pacman >/dev/null 2>&1; then
-  fail "This upgrade is only supported on Arch/Omarchy systems with pacman."
+  fail "This upgrade is only supported on Arch/DecentralOS systems with pacman."
 fi
 
 if ! command -v sudo >/dev/null 2>&1 && (( EUID != 0 )); then
@@ -165,7 +165,7 @@ if [[ -z $target_user ]]; then
 fi
 
 if [[ -z $target_user || $target_user == root ]]; then
-  fail "Could not determine the non-root Omarchy user. Re-run with --user USER."
+  fail "Could not determine the non-root DecentralOS user. Re-run with --user USER."
 fi
 
 if ! getent passwd "$target_user" >/dev/null; then
@@ -214,7 +214,7 @@ run_as_user_session() {
     "$@"
 }
 
-# Run an Omarchy command as the user with the package-backed paths, without
+# Run an DecentralOS command as the user with the package-backed paths, without
 # assuming a live session. Extra NAME=VALUE args extend the environment.
 run_as_user_omarchy() {
   run_as_user env \
@@ -345,7 +345,7 @@ if (( ! yes )); then
  ▀██████▀▄█ ████████▀    ███    █▀     ▄████▀      ▄████▀     ███    ███  ▀██████▀
                                                               ███    ███
 
-Upgrading Omarchy to Quattro is a one-way street!
+Upgrading DecentralOS to Quattro is a one-way street!
 You cannot downgrade from Quattro.
 Make sure you have a backup.
 
@@ -374,7 +374,7 @@ cleanup_on_exit() {
   # progress line, so a half-finished upgrade otherwise reads as a finished one.
   if (( exit_status != 0 && upgrade_started && ! upgrade_completed )); then
     printf '\n\033[31mUpgrade incomplete - do NOT reboot.\033[0m\n' >&2
-    printf 'The system is part Omarchy 3 and part Omarchy quattro; rebooting now can leave it without a working network or desktop.\n' >&2
+    printf 'The system is part DecentralOS 3 and part DecentralOS quattro; rebooting now can leave it without a working network or desktop.\n' >&2
     printf 'Fix the error reported above and run this script again. Re-running is safe and resumes the remaining steps.\n' >&2
   fi
 
@@ -391,7 +391,7 @@ fi
 backup_suffix=$(date +%Y%m%d%H%M%S)
 
 configure_pacman_channel() {
-  log "Configuring Omarchy pacman repositories ($channel)"
+  log "Configuring DecentralOS pacman repositories ($channel)"
 
   as_root install -d -m 0755 /etc/pacman.d
   if [[ -f /etc/pacman.d/mirrorlist ]]; then
@@ -405,7 +405,7 @@ configure_pacman_channel() {
 
   as_root cp -f /etc/pacman.conf "/etc/pacman.conf.omarchy-upgrade-to-quattro.$backup_suffix.bak"
 
-  # Replace the normal Omarchy package repository. Dev package mode uses the
+  # Replace the normal DecentralOS package repository. Dev package mode uses the
   # edge channel and resolves omarchy-dev / omarchy-settings-dev from [omarchy].
   local tmp
 
@@ -452,7 +452,7 @@ install_keyrings() {
   # re-downloading can satisfy.
 
   as_root pacman -Syy --noconfirm archlinux-keyring omarchy-keyring || {
-    warn "Keyring package install failed; attempting to trust the Omarchy packaging key directly."
+    warn "Keyring package install failed; attempting to trust the DecentralOS packaging key directly."
     as_root pacman-key --recv-keys 40DFB630FF42BCFFB047046CF0134EE680CAC571 --keyserver keys.openpgp.org || true
     as_root pacman-key --lsign-key 40DFB630FF42BCFFB047046CF0134EE680CAC571 || true
     as_root pacman -Syy --noconfirm archlinux-keyring omarchy-keyring
@@ -463,7 +463,7 @@ remove_legacy_installer_package() {
   if pacman -Q omarchy-installer >/dev/null 2>&1; then
     log "Removing legacy omarchy-installer package"
     # The pre-quattro omarchy meta package may depend on omarchy-installer. Ignore
-    # that edge temporarily; the next transaction installs the Omarchy quattro meta.
+    # that edge temporarily; the next transaction installs the DecentralOS quattro meta.
     as_root pacman -Rdd --noconfirm omarchy-installer
   fi
 }
@@ -512,7 +512,7 @@ normalize_limine_config() {
   as_root sed -i '/^interface_branding_color:/a interface_help_color_bright: 9ece6a' /boot/limine.conf
   as_root sed -i '/^interface_branding_color:/a interface_help_color: 9ece6a' /boot/limine.conf
 
-  # Pre-quattro custom-UKI installs used <machine-id>_linux.efi. Omarchy quattro uses the
+  # Pre-quattro custom-UKI installs used <machine-id>_linux.efi. DecentralOS quattro uses the
   # stable omarchy_linux.efi path generated by limine-entry-tool.
   machine_id=$(as_root cat /etc/machine-id 2>/dev/null || true)
   legacy_uki="/boot/EFI/Linux/${machine_id}_linux.efi"
@@ -694,7 +694,7 @@ configure_snapper_policy() {
     return 0
   fi
 
-  log "Configuring Omarchy snapshot retention"
+  log "Configuring DecentralOS snapshot retention"
   as_root env OMARCHY_PATH=/usr/share/omarchy bash -euo pipefail "$snapper_config_script"
 }
 
@@ -728,7 +728,7 @@ create_pre_upgrade_snapshot() {
 }
 
 remove_conflicting_legacy_packages() {
-  # Remove legacy packages that are known to conflict with Omarchy quattro defaults
+  # Remove legacy packages that are known to conflict with DecentralOS quattro defaults
   # before the main package transaction. Broader retired-package cleanup runs
   # after NetworkManager and the rest of the new stack are installed.
   local conflicting_packages=(
@@ -748,7 +748,7 @@ remove_conflicting_legacy_packages() {
     if package_installed_exact "$pkg"; then
       # Some pre-quattro meta packages depend on these retired/default packages. We
       # intentionally break those old dependency edges before installing the
-      # Omarchy quattro meta, otherwise pacman prompts to remove conflicts (for
+      # DecentralOS quattro meta, otherwise pacman prompts to remove conflicts (for
       # example ttf-jetbrains-mono-nerd -> ttf-jetbrains-mono-nerd-basic) and
       # --noconfirm answers "no".
       as_root pacman -Rdd --noconfirm "$pkg" || warn "Could not remove conflicting legacy package '$pkg'; continuing."
@@ -796,7 +796,7 @@ install_omarchy_quattro_packages() {
   )
   local base_packages=()
 
-  log "Upgrading system packages and installing Omarchy quattro packages"
+  log "Upgrading system packages and installing DecentralOS quattro packages"
   (( use_dev_packages )) && log "Using dev packages [omarchy-dev / omarchy-settings-dev]"
   # --noconfirm answers "no" to conflict-removal prompts. --ask 4 preselects
   # removing the conflicting package, which is required for legacy packages like
@@ -805,7 +805,7 @@ install_omarchy_quattro_packages() {
   mark_packages_explicit "${core_packages[@]}"
 
   if [[ -f /usr/share/omarchy/install/omarchy-base.packages ]]; then
-    log "Installing Omarchy quattro default package set"
+    log "Installing DecentralOS quattro default package set"
     mapfile -t base_packages < <(sed -e 's/[[:space:]]*#.*$//' -e '/^[[:space:]]*$/d' /usr/share/omarchy/install/omarchy-base.packages)
     # Some base packages have no aarch64 build.
     if [[ $(uname -m) != "x86_64" && -f /usr/share/omarchy/install/omarchy-x86_64-only.packages ]]; then
@@ -822,7 +822,7 @@ install_omarchy_quattro_packages() {
 
   # Archinstall installs the audio application during fresh ISO installs, so
   # legacy upgrades need to ensure the same PipeWire stack is present without
-  # depending on Archinstall or Omarchy setup helpers.
+  # depending on Archinstall or DecentralOS setup helpers.
   local audio_packages=(
     pipewire
     pipewire-alsa
@@ -854,7 +854,7 @@ install_hardware_transition_packages() {
   fi
 
   if (( ${#hardware_packages[@]} > 0 )); then
-    log "Installing hardware support needed by the Omarchy quattro layout"
+    log "Installing hardware support needed by the DecentralOS quattro layout"
     as_root pacman -S --needed --noconfirm "${hardware_packages[@]}"
     mark_packages_explicit "${hardware_packages[@]}"
   fi
@@ -921,7 +921,7 @@ remove_retired_default_packages() {
     zoom
   )
 
-  log "Removing packages retired from the Omarchy quattro default install"
+  log "Removing packages retired from the DecentralOS quattro default install"
   local pkg
   local installed_retired=()
   for pkg in "${retired_packages[@]}"; do
@@ -1144,7 +1144,7 @@ USER_UNITS
 }
 
 cleanup_retired_services() {
-  log "Disabling services retired by Omarchy quattro"
+  log "Disabling services retired by DecentralOS quattro"
 
   # iwd is retired alongside the NetworkManager enable it depends on. Do not
   # stop systemd-networkd mid-upgrade; disabling is enough and avoids dropping a
@@ -1168,7 +1168,7 @@ cleanup_retired_services() {
   fi
 }
 
-# The Omarchy 3 session keeps its bar, launcher, and notifications until the
+# The DecentralOS 3 session keeps its bar, launcher, and notifications until the
 # reboot, which is the real cutover. Swapping the UI out underneath a running
 # session buys nothing and only creates ways for the upgrade to look broken.
 
@@ -1204,7 +1204,7 @@ suppress_hyprland_config_reload() {
   # silently does nothing and the only evidence is the config error bar that
   # shows up minutes later.
   if ! run_as_user_wayland_session true >/dev/null 2>&1; then
-    warn "Could not reach the live Hyprland session; it will report config errors during the swap, and the Omarchy shell will start after reboot."
+    warn "Could not reach the live Hyprland session; it will report config errors during the swap, and the DecentralOS shell will start after reboot."
     return 0
   fi
 
@@ -1249,7 +1249,7 @@ restore_hyprland_config_reload() {
 ensure_sleep_lock_service() {
   [[ -S $target_runtime_dir/bus ]] || return 0
 
-  log "Ensuring Omarchy sleep lock service is enabled"
+  log "Ensuring DecentralOS sleep lock service is enabled"
   run_as_user_session systemctl --user daemon-reload >/dev/null 2>&1 || true
   run_as_user_session systemctl --user reset-failed omarchy-sleep-lock.service >/dev/null 2>&1 || true
   if ! run_as_user_session systemctl --user enable --now omarchy-sleep-lock.service >/dev/null 2>&1; then
@@ -1260,16 +1260,16 @@ ensure_sleep_lock_service() {
 run_post_upgrade_migrations() {
   local pending_status
 
-  log "Running Omarchy migrations"
+  log "Running DecentralOS migrations"
   if ! run_as_user_omarchy OMARCHY_UPGRADE_TO_QUATTRO_LIVE=1 omarchy-migrate; then
-    fail "Omarchy migrations did not complete. Fix the error above and rerun the upgrade before rebooting."
+    fail "DecentralOS migrations did not complete. Fix the error above and rerun the upgrade before rebooting."
   fi
   if run_as_user_omarchy omarchy-migrate --pending >/dev/null; then
-    fail "Omarchy migrations are still pending. Rerun the upgrade before rebooting."
+    fail "DecentralOS migrations are still pending. Rerun the upgrade before rebooting."
   else
     pending_status=$?
     if (( pending_status != 1 )); then
-      fail "Could not verify that Omarchy migrations completed. Rerun the upgrade before rebooting."
+      fail "Could not verify that DecentralOS migrations completed. Rerun the upgrade before rebooting."
     fi
   fi
 }
@@ -1354,7 +1354,7 @@ apply_firewall_defaults() {
     return 0
   fi
 
-  log "Applying Omarchy firewall defaults"
+  log "Applying DecentralOS firewall defaults"
   as_root env OMARCHY_PATH=/usr/share/omarchy PATH="$root_path" \
     bash -euo pipefail "$firewall_script" ||
     warn "Could not apply firewall defaults; run 'sudo bash $firewall_script' after reboot."
@@ -1381,7 +1381,7 @@ should_enable_sddm_autologin() {
 }
 
 apply_system_transition() {
-  log "Applying Omarchy quattro system transition"
+  log "Applying DecentralOS quattro system transition"
   [[ -d /usr/share/omarchy ]] || fail "/usr/share/omarchy was not installed."
 
   as_root install -d -m 0755 /usr/share/icons/Yaru/scalable/actions
@@ -1438,7 +1438,7 @@ EOF
 EOF
   as_root ln -sfn ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
-  # Fresh Omarchy socket-activates Docker. Disable the old always-on service if
+  # Fresh DecentralOS socket-activates Docker. Disable the old always-on service if
   # an upgraded install had enabled it, but do not stop running containers mid-upgrade.
   as_root systemctl disable docker.service >/dev/null 2>&1 || true
 
@@ -1534,7 +1534,7 @@ EOF
 }
 
 apply_user_transition() {
-  log "Applying Omarchy quattro user transition"
+  log "Applying DecentralOS quattro user transition"
   [[ -d /usr/share/omarchy ]] || fail "/usr/share/omarchy was not installed."
 
   run_as_user env \
@@ -1721,8 +1721,8 @@ backup_config_file() {
 
 mapfile -t retired_config_files < <(default_hash_paths retire)
 
-# These are new Omarchy quattro config entry points. Older installs cannot have an
-# Omarchy-shipped legacy copy to hash-match, so always install the quattro default.
+# These are new DecentralOS quattro config entry points. Older installs cannot have an
+# DecentralOS-shipped legacy copy to hash-match, so always install the quattro default.
 always_copy_config_files=(
   hypr/.luarc.json
   hypr/autostart.lua
@@ -1743,7 +1743,7 @@ migrate_uwsm_env_customizations() {
 
   tmp=$(mktemp)
   awk '
-    function omitted(reason) { print ": # omarchy-upgrade omitted legacy Omarchy " reason; next }
+    function omitted(reason) { print ": # omarchy-upgrade omitted legacy DecentralOS " reason; next }
 
     /^[[:space:]]*export[[:space:]]+OMARCHY_PATH=\$HOME\/\.local\/share\/omarchy[[:space:]]*$/ { omitted("OMARCHY_PATH") }
     /^[[:space:]]*export[[:space:]]+OMARCHY_PATH="\$\{OMARCHY_PATH:-\/usr\/share\/omarchy\}"[[:space:]]*$/ { omitted("OMARCHY_PATH") }
@@ -1764,8 +1764,8 @@ migrate_uwsm_env_customizations() {
 
     mkdir -p "$(dirname "$dest")"
     {
-      echo '# Preserved custom ~/.config/uwsm/env content during Omarchy quattro upgrade.'
-      echo '# Exact legacy Omarchy-managed setup lines were replaced with no-op markers where safe.'
+      echo '# Preserved custom ~/.config/uwsm/env content during DecentralOS quattro upgrade.'
+      echo '# Exact legacy DecentralOS-managed setup lines were replaced with no-op markers where safe.'
       cat "$tmp"
     } >"$dest"
   fi
@@ -1978,7 +1978,7 @@ for rel in "${retired_config_files[@]}"; do
 done
 
 # Existing user config may be customized. Refresh only files whose hash matches
-# a default Omarchy has shipped before, fill in missing defaults for old installs,
+# a default DecentralOS has shipped before, fill in missing defaults for old installs,
 # and always write the quattro-only entry points that older installs cannot have.
 refresh_known_config_defaults
 copy_missing_config_defaults "$root/config" "$HOME/.config"
@@ -1988,7 +1988,7 @@ repair_chromium_copy_url_extension_flags
 
 # Carry over user-added backgrounds from the legacy git checkout backup, then
 # remove old symlinks that pointed ~/.config/omarchy/themes/* back into the
-# pre-quattro checkout. Omarchy quattro reads stock themes from /usr/share/omarchy/themes.
+# pre-quattro checkout. DecentralOS quattro reads stock themes from /usr/share/omarchy/themes.
 legacy_omarchy_backup="$HOME/.local/share/omarchy.omarchy-upgrade-to-quattro.$BACKUP_SUFFIX.bak"
 if [[ -d $legacy_omarchy_backup/themes && -d $legacy_omarchy_backup/.git ]]; then
   (
@@ -2021,7 +2021,7 @@ for rel in "${retired_config_files[@]}"; do
   backup="$file.omarchy-upgrade-to-quattro.$BACKUP_SUFFIX.bak"
 
   # UWSM env was hardcoded to the legacy checkout on older installs. Custom
-  # non-Omarchy lines were migrated to env.d above; never keep the active file.
+  # non-DecentralOS lines were migrated to env.d above; never keep the active file.
   if [[ $rel == uwsm/env ]]; then
     rm -f "$file"
     continue
@@ -2383,7 +2383,7 @@ refresh_current_theme_after_upgrade() {
   theme_name=${theme_name//$'\n'/}
   [[ -n $theme_name ]] || theme_name="Tokyo Night"
 
-  log "Refreshing current theme with Omarchy quattro templates ($theme_name)"
+  log "Refreshing current theme with DecentralOS quattro templates ($theme_name)"
 
   runtime_dir="$target_runtime_dir"
   [[ -d $runtime_dir ]] || runtime_dir=/tmp
@@ -2456,7 +2456,7 @@ refresh_current_theme_after_upgrade
 # Do not force-reload Hyprland in the live upgraded session. The legacy
 # default/hypr and theme hyprland.conf shims above exist specifically so the
 # pre-reboot session can keep running safely; the reboot performs the real
-# Omarchy quattro Lua-config cutover.
+# DecentralOS quattro Lua-config cutover.
 restore_hyprland_config_reload
 
 upgrade_completed=1

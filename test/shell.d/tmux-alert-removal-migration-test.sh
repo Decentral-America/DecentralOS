@@ -139,7 +139,7 @@ expected=$(printf '%s\n' 'set -g mouse on' '' '' '# Custom' "set-hook -g alert-b
 pass "alert removal drops an appended block and keeps the user's lines"
 
 # An older config kept the refresh spelling of these two hooks; an indented one
-# is still the hook Omarchy wrote.
+# is still the hook DecentralOS wrote.
 grep -q 'after-select-window\|client-session-changed' "$tmux_config" &&
   fail "alert removal drops the older and indented hook spellings"
 pass "alert removal drops the older and indented hook spellings"

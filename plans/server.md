@@ -1,12 +1,12 @@
-# Plan: Omarchy Server — a headless edition with a BBS front door
+# Plan: DecentralOS Server — a headless edition with a BBS front door
 
 Revision 1.
 
 ## Problem
 
-Omarchy's taste — opinionated defaults, a curated TUI toolbox, one-command updates with snapshots, themes everywhere — stops at the desktop. There is no story for the second machine most Omarchy users have: the home-lab box, the VPS, the closet server running Docker. Ubuntu has Server; Arch has a wiki and an afternoon of yak-shaving. People who want "Omarchy for servers" today either drag the entire Hyprland/GUI stack onto a headless machine or hand-strip it and lose the update pipeline.
+DecentralOS's taste — opinionated defaults, a curated TUI toolbox, one-command updates with snapshots, themes everywhere — stops at the desktop. There is no story for the second machine most DecentralOS users have: the home-lab box, the VPS, the closet server running Docker. Ubuntu has Server; Arch has a wiki and an afternoon of yak-shaving. People who want "DecentralOS for servers" today either drag the entire Hyprland/GUI stack onto a headless machine or hand-strip it and lose the update pipeline.
 
-And every server distro greets you the same dreary way: `Last login: ...` and a blinking cursor. A machine you *dial into* deserves a front door with character. Omarchy Server boots to a console, runs over SSH, and greets an interactive login like an old-school BBS: ANSI wordmark, node status, callers today, and a hotkey home menu that opens into the TUIs Omarchy already ships. The aesthetic isn't decoration bolted on — terminal-first is the whole product, so the terminal experience *is* the identity.
+And every server distro greets you the same dreary way: `Last login: ...` and a blinking cursor. A machine you *dial into* deserves a front door with character. DecentralOS Server boots to a console, runs over SSH, and greets an interactive login like an old-school BBS: ANSI wordmark, node status, callers today, and a hotkey home menu that opens into the TUIs DecentralOS already ships. The aesthetic isn't decoration bolted on — terminal-first is the whole product, so the terminal experience *is* the identity.
 
 ## Shape
 
@@ -19,10 +19,10 @@ A second edition built from this same repo — not a fork, not a mode toggle:
 ## Rejected approaches
 
 - **A fork repo**: permanent drift; every bin/ fix would need double maintenance. The dots plan's reasoning against wrapping third-party tools applies to wrapping ourselves.
-- **A web admin panel** (Cockpit and friends): a second attack surface listening on a port, a second UI toolkit to theme, and not Omarchy's soul. The terminal is the product; SSH is the transport we already secured.
+- **A web admin panel** (Cockpit and friends): a second attack surface listening on a port, a second UI toolkit to theme, and not DecentralOS's soul. The terminal is the product; SSH is the transport we already secured.
 - **"Server mode" toggle on an installed desktop**: uninstalling a GUI stack in place is a migration minefield in both directions. Edition is chosen at install time; changing your mind is a reinstall (dots + backup make that cheap).
 - **A compiled TUI framework** (bubbletea, ratatui) for the menu: a new toolchain for v1's needs. The repo's idiom is bash + gum, which is already themeable and already everywhere; revisit only if the menu outgrows it.
-- **archinstall server profile**: Omarchy has its own installer and offline mirror; the edition is a package-set and provisioning variant of that pipeline, not a different installer.
+- **archinstall server profile**: DecentralOS has its own installer and offline mirror; the edition is a package-set and provisioning variant of that pipeline, not a different installer.
 
 ## What it looks like
 
@@ -30,15 +30,15 @@ Mockups, generated from the repo's own `logo.txt` wordmark and the tokyo-night `
 
 The login splash — pre-menu, both on the console and over SSH:
 
-![Omarchy Server login splash](images/server-login.svg)
+![DecentralOS Server login splash](images/server-login.svg)
 
-The home menu — hotkeys on the left, live vitals and MOTD on the right; every entry opens an existing Omarchy TUI or command as a full-screen "door" and returns here on exit:
+The home menu — hotkeys on the left, live vitals and MOTD on the right; every entry opens an existing DecentralOS TUI or command as a full-screen "door" and returns here on exit:
 
-![Omarchy Server home menu](images/server-menu.svg)
+![DecentralOS Server home menu](images/server-menu.svg)
 
 A door in action — `[U]` runs the standard `omarchy-update` pipeline, snapshot first, in BBS dress:
 
-![Omarchy Server update screen](images/server-update.svg)
+![DecentralOS Server update screen](images/server-update.svg)
 
 ## Design
 
@@ -72,7 +72,7 @@ The existing provisioning flow, server flavor: hostname, user, then straight int
 
 - Phase 1 (this repo): `omarchy-edition` + predicates, `install/omarchy-server.packages`, edition gating in migrations/refresh commands, `omarchy-server-menu` + greeting + issue generation, theme bridge, `server` group in `GROUP_DESCRIPTIONS`.
 - Phase 2 (coordinated): ISO/installer work in the ISO pipeline repo — a Server choice at install (or a separate slim ISO; open question), provisioning flow, offline mirror subset.
-- Docs: a manual section for Omarchy Server (install, first boot, the menu, greet settings, headless conventions); `docs/` reference for edition gating so future migrations know the rule.
+- Docs: a manual section for DecentralOS Server (install, first boot, the menu, greet settings, headless conventions); `docs/` reference for edition gating so future migrations know the rule.
 - Tests: greeting guards are the safety-critical bit — shell.d tests that non-interactive shells, scp/sftp, and `ssh host command` never see the menu; menu routing smoke tests; edition-predicate tests; CLI metadata via `omarchy commands --check`. Visual checks of splash/menu on a real console and over ssh per the visual-verification skill's spirit, adapted to a VM TTY.
 
 ## Open questions
@@ -82,4 +82,4 @@ The existing provisioning flow, server flavor: hostname, user, then straight int
 3. Whether the splash-vs-menu-vs-off default should differ for console vs SSH logins (console boxes are often headless appliances; SSH is where the BBS lands).
 4. Console glyph strategy on `TERM=linux`: ship a PSF console font with box-drawing coverage, or lean entirely on the ASCII fallback?
 5. Does the desktop edition get the menu as `omarchy bbs` — an easter egg that doubles as the demo?
-6. Naming: "Omarchy Server" is the descriptor; is there appetite for a BBS-flavored brand on the greeting itself ("Omarchy BBS — est. 2025"), or does that overcook it?
+6. Naming: "DecentralOS Server" is the descriptor; is there appetite for a BBS-flavored brand on the greeting itself ("DecentralOS BBS — est. 2025"), or does that overcook it?

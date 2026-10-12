@@ -1,4 +1,4 @@
-echo "Install herdr from the Omarchy package repo and seed its config"
+echo "Install herdr from the DecentralOS package repo and seed its config"
 
 # The package was briefly published as omarchy-herdr; herdr replaces it
 omarchy-pkg-drop omarchy-herdr

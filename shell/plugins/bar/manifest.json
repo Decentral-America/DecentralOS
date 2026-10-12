@@ -3,7 +3,7 @@
   "id": "omarchy.bar",
   "name": "Bar",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Status bar with widgets",
   "kinds": [
     "bar"

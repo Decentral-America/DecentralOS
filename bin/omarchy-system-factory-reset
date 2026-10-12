@@ -10,7 +10,7 @@
 #
 # The running root (@) is swapped for a fresh writable clone of the @factory
 # snapshot, so user-installed packages and /etc drift are gone too. That
-# snapshot is taken by the Omarchy Quattro installer, so only machines
+# snapshot is taken by the DecentralOS Quattro installer, so only machines
 # installed from that ISO can be reset; a machine upgraded to Quattro from an
 # earlier version has no baseline to return to and is turned away.
 #
@@ -39,7 +39,7 @@ LOG_FILE=/var/log/omarchy-system-factory-reset.log
 
 # Never replace a newer checkout reset with a different installed implementation.
 if ! /usr/bin/cmp -s -- "${BASH_SOURCE[0]}" "$PACKAGED_PATH"; then
-  echo "Factory reset differs from the installed command. Install the matching Omarchy package before resetting." >&2
+  echo "Factory reset differs from the installed command. Install the matching DecentralOS package before resetting." >&2
   exit 1
 fi
 
@@ -300,7 +300,7 @@ install_provisioning_units() {
 }
 
 # Start the ESP's limine.conf over from the shipped template and drop the
-# previous Omarchy identity's state. limine-entry-tool keys OS entries by
+# previous DecentralOS identity's state. limine-entry-tool keys OS entries by
 # machine-id, so after a reset gives the machine a fresh identity, the
 # previous system's entry (with the now-stale UKI hash) would survive, sort
 # first, and make Limine refuse the rebuilt UKI with a hash-mismatch warning.
@@ -585,19 +585,19 @@ require_factory_snapshot() {
   echo
   gum style --bold --foreground 3 "This machine has no factory snapshot to reset to."
   echo
-  gum style "A reset restores the @factory snapshot the Omarchy Quattro installer takes"
+  gum style "A reset restores the @factory snapshot the DecentralOS Quattro installer takes"
   gum style "right after installing. Machines upgraded to Quattro from an earlier version,"
   gum style "or installed some other way, never got one, so there is no baseline here to"
   gum style "return to."
   echo
-  gum style --foreground 8 "Reinstall from the Omarchy ISO to make this machine resettable."
+  gum style --foreground 8 "Reinstall from the DecentralOS ISO to make this machine resettable."
   exit 1
 }
 
 main() {
   omarchy-cmd-present btrfs || { echo "Error: btrfs-progs is required" >&2; exit 1; }
 
-  root_is_btrfs_at || fail "reset requires the standard Omarchy Btrfs layout (subvol=@)"
+  root_is_btrfs_at || fail "reset requires the standard DecentralOS Btrfs layout (subvol=@)"
 
   touch "$LOG_FILE"
   chmod 600 "$LOG_FILE"

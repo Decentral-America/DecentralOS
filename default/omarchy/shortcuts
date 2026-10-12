@@ -1,4 +1,4 @@
-# Hyprland global shortcuts the Omarchy shell registers, one per line: a menu
+# Hyprland global shortcuts the DecentralOS shell registers, one per line: a menu
 # route to toggle, a panel plugin to toggle, a volume or brightness key, or an
 # argument-free IPC call as target.method. A binding written as o.bind(keys,
 # description, { menu = "theme" }), { panel = "omarchy.emojis" },

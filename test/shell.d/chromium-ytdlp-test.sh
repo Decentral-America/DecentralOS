@@ -31,7 +31,7 @@ jq -e --arg path "$ROOT/bin/omarchy-chromium-ytdlp-host" '
   .path == $path and
   (.allowed_origins | index("chrome-extension://dedjgknigfeelejglamclffonmophnfl/"))
 ' "$manifest_path" >/dev/null
-pass "yt-dlp native host manifest uses Omarchy host path and extension id"
+pass "yt-dlp native host manifest uses DecentralOS host path and extension id"
 
 [[ -f $test_home/.config/BraveSoftware/Brave-Origin/NativeMessagingHosts/com.omarchy.ytdlp.json ]] ||
   fail "yt-dlp native host installer covers Brave Origin"

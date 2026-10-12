@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Build and install an Omarchy package from a local checkout
+# omarchy:summary=Build and install an DecentralOS package from a local checkout
 # omarchy:group=dev
 # omarchy:args=[package-name] [path-to-checkout]
 # omarchy:examples=omarchy dev pkg-test | omarchy dev pkg-test omarchy-dev ~/Work/omarchy/omarchy-installer
@@ -11,7 +11,7 @@ if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
   cat <<USAGE
 Usage: omarchy dev pkg-test [package-name] [path-to-checkout]
 
-Builds and installs an Omarchy package from a local Omarchy source
+Builds and installs an DecentralOS package from a local DecentralOS source
 checkout. Use when changes need to land at fixed system paths (/etc/,
 /usr/lib/systemd/, udev rule bodies, plymouth) that omarchy-dev-link
 can't shadow.
@@ -127,7 +127,7 @@ for PKG in "${PKGS[@]}"; do
 
   # Install separately so we can pass --overwrite='*' (makepkg -i can't).
   # Dev builds frequently conflict with files left behind by previous
-  # script-installed Omarchy versions; the build is the authoritative state.
+  # script-installed DecentralOS versions; the build is the authoritative state.
   built_pkg=$(ls -t "$package_build_dir"/*.pkg.tar.* 2>/dev/null | grep -v '\.sig$' | head -1)
   if [[ -z $built_pkg ]]; then
     echo "Error: no built package found in $package_build_dir" >&2

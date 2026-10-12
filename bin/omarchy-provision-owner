@@ -184,7 +184,7 @@ DYNAMIC_ROW=$((LOGO_HEIGHT + 3))
 LAST_SETUP_SIZE=""
 
 tips=(
-  "Super + Space opens the Omarchy menu for apps, settings, and more"
+  "Super + Space opens the DecentralOS menu for apps, settings, and more"
   "Super + K shows all the key bindings"
   "Super is the Windows or command key on your keyboard"
   "Sign PDFs and fill them in with Signed"
@@ -195,13 +195,13 @@ tips=(
   "Super + Ctrl + Print grabs text off the screen with OCR"
   "Print takes a screenshot, Alt + Print records the screen"
   "Set a reminder with Super + Ctrl + R"
-  "Switch themes from Style > Theme in the Omarchy menu"
+  "Switch themes from Style > Theme in the DecentralOS menu"
   "Double-click the menu bar to make it transparent"
   "Run a full Windows VM via Install > Windows in the menu"
   "Super + Ctrl + V opens the clipboard manager"
   "Super + 1 through 0 switches workspaces, add Shift to bring the window"
   "Super + Print picks a color from anywhere on screen"
-  "Keep the system fresh with Update in the Omarchy menu"
+  "Keep the system fresh with Update in the DecentralOS menu"
 )
 
 term_cols() {
@@ -435,7 +435,7 @@ render_setup_dynamic() {
 
 # The first thing a new owner sees, shown once before the keyboard step:
 # the logo (vertically centered like the boot logo) running a looping ColorShift,
-# the Omarchy tagline, and a hint. Return skips ahead into setup at any time.
+# the DecentralOS tagline, and a hint. Return skips ahead into setup at any time.
 greeter_screen() {
   local anim="" drawn_sig cur_sig resized=0
 
@@ -454,7 +454,7 @@ greeter_screen() {
     rows=$(stty size 2>/dev/null </dev/tty | awk '{print $1}')
     [[ $rows =~ ^[0-9]+$ ]] || rows=${LINES:-24}
 
-    tagline="Beautiful, Fun & Agentic Linux by DHH"
+    tagline="Beautiful, Fun & Agentic Linux"
     hint="Press Return to Start Setup"
 
     printf '%s%s' "$HIDE_CURSOR" "$CLEAR"
@@ -1093,7 +1093,7 @@ reset_limine_config() {
   local esp template found="" machine_id old_id old_ids=""
   esp=$(esp_path)
 
-  # Only remove machine-ids the old (Omarchy-managed) limine.conf referenced;
+  # Only remove machine-ids the old (DecentralOS-managed) limine.conf referenced;
   # a shared ESP may hold other installations' machine-id directories.
   if [[ -f $esp/limine.conf ]]; then
     # `|| true`: an entry-less limine.conf (left by a failed earlier rebuild)
@@ -1275,7 +1275,7 @@ run_setup() {
   # in on encrypted installs. No timed celebration screen and no "start" button
   # here — that send-off belongs to a direct install, not first-boot setup. The
   # finished progress bar is the last frame; clearing it for a "Starting
-  # Omarchy..." card would only add a flash of screen before the handoff.
+  # DecentralOS..." card would only add a flash of screen before the handoff.
 }
 
 # A failed first-boot setup must not strand the machine at a user-less login

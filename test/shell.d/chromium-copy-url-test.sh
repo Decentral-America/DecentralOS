@@ -68,7 +68,7 @@ jq -e --arg path "$ROOT/bin/omarchy-chromium-copy-url-host" '
   .name == "com.omarchy.copy_url" and
   .path == $path and
   (.allowed_origins | index("chrome-extension://bgpiichlckmfanooecilcjemknkcpngb/"))
-' "$native_manifest" >/dev/null || fail "copy-url native host manifest uses Omarchy host path and extension id"
+' "$native_manifest" >/dev/null || fail "copy-url native host manifest uses DecentralOS host path and extension id"
 pass "copy-url native host installer registers the stable extension id"
 
 [[ -f $test_home/.config/BraveSoftware/Brave-Origin/NativeMessagingHosts/com.omarchy.copy_url.json ]] ||

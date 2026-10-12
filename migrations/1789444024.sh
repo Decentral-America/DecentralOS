@@ -1,4 +1,4 @@
-echo "Install missing headers for the Omarchy or T2 kernel"
+echo "Install missing headers for the DecentralOS or T2 kernel"
 
 # Fresh ISO installs mark earlier migrations complete, so the kernel migration
 # cannot repair headers omitted by those installers. Package installation is

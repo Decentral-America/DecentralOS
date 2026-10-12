@@ -3,12 +3,12 @@
 Read this before changing keybindings, monitors, window rules, or any other
 Hyprland (window manager) configuration.
 
-Omarchy configures Hyprland in Lua. User files are loaded after Omarchy's
+DecentralOS configures Hyprland in Lua. User files are loaded after DecentralOS's
 defaults, so overrides go here:
 
 ```
 ~/.config/hypr/
-├── hyprland.lua       # Main config (loads Omarchy defaults, then user files)
+├── hyprland.lua       # Main config (loads DecentralOS defaults, then user files)
 ├── bindings.lua       # Keybindings
 ├── monitors.lua       # Display configuration
 ├── input.lua          # Keyboard/mouse settings
@@ -36,7 +36,7 @@ Edit `~/.config/hypr/bindings.lua`. Format:
 ```lua
 o.bind("SUPER + SHIFT + R", "SSH", "alacritty -e ssh your-server")
 o.bind("SUPER + B", "Browser", { launch = "chromium" })  -- launch wraps with uwsm-app
-o.bind("SUPER + M", "Theme menu", { menu = "theme" })     -- toggle an Omarchy menu route
+o.bind("SUPER + M", "Theme menu", { menu = "theme" })     -- toggle an DecentralOS menu route
 o.bind("SUPER + N", "Network", { panel = "omarchy.network" })  -- toggle a shell panel
 ```
 
@@ -77,4 +77,4 @@ Before writing ANY window rules, you MUST fetch the current documentation from t
 
 DO NOT rely on cached or memorized window rule syntax. The format has changed multiple times and using outdated syntax will cause errors or unexpected behavior.
 
-Window rules go in `~/.config/hypr/hyprland.lua` or a required Lua module. Prefer Omarchy's `o.window(match, rules)` helper — see examples in `$OMARCHY_PATH/default/hypr/windows.lua`.
+Window rules go in `~/.config/hypr/hyprland.lua` or a required Lua module. Prefer DecentralOS's `o.window(match, rules)` helper — see examples in `$OMARCHY_PATH/default/hypr/windows.lua`.

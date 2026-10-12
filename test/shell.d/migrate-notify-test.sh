@@ -86,13 +86,13 @@ run_notify 0 >"$test_tmp/not-pending.out" 2>"$test_tmp/not-pending.err"
 pass "migration notifier ignores users with no pending migrations"
 
 run_notify 1 fail >"$test_tmp/pending.out" 2>"$test_tmp/pending.err"
-grep -q 'Omarchy has pending migrations' "$test_tmp/pending.err" || fail "migration notifier explains pending migrations without notification system"
+grep -q 'DecentralOS has pending migrations' "$test_tmp/pending.err" || fail "migration notifier explains pending migrations without notification system"
 grep -q '200-migration.sh' "$test_tmp/pending.err" || fail "migration notifier lists pending migration names"
 pass "migration notifier reports pending migrations"
 
 run_notify 1 >"$test_tmp/notified.out" 2>"$test_tmp/notified.err"
 notify_args_written || fail "migration notifier sends a notification for pending migrations"
-grep -Fx 'Pending Omarchy Migrations' "$test_tmp/notify-args" >/dev/null || fail "migration notifier uses pending migrations title"
+grep -Fx 'Pending DecentralOS Migrations' "$test_tmp/notify-args" >/dev/null || fail "migration notifier uses pending migrations title"
 grep -Fx 'Click to run 1 pending migration.' "$test_tmp/notify-args" >/dev/null || fail "migration notifier describes the pending migration"
 grep -Fx '' "$test_tmp/notify-args" >/dev/null || fail "migration notifier includes the large-slot glyph"
 pass "migration notifier uses the actionable notification format"
@@ -116,7 +116,7 @@ exec {update_lock_fd}>&-
 
 run_notify 1 >/dev/null 2>&1
 notify_args_written &&
-  grep -Fx 'Pending Omarchy Migrations' "$test_tmp/notify-args" >/dev/null ||
+  grep -Fx 'Pending DecentralOS Migrations' "$test_tmp/notify-args" >/dev/null ||
   fail "migration notifier resumes notifying once the update lock is released"
 pass "migration notifier resumes notifying after the update releases its lock"
 
@@ -145,7 +145,7 @@ flock -n "$foreign_lock_fd" || fail "test could not hold the foreign update lock
 
 run_notify 1 >/dev/null 2>&1
 notify_args_written &&
-  grep -Fx 'Pending Omarchy Migrations' "$test_tmp/notify-args" >/dev/null ||
+  grep -Fx 'Pending DecentralOS Migrations' "$test_tmp/notify-args" >/dev/null ||
   fail "migration notifier ignores update locks outside its own runtime directory"
 pass "migration notifier ignores update locks outside its own runtime directory"
 

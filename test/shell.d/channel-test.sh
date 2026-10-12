@@ -128,8 +128,8 @@ assert_log_line() {
 
 run_channel stable
 assert_log_line $'refresh\tstable' "stable refreshes the stable pacman channel"
-assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy\tomarchy-settings' "stable installs stable Omarchy packages"
-assert_log_line $'unlink\t--no-reboot' "stable restores the package-backed Omarchy path without an early reboot prompt"
+assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy\tomarchy-settings' "stable installs stable DecentralOS packages"
+assert_log_line $'unlink\t--no-reboot' "stable restores the package-backed DecentralOS path without an early reboot prompt"
 assert_log_line $'update\t-y\tOMARCHY_PATH='"$package_root" "stable runs the normal update pipeline from the package-backed path"
 if grep -q $'^state\tset\treboot-required$' "$log_file"; then
   fail "stable does not require reboot when already package-backed" "$(cat "$log_file")"
@@ -138,15 +138,15 @@ pass "stable does not require reboot when already package-backed"
 
 run_channel rc
 assert_log_line $'refresh\trc' "rc refreshes the rc pacman channel"
-assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy\tomarchy-settings' "rc installs rc Omarchy packages"
-assert_log_line $'unlink\t--no-reboot' "rc restores the package-backed Omarchy path without an early reboot prompt"
+assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy\tomarchy-settings' "rc installs rc DecentralOS packages"
+assert_log_line $'unlink\t--no-reboot' "rc restores the package-backed DecentralOS path without an early reboot prompt"
 assert_log_line $'update\t-y\tOMARCHY_PATH='"$package_root" "rc runs the normal update pipeline from the package-backed path"
 
 active_checkout="$test_tmp/active-checkout"
 cp -a "$package_root" "$active_checkout"
 OMARCHY_TEST_PATH="$active_checkout" run_channel edge
 assert_log_line $'refresh\tedge' "edge refreshes the edge pacman channel"
-assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy-dev\tomarchy-settings-dev' "edge installs development Omarchy packages"
+assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy-dev\tomarchy-settings-dev' "edge installs development DecentralOS packages"
 assert_log_line $'unlink\t--no-reboot' "edge unlinks dev without an early reboot prompt"
 assert_log_line $'state\tset\treboot-required' "edge marks reboot required when leaving dev"
 assert_log_line $'update\t-y\tOMARCHY_PATH='"$package_root" "edge runs the normal update pipeline from the package-backed path"
@@ -170,7 +170,7 @@ rmdir "$checkout"
 run_channel dev
 assert_log_line $'gum\tconfirm\t--default=false\tSwitch to dev channel?' "dev asks for confirmation"
 assert_log_line $'refresh\tedge' "dev refreshes the edge pacman channel"
-assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy-dev\tomarchy-settings-dev' "dev installs development Omarchy packages"
+assert_log_line $'update-pacman\t-S\t--needed\t--noconfirm\t--ask\t4\tomarchy-dev\tomarchy-settings-dev' "dev installs development DecentralOS packages"
 assert_log_line $'git\tclone\thttps://github.com/omacom/omarchy.git\t'"$checkout" "dev clones the source checkout to ~/omarchy"
 assert_log_line $'link\t'"$checkout"$'\t--no-reboot' "dev links ~/omarchy without an early reboot prompt"
 assert_log_line $'state\tset\treboot-required' "dev defers the reboot prompt to the update pipeline"

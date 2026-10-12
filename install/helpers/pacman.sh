@@ -17,7 +17,7 @@ omarchy_pacman_templates() {
 }
 
 # The channel a machine takes when none is named: stable, except on aarch64.
-# Omarchy publishes aarch64 packages on edge alone so far, and the stable and rc
+# DecentralOS publishes aarch64 packages on edge alone so far, and the stable and rc
 # packages there are the release line, which has no aarch64 support, so ARM
 # platforms have edge templates only until a release does.
 omarchy_pacman_default_channel() {

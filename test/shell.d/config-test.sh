@@ -251,7 +251,7 @@ assert(package.loaded["hypr.looknfeel"] == nil)
 assert(package.loaded["omarchy.current.theme.hyprland"] == nil)
 assert(package.loaded["unrelated.module"] == true)
 LUA
-pass "Hyprland bootstrap reloads cached Omarchy config modules"
+pass "Hyprland bootstrap reloads cached DecentralOS config modules"
 
 TMPDIR=$(mktemp -d)
 mkdir -p "$TMPDIR/home/.config/omarchy"
@@ -545,7 +545,7 @@ jq -e '
 [[ -f $TMPDIR/home/.local/state/omarchy/restart-shell-called ]] || fail "shell refresh restarts shell"
 pass "shell refresh places optional service widgets when services are available"
 
-if grep -RIl 'upgrade-to-quattro\|Omarchy 4\.0 is upgraded' "$ROOT/migrations" >/dev/null; then
+if grep -RIl 'upgrade-to-quattro\|DecentralOS 4\.0 is upgraded' "$ROOT/migrations" >/dev/null; then
   fail "4.0 upgrade is not modeled as a migration"
 fi
 pass "4.0 upgrade is handled outside the migration runner"

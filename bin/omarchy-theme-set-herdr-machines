@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Mirror the current theme to your herdr machines that run Omarchy
+# omarchy:summary=Mirror the current theme to your herdr machines that run DecentralOS
 # omarchy:args=[--available]
 # omarchy:hidden=true
 
@@ -34,7 +34,7 @@ mkdir -m 700 -p "$control_dir"
 
 # Runs on the remote machine under a login shell, so OMARCHY_PATH and PATH are set there.
 # SSH carries no desktop session, so the environment comes from the live Hyprland instance.
-# The flag is read directly, so an Omarchy that predates theme sync simply counts as off.
+# The flag is read directly, so an DecentralOS that predates theme sync simply counts as off.
 # Braces make bash read the whole script before running it, so nothing it runs can consume the rest.
 read -r -d '' REMOTE_SCRIPT <<'EOF'
 {

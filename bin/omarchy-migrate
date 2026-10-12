@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Run pending Omarchy migrations.
+# omarchy:summary=Run pending DecentralOS migrations.
 # omarchy:args=[--pending]
 
 set -euo pipefail
@@ -69,14 +69,14 @@ wait_for_pacman_transaction() {
   local lock_file=/var/lib/pacman/db.lck
 
   [[ -e $lock_file ]] || return 0
-  echo "Waiting for pacman transaction to finish before running Omarchy migrations..."
+  echo "Waiting for pacman transaction to finish before running DecentralOS migrations..."
 
   for _ in {1..900}; do
     [[ -e $lock_file ]] || return 0
     sleep 1
   done
 
-  echo "Pacman transaction is still running; Omarchy migrations will retry on next login."
+  echo "Pacman transaction is still running; DecentralOS migrations will retry on next login."
   exit 0
 }
 
@@ -99,4 +99,4 @@ done 3< <(migration_entries)
 # Clear a login-time notification the user left sitting there and then resolved
 # by running migrations some other way. The substring matches both the current
 # and legacy notification titles.
-omarchy-notification-dismiss "Omarchy Migrations" >/dev/null 2>&1 || true
+omarchy-notification-dismiss "DecentralOS Migrations" >/dev/null 2>&1 || true

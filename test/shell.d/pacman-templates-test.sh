@@ -64,7 +64,7 @@ for platform in $platforms; do
     # $arch stays literal: pacman fills it in on the machine.
     server=$(sed -n '/^\[omarchy\]/,/^\[/s/^Server = //p' "$templates/pacman-$channel.conf")
     [[ $server == "https://pkgs.omarchy.org/$channel/\$arch" ]] ||
-      fail "$platform $channel: Omarchy's $channel repository" "$server"
+      fail "$platform $channel: DecentralOS's $channel repository" "$server"
   done
 done
 pass "x86 has templates for stable, rc and edge and aarch64 for edge alone, each with its repositories in order"
@@ -158,7 +158,7 @@ for platform in aarch64 aarch64-apple; do
     reset_boundary
     if SUDO_TEST_PLATFORM=$platform refresh "$channel"; then fail "$platform: $channel is refused"; fi
     [[ -z $(events) ]] || fail "$platform: $channel stops before anything" "$(events)"
-    grep -q "Omarchy has no $channel channel for $platform" "$boundary_tmp/output" || fail "the refusal says why" "$(cat "$boundary_tmp/output")"
+    grep -q "DecentralOS has no $channel channel for $platform" "$boundary_tmp/output" || fail "the refusal says why" "$(cat "$boundary_tmp/output")"
     assert_boundary_cold "$platform $channel"
   done
 done

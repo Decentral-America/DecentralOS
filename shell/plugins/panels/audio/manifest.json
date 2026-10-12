@@ -3,7 +3,7 @@
   "id": "omarchy.audio",
   "name": "Audio",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Volume slider, output picker, per-app mixer",
   "kinds": [
     "bar-widget"

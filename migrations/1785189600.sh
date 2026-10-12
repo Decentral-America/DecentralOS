@@ -2,7 +2,7 @@ echo "Remove the tmux alert hooks and its bar indicator"
 
 tmux_config="$HOME/.config/tmux/tmux.conf"
 
-# Drop only the hooks Omarchy installed, wherever the migrations that wrote
+# Drop only the hooks DecentralOS installed, wherever the migrations that wrote
 # them left them, and only the blank run around what goes: every other line
 # comes through untouched.
 if [[ -f $tmux_config ]]; then

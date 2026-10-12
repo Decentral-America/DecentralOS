@@ -3,7 +3,7 @@
   "id": "omarchy.bluetooth",
   "name": "Bluetooth",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Bluetooth device list with connect/disconnect",
   "kinds": [
     "bar-widget"

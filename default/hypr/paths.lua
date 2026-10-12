@@ -1,4 +1,4 @@
--- Shared path constants for Omarchy's Hyprland Lua modules.
+-- Shared path constants for DecentralOS's Hyprland Lua modules.
 -- Lua files loaded with require() have separate local scopes, so modules that
 -- need these paths import this table instead of repeating os.getenv() lookups.
 

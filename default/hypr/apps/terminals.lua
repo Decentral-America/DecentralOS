@@ -1,4 +1,4 @@
--- Define terminal tag so themes and bindings can single terminals out. Omarchy
+-- Define terminal tag so themes and bindings can single terminals out. DecentralOS
 -- launches TUIs and its own terminal windows under dedicated app-ids
 -- (org.omarchy.btop, org.omarchy.terminal, TUI.float, ...), so match those too.
 -- The class is matched in full, so foot's other app-id needs spelling out.

@@ -4,7 +4,7 @@
 -- See current bindings and descriptions:
 --   omarchy menu keybindings --print
 
--- To disable every Omarchy default binding, set this in
+-- To disable every DecentralOS default binding, set this in
 -- ~/.config/hypr/hyprland.lua before require("default.hypr.omarchy"), then add
 -- only the bindings you want below:
 --   omarchy_default_bindings = false

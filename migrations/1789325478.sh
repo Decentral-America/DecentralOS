@@ -1,4 +1,4 @@
-echo "Install the Omarchy kernel and make it the first Limine boot entry"
+echo "Install the DecentralOS kernel and make it the first Limine boot entry"
 
 # linux-omarchy is an x86_64 kernel. T2 Macs must keep their specialized kernel,
 # including when other kernels are installed or the running T2 package is gone.
@@ -34,7 +34,7 @@ sudo limine-mkinitcpio "$kernel"
 # limine-mkinitcpio can return success after skipping a failed kernel build.
 # Do not mark the migration complete unless the new kernel is in the menu.
 if ! sudo limine-entry-tool --tree | grep -E "(^|[^[:alnum:]_-])$kernel([^[:alnum:]_-]|$)" >/dev/null; then
-  echo "The Omarchy kernel has no Limine boot entry; rerun omarchy-migrate after fixing the boot image build." >&2
+  echo "The DecentralOS kernel has no Limine boot entry; rerun omarchy-migrate after fixing the boot image build." >&2
   exit 1
 fi
 

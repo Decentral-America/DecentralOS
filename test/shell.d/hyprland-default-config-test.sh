@@ -141,8 +141,8 @@ pass "preinstalled binding variable skips optional application bindings"
 no_bindings_home="$tmpdir/no-bindings-home"
 mkdir -p "$no_bindings_home"
 no_bindings_output=$(run_omarchy_bindings "$no_bindings_home" 'omarchy_default_bindings = false')
-[[ -z $no_bindings_output ]] || fail "default binding variable disables all Omarchy bindings" "$no_bindings_output"
-pass "default binding variable disables all Omarchy bindings"
+[[ -z $no_bindings_output ]] || fail "default binding variable disables all DecentralOS bindings" "$no_bindings_output"
+pass "default binding variable disables all DecentralOS bindings"
 
 dictation_home="$tmpdir/dictation-home"
 missing_bin="$tmpdir/missing-bin"
@@ -229,7 +229,7 @@ require("default.hypr.bindings.clipboard")
 require("default.hypr.bindings.tiling")
 require("default.hypr.bindings.utilities")
 
--- Application bindings without Omarchy's preinstalled web apps, TUIs, or desktop apps.
+-- Application bindings without DecentralOS's preinstalled web apps, TUIs, or desktop apps.
 o.bind("SUPER + RETURN", "Terminal", { omarchy = "terminal" })
 o.bind("SUPER + SHIFT + RETURN", "Browser", { omarchy = "browser" })
 o.bind("SUPER + SHIFT + F", "File manager", { omarchy = "nautilus" })

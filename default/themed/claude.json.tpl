@@ -1,5 +1,5 @@
 {
-  "name": "Omarchy",
+  "name": "DecentralOS",
   "base": "{{ theme_type }}",
   "overrides": {
     "claude": "{{ accent }}",

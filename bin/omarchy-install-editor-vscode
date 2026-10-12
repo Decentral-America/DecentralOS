@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Install VS Code and configure Omarchy defaults for secrets, updates, and theme
+# omarchy:summary=Install VS Code and configure DecentralOS defaults for secrets, updates, and theme
 
 echo "Installing VSCode..."
 omarchy-pkg-add visual-studio-code-bin
@@ -23,7 +23,7 @@ EOF
 # Ensure VSC's own auto-update feature is turned off
 printf '{\n  "update.mode": "none"\n}\n' > ~/.config/Code/User/settings.json
 
-# Apply Omarchy theme to VSCode
+# Apply DecentralOS theme to VSCode
 omarchy-theme-set-vscode
 
 setsid uwsm-app -- gtk-launch code >/dev/null 2>&1 &

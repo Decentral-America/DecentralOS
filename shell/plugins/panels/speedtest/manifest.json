@@ -3,7 +3,7 @@
   "id": "omarchy.speedtest",
   "name": "Speed Test",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Internet speed test with download and upload dials",
   "kinds": [
     "panel"

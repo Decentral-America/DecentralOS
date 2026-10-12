@@ -7,7 +7,7 @@ set -e
 
 omarchy-pkg-add superwhisper-bin
 bash /usr/share/superwhisper/setup-user
-# Existing profiles may still use Right Alt, which conflicts with Omarchy.
+# Existing profiles may still use Right Alt, which conflicts with DecentralOS.
 # Keep a recording shortcut active while moving away from that binding.
 shortcuts=$(superwhisper shortcuts show)
 if [[ $(jq -r '.shortcuts.hold' <<< "$shortcuts") == "RightAlt" ]]; then
@@ -18,7 +18,7 @@ if [[ $(jq -r '.shortcuts.hold' <<< "$shortcuts") == "RightAlt" ]]; then
   fi
 fi
 # Superwhisper requires a native recording shortcut; keep it separate from
-# Omarchy's push-to-talk keys.
+# DecentralOS's push-to-talk keys.
 superwhisper shortcuts set toggle "Alt+Space" >/dev/null
 superwhisper shortcuts set hold none >/dev/null
 omarchy-dictation-use superwhisper

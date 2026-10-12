@@ -65,7 +65,7 @@ ln -s "$ROOT/bin" "$test_root/bin"
 
 cat >"$stub_bin/omarchy-update-available" <<'SH'
 #!/bin/bash
-echo "Omarchy update available (test)"
+echo "DecentralOS update available (test)"
 exit 0
 SH
 chmod +x "$stub_bin/omarchy-update-available"

@@ -238,7 +238,7 @@ run_installer() {
   done
   return 1
 }
-# ~/.local/bin is on PATH the way Omarchy puts it there, after the mocks.
+# ~/.local/bin is on PATH the way DecentralOS puts it there, after the mocks.
 run_cli() {
   HOME="$test_home" HERMES_HOME="${OMARCHY_TEST_HOME:-$hermes_home}" PATH="$test_tmp/bin:$test_home/.local/bin:$PATH" npm_config_yes= \
     bash "$test_tmp/bin/omarchy-install-hermes-cli" "$@" >"$test_tmp/output" 2>&1
@@ -369,7 +369,7 @@ run_installer && fail "incomplete existing app requires repair"
 assert_stopped "incomplete native app prevents launch"
 pass "an incomplete existing native app is preserved"
 
-# A runtime already at the release, edited where the patch lands, before Omarchy
+# A runtime already at the release, edited where the patch lands, before DecentralOS
 # has prepared it: the conflict is reported and nothing is touched.
 new_home patch-conflict
 HOME="$test_home" HERMES_HOME="$hermes_home" bash "$test_tmp/share/install.sh" --dir "$runtime" --hermes-home "$hermes_home"
@@ -653,7 +653,7 @@ run_cli --check || fail "--check follows the install once nothing shadows it"
 pass "a hermes ahead of ~/.local/bin on PATH is reported, not set up over"
 
 # A machine that chose Hermes before its migration ran: the wrapper's copy the
-# runtime setup saved aside proves the mise environment Omarchy's, and mise's
+# runtime setup saved aside proves the mise environment DecentralOS's, and mise's
 # shim for it sits ahead of ~/.local/bin. Choosing Hermes again finishes the
 # handover: the environment goes, the shim and the saved copy with it, and
 # only then is the command the one PATH finds.
@@ -667,7 +667,7 @@ cp "$test_home/.local/bin/hermes" "$test_tmp/bin/hermes"
 OMARCHY_TEST_MISE_BUILT=1 run_cli --check && fail "--check calls a handover with the mise environment still there finished"
 : >"$test_tmp/events"
 OMARCHY_TEST_MISE_BUILT=1 OMARCHY_TEST_SHIM="$test_tmp/bin/hermes" run_cli --now || fail "--now finishes the handover" "$(cat "$test_tmp/output")"
-grep -q 'mise uninstall --all' "$test_tmp/mise-log" || fail "the environment the saved wrapper proves Omarchy's is removed" "$(cat "$test_tmp/mise-log")"
+grep -q 'mise uninstall --all' "$test_tmp/mise-log" || fail "the environment the saved wrapper proves DecentralOS's is removed" "$(cat "$test_tmp/mise-log")"
 [[ ! -e $test_tmp/bin/hermes ]] || fail "the shim is gone with the environment"
 [[ ! -e $saved/hermes && ! -d $saved ]] || fail "the saved wrapper and its directory go once the environment is gone"
 [[ ! -s $test_tmp/events ]] || fail "the handover sets nothing up again" "$(cat "$test_tmp/events")"

@@ -23,7 +23,7 @@ echo "check" >>"$OMARCHY_TEST_HERMES_CALLS"
 [[ $1 == "--check" && ${OMARCHY_TEST_HERMES_READY:-0} == "1" ]]
 SH
 
-# A theme switch finishes the hand-over only for the desktop app Omarchy
+# A theme switch finishes the hand-over only for the desktop app DecentralOS
 # installed; --activate is asked for by name and does not look.
 cat >"$mock_bin/omarchy-pkg-present" <<'SH'
 #!/bin/bash
@@ -54,7 +54,7 @@ SH
 cat >"$mock_bin/omarchy-theme-refresh" <<'SH'
 #!/bin/bash
 echo "refresh" >>"$OMARCHY_TEST_HERMES_CALLS"
-printf 'name: omarchy\ndescription: Omarchy system theme\ncolors:\n  background: "#1a1b26"\n' \
+printf 'name: omarchy\ndescription: DecentralOS system theme\ncolors:\n  background: "#1a1b26"\n' \
   >"$HOME/.local/state/omarchy/current/theme/hermes.yaml"
 SH
 
@@ -74,7 +74,7 @@ SH
 chmod +x "$mock_bin"/*
 
 good_skin='name: omarchy
-description: Omarchy system theme
+description: DecentralOS system theme
 colors:
   background: "#1a1b26"
   ui_text: "#a9b1d6"
@@ -128,7 +128,7 @@ run_hook() {
 
 reset_home
 run_hook
-[[ ! -e $hermes_home/skins ]] || fail "a Hermes home that only holds the Omarchy skill gets no skin"
+[[ ! -e $hermes_home/skins ]] || fail "a Hermes home that only holds the DecentralOS skill gets no skin"
 [[ ! -s $hermes_calls ]] || fail "nothing is run for a Hermes that never ran" "$(cat "$hermes_calls")"
 pass "a theme switch leaves a machine that never ran Hermes alone"
 
@@ -145,7 +145,7 @@ diff -q "$skin" "$hermes_home/profiles/work/skins/omarchy.yaml" >/dev/null ||
 pass "the skin is published to the Hermes home and every profile"
 
 reset_home --set-up 'name: omarchy
-description: Omarchy system theme
+description: DecentralOS system theme
 colors:
   background: "{{ background }}"'
 mkdir -p "$hermes_home/skins"
@@ -167,10 +167,10 @@ fi
 pass "a directory at the skin's path is refused cleanly"
 
 for bad in \
-  $'name: omarchy\ndescription: Omarchy system theme\ncolors:\n  background: "#1a1b26"\nbanner_logo: "[link=file:///etc/passwd]x[/link]"' \
-  $'name: omarchy\ndescription: Omarchy system theme\ncolors:\n  background: "#1a1b26\\"\\n  ui_text: \\"#ffffff"' \
+  $'name: omarchy\ndescription: DecentralOS system theme\ncolors:\n  background: "#1a1b26"\nbanner_logo: "[link=file:///etc/passwd]x[/link]"' \
+  $'name: omarchy\ndescription: DecentralOS system theme\ncolors:\n  background: "#1a1b26\\"\\n  ui_text: \\"#ffffff"' \
   $'name: nord\ndescription: Nord\ncolors:\n  background: "#2e3440"' \
-  $'description: Omarchy system theme\ncolors:\n  background: "#1a1b26"' \
+  $'description: DecentralOS system theme\ncolors:\n  background: "#1a1b26"' \
   $'name: omarchy\ndescription: Nord: arctic palette\ncolors:\n  background: "#2e3440"' \
   $'name: omarchy\ncolors:\n  background: "#1a1b26"\n#\rbanner_logo: "[link=file:///etc/passwd]x[/link]"' \
   $'name: omarchy\ncolors:\n  background: "#1a1b26"\n#\xe2\x80\xa8banner_logo: "evil"' \
@@ -193,7 +193,7 @@ run_hook 2>/dev/null
 [[ ! -e $skin ]] || fail "a NUL byte in the skin is rejected"
 pass "a skin carrying a NUL byte is not published"
 
-reset_home --set-up $'# rendered by Omarchy\nname: omarchy\n\ndescription: Omarchy system theme\ncolors:\n  background: "#1a1b26"\n'
+reset_home --set-up $'# rendered by DecentralOS\nname: omarchy\n\ndescription: DecentralOS system theme\ncolors:\n  background: "#1a1b26"\n'
 run_hook 2>/dev/null
 [[ -f $skin ]] || fail "comments and blank lines are allowed around the palette"
 pass "a well-formed skin with comments and blank lines is published"
@@ -216,8 +216,8 @@ pass "a theme switch does not start a Hermes already on the skin"
 reset_home --set-up
 OMARCHY_TEST_HERMES_READY=1 OMARCHY_TEST_DESKTOP_INSTALLED=0 run_hook
 [[ -f $skin ]] || fail "a Hermes installed some other way still gets the skin published"
-[[ ! -s $hermes_calls ]] || fail "a theme switch does not touch a Hermes Omarchy did not install as the app" "$(cat "$hermes_calls")"
-pass "a theme switch activates only for the desktop app Omarchy installed"
+[[ ! -s $hermes_calls ]] || fail "a theme switch does not touch a Hermes DecentralOS did not install as the app" "$(cat "$hermes_calls")"
+pass "a theme switch activates only for the desktop app DecentralOS installed"
 
 reset_home --set-up
 OMARCHY_TEST_HERMES_READY=1 OMARCHY_TEST_DESKTOP_INSTALLED=0 run_hook --activate 2>/dev/null
@@ -227,7 +227,7 @@ pass "--activate does not ask which Hermes it is"
 
 reset_home --on ares
 OMARCHY_TEST_HERMES_READY=1 OMARCHY_TEST_HERMES_SKIN=ares run_hook 2>"$test_tmp/stderr"
-[[ -f $skin ]] || fail "a chosen skin still gets the Omarchy skin published beside it"
+[[ -f $skin ]] || fail "a chosen skin still gets the DecentralOS skin published beside it"
 [[ ! -s $hermes_calls ]] || fail "a theme switch does not start a Hermes whose config names a chosen skin" "$(cat "$hermes_calls")"
 [[ ! -s $test_tmp/stderr ]] || fail "a chosen skin is left without comment on a theme switch" "$(cat "$test_tmp/stderr")"
 pass "a theme switch leaves a skin the user chose in Hermes"
@@ -302,7 +302,7 @@ reset_home --set-up
 OMARCHY_TEST_HERMES_READY=1 run_hook --activate 2>"$test_tmp/stderr"
 [[ $(cat "$hermes_calls") == $'check\nconfig get display.skin\nconfig set display.skin omarchy' ]] ||
   fail "a ready Hermes is asked for its skin and then to switch" "$(cat "$hermes_calls")"
-grep -q 'on the Omarchy skin' "$test_tmp/stderr" || fail "--activate reports success"
+grep -q 'on the DecentralOS skin' "$test_tmp/stderr" || fail "--activate reports success"
 pass "--activate goes through hermes config set when Hermes runs"
 
 reset_home --on omarchy
@@ -321,7 +321,7 @@ pass "--activate replaces Hermes' default skin"
 
 reset_home --set-up
 OMARCHY_TEST_HERMES_READY=1 OMARCHY_TEST_HERMES_SKIN=ares run_hook --activate 2>"$test_tmp/stderr"
-[[ -f $skin ]] || fail "a chosen skin still gets the Omarchy skin published beside it"
+[[ -f $skin ]] || fail "a chosen skin still gets the DecentralOS skin published beside it"
 ! grep -q 'config set' "$hermes_calls" || fail "a skin the user chose is not replaced" "$(cat "$hermes_calls")"
 grep -q "'ares' skin" "$test_tmp/stderr" || fail "leaving a chosen skin is reported"
 pass "--activate leaves a skin the user chose in Hermes"
@@ -354,7 +354,7 @@ rm "$test_home/.local/state/omarchy/current/theme/hermes.yaml"
 if run_hook --activate 2>"$test_tmp/stderr"; then
   fail "--activate fails when no theme has been selected"
 fi
-grep -q 'Select an Omarchy theme' "$test_tmp/stderr" || fail "a missing theme is reported"
+grep -q 'Select an DecentralOS theme' "$test_tmp/stderr" || fail "a missing theme is reported"
 pass "--activate fails without a current theme to render the skin from"
 
 reset_home --set-up

@@ -13,7 +13,7 @@
 #
 # So the block is the state, and BlueZ follows it: unblocking leaves AutoEnable
 # at its stock default and bluetoothd powers the adapter up by itself. Every
-# Omarchy path that turns Bluetooth on or off goes through here, because a plain
+# DecentralOS path that turns Bluetooth on or off goes through here, because a plain
 # `bluetoothctl power on` fails outright while the block is set.
 
 POWER_WAIT_SECONDS=${OMARCHY_BLUETOOTH_POWER_WAIT_SECONDS:-2}

@@ -38,7 +38,7 @@ generated_queues=$(printf '%s\n' "$queue_report" |
 while IFS= read -r queue; do
   [[ -n $queue ]] || continue
 
-  if ! reject_error=$(sudo cupsreject -r "Printer discovery has been removed from Omarchy" "$queue" 2>&1); then
+  if ! reject_error=$(sudo cupsreject -r "Printer discovery has been removed from DecentralOS" "$queue" 2>&1); then
     if LC_ALL=C lpstat -p "$queue" >/dev/null 2>&1; then
       printf '%s\n' "$reject_error" >&2
       exit 1

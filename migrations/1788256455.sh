@@ -38,7 +38,7 @@ is_omarchy_vulnerable_stack() {
     grep -qE "^${phase}[[:space:]]+required[[:space:]]+pam_unix\.so[[:space:]]*\$" "$file" || return 1
   done
 
-  # Every meaningful line must be one Omarchy itself wrote; anything else means
+  # Every meaningful line must be one DecentralOS itself wrote; anything else means
   # an administrator has edited this file, so it is not ours to rewrite.
   while IFS= read -r line || [[ -n $line ]]; do
     [[ -z ${line//[[:space:]]/} ]] && continue

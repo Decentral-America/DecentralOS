@@ -19,5 +19,5 @@ export PATH="$tmp_dir:$ROOT/bin:$PATH"
 "$ROOT/bin/omarchy-launch-floating-terminal-with-presentation" "echo hello"
 
 launch=$(<"$TEST_LOG")
-[[ $launch == *"xdg-terminal-exec --app-id=org.omarchy.terminal"* ]] || fail "floating terminal launches Omarchy terminal" "$launch"
-pass "floating terminal launches Omarchy terminal"
+[[ $launch == *"xdg-terminal-exec --app-id=org.omarchy.terminal"* ]] || fail "floating terminal launches DecentralOS terminal" "$launch"
+pass "floating terminal launches DecentralOS terminal"

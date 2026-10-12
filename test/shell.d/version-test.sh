@@ -47,9 +47,9 @@ pass "version reports the edge package"
 pass "version reports a dev checkout"
 
 if version "" >/dev/null 2>&1; then
-  fail "version fails when no Omarchy package is installed"
+  fail "version fails when no DecentralOS package is installed"
 fi
-pass "version fails when no Omarchy package is installed"
+pass "version fails when no DecentralOS package is installed"
 
 # The snapshot description is only a label, so a failed lookup must not abort
 # the update under set -e.

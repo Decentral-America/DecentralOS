@@ -6,7 +6,7 @@
 # pacman.conf — common cases are adding a custom repository (e.g. CachyOS,
 # Chaotic-AUR, an internal company repo) or extra IgnorePkg lines.
 #
-# The hook runs as the invoking user after Omarchy invalidates its sudo cache.
+# The hook runs as the invoking user after DecentralOS invalidates its sudo cache.
 # A sudo command here therefore requires its own explicit authorization.
 #
 # To put it into use, remove .sample from this file name.

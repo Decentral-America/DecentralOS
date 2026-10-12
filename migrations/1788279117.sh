@@ -26,7 +26,7 @@ yt6801_check_binding() {
   for device in "${yt6801_devices[@]}"; do
     if ! yt6801_uses_upstream "$device"; then
       echo "YT6801 device $device did not bind to dwmac-motorcomm." >&2
-      echo "Reboot into the latest Omarchy kernel and rerun omarchy-migrate." >&2
+      echo "Reboot into the latest DecentralOS kernel and rerun omarchy-migrate." >&2
       exit 1
     fi
   done
@@ -48,7 +48,7 @@ if (( ${#yt6801_pending[@]} > 0 )); then
   if ! aliases=$(modinfo -F alias dwmac-motorcomm) ||
     ! grep -Fxq 'pci:v00001F0Ad00006801sv*sd*bc*sc*i*' <<< "$aliases"; then
     echo "The running kernel does not provide YT6801 support in dwmac-motorcomm." >&2
-    echo "Reboot into the latest Omarchy kernel and rerun omarchy-migrate." >&2
+    echo "Reboot into the latest DecentralOS kernel and rerun omarchy-migrate." >&2
     exit 1
   fi
 

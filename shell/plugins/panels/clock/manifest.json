@@ -3,7 +3,7 @@
   "id": "omarchy.clock",
   "name": "Clock",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Date/time label with a calendar popup",
   "kinds": [
     "bar-widget"

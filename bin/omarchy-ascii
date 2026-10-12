@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# omarchy:summary=Render text as ASCII art in the font the Omarchy logo is drawn in
+# omarchy:summary=Render text as ASCII art in the font the DecentralOS logo is drawn in
 # omarchy:args=[text...]
-# omarchy:examples=omarchy ascii Omarchy | omarchy ascii "Hello there"
+# omarchy:examples=omarchy ascii DecentralOS | omarchy ascii "Hello there"
 
 set -o pipefail
 
@@ -10,7 +10,7 @@ usage() {
   cat <<'EOF'
 Usage: omarchy-ascii [text...]
 
-Renders text as ASCII art in Delta Corps Priest 1, the FIGlet font the Omarchy
+Renders text as ASCII art in Delta Corps Priest 1, the FIGlet font the DecentralOS
 logo is drawn in. Reads the text from stdin when given none.
 
 Options:

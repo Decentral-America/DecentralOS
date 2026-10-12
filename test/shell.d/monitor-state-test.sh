@@ -61,7 +61,7 @@ extended='[
   { "name": "DP-1", "mirrorOf": "none", "disabled": false, "focused": true, "width": 2560, "height": 1440 }
 ]'
 
-# Omarchy mirrors by pointing the external at the internal, so `mirrorOf` lands
+# DecentralOS mirrors by pointing the external at the internal, so `mirrorOf` lands
 # on the external and the internal keeps saying "none".
 mirrored='[
   { "name": "eDP-1", "mirrorOf": "none", "disabled": false, "focused": true, "width": 1920, "height": 1080 },

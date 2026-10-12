@@ -1,11 +1,11 @@
-# Omarchy update process
+# DecentralOS update process
 
-This document describes the intended update behavior now that Omarchy is
+This document describes the intended update behavior now that DecentralOS is
 package-backed. It covers the blessed update path plus what happens when a user attempts to
 bypass it:
 
-1. `omarchy update` — the blessed interactive Omarchy update flow.
-2. `sudo pacman -Syu` — guarded by Omarchy and aborted with instructions unless
+1. `omarchy update` — the blessed interactive DecentralOS update flow.
+2. `sudo pacman -Syu` — guarded by DecentralOS and aborted with instructions unless
    the user explicitly bypasses the guard.
 
 The design goal is:
@@ -81,7 +81,7 @@ omarchy-update-pacman-guard
 
 The guard detects direct pacman system-upgrade commands like `pacman -Syu` or
 `pacman --sync --refresh --sysupgrade`. If the upgrade was not launched by an
-Omarchy update command, the hook exits non-zero with `AbortOnFail`, which stops
+DecentralOS update command, the hook exits non-zero with `AbortOnFail`, which stops
 the transaction before packages are changed.
 
 `omarchy-update-system-pkgs`, `omarchy-refresh-pacman`, `omarchy-reinstall-pkgs`,
@@ -92,7 +92,7 @@ helper (the v4 upgrader sets `OMARCHY_UPDATE_PACMAN=1` directly):
 sudo env OMARCHY_UPDATE_PACMAN=1 systemd-run --scope --quiet --collect pacman ...
 ```
 
-so the guard allows Omarchy-owned update flows. The `systemd-run --scope`
+so the guard allows DecentralOS-owned update flows. The `systemd-run --scope`
 wrapper registers the transaction as a PID 1 scope: upgrading systemd reexecs
 the system and user managers mid-transaction, and a pacman left inside a
 user-session scope can be SIGKILLed by that reexec. On unbooted systems (such
@@ -160,7 +160,7 @@ Important behavior:
 - This lifecycle controls authorization created by the protected workflow. `sudo -N` prevents cache updates but can use an existing valid credential, and `sudo -k` revokes the current session's timestamp. It does not isolate the account from unrelated concurrent authentication in another workflow.
 - Sleep inhibition authenticates before detaching, drops the held command back to the caller, and closes both update lock descriptors before the persistent process starts. Cleanup accepts only caller-owned, mode-0600, single-link state and revalidates the recorded PID, process start time, owner, and random token immediately before every signal.
 - Channel switching establishes the same boundary before dev link/unlink, refresh and package operations. It keeps the wrapper first when changing source roots, carries the original user PATH into update hooks and mise, and checks after each package transaction that the wrapper still exists before any further privileged step, since a transaction can replace the running tree with a release that predates it; when it is gone, or the destination otherwise lacks it, the switch stops after the package switch with instructions to run that release's update from a fresh session rather than letting a bare `sudo` or an updater that authenticates without `--no-update` publish a timestamp. Failed and interrupted channel switches revoke on exit.
-- `-y` exports `OMARCHY_UPDATE_UNATTENDED=1` and suppresses Omarchy confirmation prompts. Conflict handoff reports and skips instead of blocking. Orphan packages are automatically removed during every update. Privileged commands still require the one sudo authorization, and AUR installs can prompt separately.
+- `-y` exports `OMARCHY_UPDATE_UNATTENDED=1` and suppresses DecentralOS confirmation prompts. Conflict handoff reports and skips instead of blocking. Orphan packages are automatically removed during every update. Privileged commands still require the one sudo authorization, and AUR installs can prompt separately.
 - The free-space requirement uses a 10 GiB threshold and stops the update before
   confirmation when it is not met. If free space cannot be determined, the
   check is silently skipped. Set `OMARCHY_UPDATE_FORCE=1` to bypass the check.
@@ -247,7 +247,7 @@ The bar widget `omarchy.system-update` runs:
 omarchy-update-available
 ```
 
-`omarchy-update-available` checks the active Omarchy sources for updates:
+`omarchy-update-available` checks the active DecentralOS sources for updates:
 
 - new upstream commits for the active dev-linked checkout
 - `omarchy-dev`, when installed
@@ -259,8 +259,8 @@ tracking state.
 
 Exit codes:
 
-- `0` — Omarchy updates are available; stdout is the update list.
-- non-zero — no Omarchy updates are available; stdout says Omarchy is up to date.
+- `0` — DecentralOS updates are available; stdout is the update list.
+- non-zero — no DecentralOS updates are available; stdout says DecentralOS is up to date.
 
 The widget runs this check on shell startup and every six hours. Clicking the
 update icon launches `omarchy-update` in a floating terminal.
@@ -284,12 +284,12 @@ every platform (`install/helpers/pacman.sh`); a channel change backs up
 the old pair first.
 x86_64's are `default/pacman/pacman-<channel>.conf` and
 `mirrorlist-<channel>`; Snapdragon and other aarch64 machines use
-`default/pacman/aarch64/`, Omarchy's repository ahead of Arch Linux ARM's, as
+`default/pacman/aarch64/`, DecentralOS's repository ahead of Arch Linux ARM's, as
 x86_64 puts it ahead of Arch's (migration 1791403252 reorders existing
-machines the same way, and a refresh can then move a package Omarchy also
-publishes to Omarchy's build, downgrading it if that build is older); Apple
-Silicon uses `default/pacman/aarch64-apple/`, which puts Omarchy and Asahi ALARM
-ahead of Arch Linux ARM. Omarchy publishes aarch64 packages on edge alone so
+machines the same way, and a refresh can then move a package DecentralOS also
+publishes to DecentralOS's build, downgrading it if that build is older); Apple
+Silicon uses `default/pacman/aarch64-apple/`, which puts DecentralOS and Asahi ALARM
+ahead of Arch Linux ARM. DecentralOS publishes aarch64 packages on edge alone so
 far, and the `omarchy` and `omarchy-settings` packages there for stable and rc
 are the release line, which has no aarch64 support, so ARM platforms have edge
 templates only: switching an ARM machine to stable or rc would replace its
@@ -322,18 +322,18 @@ scripts.
 | `omarchy-update-status` | Hidden helper that refreshes or clears the shell update indicator after rechecking available updates. | **Keep internal/hidden.** Keeps shell status synchronization out of the main pipeline. |
 | `omarchy-update-confirm` | Gum confirmation copy for `omarchy update`. | **Question.** Could be inlined into `omarchy-update`; separate file only helps keep copy isolated. |
 | `omarchy-update-dev` | Fast-forwards the active dev-linked checkout from its configured upstream; no-ops for package-backed installs. | **Keep.** Runs before package updates so a checkout conflict stops the update before system mutation. |
-| `omarchy-update-keyring` | Ensures Omarchy keyring and Arch keyring (and Arch Linux ARM keyring on aarch64, where installed) are current before the main transaction. | **Keep, but review.** It uses targeted `pacman -Sy` for keyring bootstrapping; acceptable for this special case but should remain tightly scoped. |
+| `omarchy-update-keyring` | Ensures DecentralOS keyring and Arch keyring (and Arch Linux ARM keyring on aarch64, where installed) are current before the main transaction. | **Keep, but review.** It uses targeted `pacman -Sy` for keyring bootstrapping; acceptable for this special case but should remain tightly scoped. |
 | `omarchy-update-system-pkgs` | Runs `omarchy-update-pacman -Syu --noconfirm` with `--overwrite '/usr/share/omarchy/*'`, capturing stderr to a report file; on failure it execs `omarchy-update-system-pkgs-when-conflicted`. | **Keep for now.** Small leaf command, clear/testable. |
 | `omarchy-update-system-pkgs-when-conflicted` | Hidden conflict handler: quarantines unowned conflicting files under `/var/lib/omarchy/replaced`, retries the upgrade once, restores files the upgrade didn't claim, and hands package-vs-package conflicts to an interactive pacman run (never under `-y`). | **Keep internal/hidden.** Keeps conflict recovery out of the happy path. |
 | `omarchy-update-pkg-prune` | Trims the pacman cache to two versions per package (`paccache -rk2`) before the snapshot, keeping the offline downgrade path while capping snapshot growth. | **Keep internal/hidden.** |
 | `omarchy-update-requires-free-space` | Aborts the update below a 10 GiB free-space threshold on `/`; silently skipped when free space cannot be determined; `OMARCHY_UPDATE_FORCE=1` bypasses. | **Keep internal/hidden.** |
 | `omarchy-migrate` | Public migration command. Waits for pacman, then runs all pending migrations for the current user. Supports `--pending`. | **Keep.** This replaces the discarded `omarchy-update-user-finalize` name and no longer needs `--force`. |
-| `omarchy-update-pacman-guard` | ALPM pre-transaction guard that aborts direct `pacman -Syu` style upgrades unless Omarchy set `OMARCHY_UPDATE_PACMAN=1` or the user explicitly set `OMARCHY_ALLOW_DIRECT_PACMAN=1`. | **Keep internal/hidden.** This is what nudges users back to `omarchy update`. |
-| `omarchy-update-pacman` | Hidden helper that runs a guard-approved pacman transaction as a PID 1 scope (`systemd-run --scope`) so a mid-transaction systemd reexec cannot kill it; runs pacman directly when not booted under systemd. | **Keep internal/hidden.** Single place that owns how Omarchy invokes pacman for system mutation. |
+| `omarchy-update-pacman-guard` | ALPM pre-transaction guard that aborts direct `pacman -Syu` style upgrades unless DecentralOS set `OMARCHY_UPDATE_PACMAN=1` or the user explicitly set `OMARCHY_ALLOW_DIRECT_PACMAN=1`. | **Keep internal/hidden.** This is what nudges users back to `omarchy update`. |
+| `omarchy-update-pacman` | Hidden helper that runs a guard-approved pacman transaction as a PID 1 scope (`systemd-run --scope`) so a mid-transaction systemd reexec cannot kill it; runs pacman directly when not booted under systemd. | **Keep internal/hidden.** Single place that owns how DecentralOS invokes pacman for system mutation. |
 | `omarchy-migrate-notify` | Internal login-time notification helper. Uses `omarchy-migrate --pending` and shows a notification only when this user has pending migrations. | **Keep internal/hidden.** Clear name now that the public command is `omarchy-migrate`. |
 | `omarchy-update-user-notify` | Hidden compatibility wrapper for `omarchy-migrate-notify`. | **Temporary.** Keep only for old callers. |
 | `omarchy-update-available` | Update checker for shell widget and post-update refresh. | **Keep.** Could eventually be renamed `omarchy-update-check`, but current name matches widget semantics. |
-| `omarchy-update-aur-pkgs` | Updates AUR packages with `yay -Sua` if foreign packages exist and AUR is reachable. | **Question.** Omarchy is package-backed now, but users may still install AUR packages. Keep for now. |
+| `omarchy-update-aur-pkgs` | Updates AUR packages with `yay -Sua` if foreign packages exist and AUR is reachable. | **Question.** DecentralOS is package-backed now, but users may still install AUR packages. Keep for now. |
 | `omarchy-update-mise` | Runs `MISE_MINIMUM_RELEASE_AGE=0 mise up` for mise-managed tools — the override of mise's release-age cooldown is the point. | **Keep.** Mise-managed tools are intentionally part of the blessed update path. |
 | `omarchy-update-orphan-pkgs` | Lists orphans and prompts before removal unless passed `-y`, as the update pipeline does; standalone noninteractive mode only reports. | **Keep for now.** Automates cleanup during updates and supports standalone review. |
 | `omarchy-update-analyze-logs` | Scans `/tmp/omarchy-update.log` for known failure patterns, currently initramfs generation. | **Keep/expand.** Useful safety net; should grow only for high-signal checks. |
@@ -372,12 +372,12 @@ scripts.
 ## Remaining concerns
 
 1. **Pacman guard scope**
-   - The guard detects direct pacman sysupgrade invocations and allows Omarchy
+   - The guard detects direct pacman sysupgrade invocations and allows DecentralOS
      commands that set `OMARCHY_UPDATE_PACMAN=1`.
    - We may regret blocking some legitimate package-manager frontends or
      maintenance flows. Keep an eye on what should be allowed versus redirected
      to `omarchy update`.
 
 2. **Pacnew/pacsave handling is still missing**
-   - Package-backed Omarchy should warn about or help process `.pacnew` and
+   - Package-backed DecentralOS should warn about or help process `.pacnew` and
      `.pacsave` files after updates.

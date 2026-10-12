@@ -16,7 +16,7 @@ done
 chmod +x "$mock_bin"/*
 
 # Provisioning prepends $OMARCHY_PATH/bin, which shadows a mock for anything
-# Omarchy ships, so the install suite is stubbed out at its path instead. The
+# DecentralOS ships, so the install suite is stubbed out at its path instead. The
 # real one rethemes the session it runs in: hyprctl reload against the live
 # compositor, gsettings against the live desktop, and a global Node install.
 mkdir -p "$test_tmp/install/user"

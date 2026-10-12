@@ -291,7 +291,7 @@ modmask_to_text() {
 #
 # Also do some pre-processing:
 # - Fill missing Lua code:... keys and __lua dispatch metadata from the Lua source cache
-# - Remove standard Omarchy bin path prefix
+# - Remove standard DecentralOS bin path prefix
 # - Map numeric modifier key mask to a textual rendition
 # - Output comma-separated values that the parser can understand
 dynamic_bindings() {
@@ -356,7 +356,7 @@ static_bindings() {
   echo "SHIFT ALT,D,Download Video from Web App,sendshortcut,SHIFT ALT,D,"
 }
 
-# Actions Omarchy binds to a second chord meant as an alternative, named one at
+# Actions DecentralOS binds to a second chord meant as an alternative, named one at
 # a time. A rule would be wrong here: Alt + Tab and Shift + Alt + Tab both say
 # "Reveal active window on top" while cycling opposite ways, and a media key is
 # nobody's idea of an alternative to a Super chord. Only chords a user reaches
@@ -468,7 +468,7 @@ prioritize_entries() {
 
     prio = 50
     if (match(line, /Keybindings/)) prio = 0
-    if (match(line, /Omarchy menu/))  prio = 1
+    if (match(line, /DecentralOS menu/))  prio = 1
     if (match(line, /Terminal/)) prio = 2
     if (match(line, /Browser/) && !match(line, /Browser[[:space:]]*\(/) && !match(line, /SUPER SHIFT.*\+.*B.*→.*Browser/)) prio = 3
     if (match(line, /File manager/) && !match(line, /File manager \(cwd\)/))  prio = 4

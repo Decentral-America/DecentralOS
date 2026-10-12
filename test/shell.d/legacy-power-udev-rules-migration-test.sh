@@ -148,7 +148,7 @@ EOF
 }
 
 # #8175's non-udev behavior belongs here so one migration owns the whole legacy
-# compatibility-link repair. Omarchy 3 emitted %H, while users may have changed
+# compatibility-link repair. DecentralOS 3 emitted %H, while users may have changed
 # it to ~ or its expanded value.
 for legacy_include in \
   'include "%H/.local/share/omarchy/default/xcompose"' \
@@ -159,7 +159,7 @@ for legacy_include in \
   run_migration
 
   grep -qxF "$packaged_xcompose" "$xcompose" ||
-    fail "migration repoints $legacy_include at the active Omarchy tree" "$(cat "$xcompose")"
+    fail "migration repoints $legacy_include at the active DecentralOS tree" "$(cat "$xcompose")"
   grep -qF '<Multi_key> <space> <e> : "test@example.com"' "$xcompose" ||
     fail "migration discards the user's own compose sequences"
   grep -qxF 'omarchy-restart-xcompose' "$CALLS" ||
@@ -179,7 +179,7 @@ run_migration
 [[ ! -s $CALLS ]] || fail "migration acts when XCompose and legacy udev rules are absent" "$(cat "$CALLS")"
 pass "migration leaves a home without XCompose alone"
 
-# What Omarchy 3's unquoted heredoc actually left on disk: the installing user's
+# What DecentralOS 3's unquoted heredoc actually left on disk: the installing user's
 # home expanded into a rule root runs on every power_supply event.
 write_vulnerable_power_rule() {
   cat >"$power_rule" <<'RULE'
@@ -248,10 +248,10 @@ write_final_vulnerable_power_rule
 run_migration
 
 [[ ! -e $power_rule ]] ||
-  fail "migration removes the final Omarchy 3 power rule" "$(cat "$power_rule")"
+  fail "migration removes the final DecentralOS 3 power rule" "$(cat "$power_rule")"
 (( $(reload_count) == 1 )) ||
   fail "migration reloads udev after removing the final power rule" "$(cat "$CALLS")"
-pass "migration removes the final Omarchy 3 power rule body"
+pass "migration removes the final DecentralOS 3 power rule body"
 
 reset_machine
 write_vulnerable_wifi_rule
@@ -424,7 +424,7 @@ pass "migration fails closed when it cannot search the rules directory"
 # the file talks about the legacy checkout. udev never runs a comment.
 reset_machine
 cat >"$power_rule" <<'RULE'
-# Replaces the rule Omarchy used to install from
+# Replaces the rule DecentralOS used to install from
 # /home/someuser/.local/share/omarchy/bin/omarchy-powerprofiles-set
 #SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="/home/someuser/.local/share/omarchy/bin/omarchy-powerprofiles-set"
 SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="/usr/local/bin/my-own-power-hook"
@@ -445,7 +445,7 @@ run_migration
 pass "migration keeps same-named rules that only mention the legacy path"
 
 # A vulnerable rule that an administrator extended is no longer the exact file
-# Omarchy generated. Preserve the whole file under a suffix udev ignores rather
+# DecentralOS generated. Preserve the whole file under a suffix udev ignores rather
 # than deleting their addition or leaving the vulnerable command active.
 reset_machine
 write_vulnerable_power_rule
@@ -480,7 +480,7 @@ run_migration
 pass "migration is a no-op after completing a quarantine"
 
 # Reformatting RUN does not make the user-controlled command safe, but it does
-# make the file something Omarchy cannot delete wholesale without guessing.
+# make the file something DecentralOS cannot delete wholesale without guessing.
 reset_machine
 cat >"$wifi_rule" <<'RULE'
 SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ATTR{online}=="0", RUN += "/home/someuser/.local/share/omarchy/bin/omarchy-wifi-powersave on"

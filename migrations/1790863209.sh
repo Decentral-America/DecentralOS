@@ -32,13 +32,13 @@ if [[ ! -f $HOME/.local/state/omarchy/preinstalls-removed ]]; then
     omarchy-mise-install grok
   fi
 elif [[ $npm_stub == true ]]; then
-  # After an opt-out, only a wrapper Omarchy wrote proves the tool is ours.
+  # After an opt-out, only a wrapper DecentralOS wrote proves the tool is ours.
   rm -f "$wrapper"
   drop_npm_grok
 fi
 
 # The npm launcher unpacked its binary into ~/.grok/bin, where x.ai's installer
-# also puts its copy and a PATH entry ahead of mise. With Omarchy's wrapper
+# also puts its copy and a PATH entry ahead of mise. With DecentralOS's wrapper
 # gone, nothing of ours runs from there, and a copy left behind would keep
 # shadowing the mise tool.
 if [[ $npm_stub == true ]]; then

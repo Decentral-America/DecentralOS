@@ -3,7 +3,7 @@
   "id": "omarchy.keyboard-layout",
   "name": "Keyboard layout",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Current keyboard layout and input language, click cycles",
   "kinds": [
     "bar-widget"

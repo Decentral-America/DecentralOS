@@ -1,4 +1,4 @@
--- Window and layer rules for the Omarchy Quickshell surfaces. The
+-- Window and layer rules for the DecentralOS Quickshell surfaces. The
 -- shell-wide bar / menu / popouts are layer-shell.
 
 -- Keep the bar instant: no layer-shell fade/slide animation.
@@ -18,4 +18,4 @@ hl.layer_rule({ match = { namespace = "^(omarchy-background|owe-background)$" },
 
 -- Dev gallery is the main shell workbench; open it maximized like
 -- SUPER+ALT+F so component previews have the whole workspace.
-o.window({ class = "^org.quickshell$", title = "^Omarchy shell – dev gallery$" }, { maximize = true })
+o.window({ class = "^org.quickshell$", title = "^DecentralOS shell – dev gallery$" }, { maximize = true })

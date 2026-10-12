@@ -204,11 +204,11 @@ assertEqual(
 )
 assert(
   defaultById['update.omarchy'].icon === '\ue900',
-  'menu update Omarchy entry uses the Omarchy glyph'
+  'menu update DecentralOS entry uses the DecentralOS glyph'
 )
 assert(
   defaultById['update.omarchy'].iconFont === 'omarchy',
-  'menu update Omarchy entry renders the private glyph with the Omarchy font'
+  'menu update DecentralOS entry renders the private glyph with the DecentralOS font'
 )
 assertEqual(
   defaultById['update.themes'].when,
@@ -285,7 +285,7 @@ assert(
 )
 assert(!defaultById['install.ai.crush'], 'menu removes Crush from Install > AI')
 // Software you already have keeps its place in Install, dimmed rather than
-// dropped, so the list reads as a catalog of what Omarchy can install.
+// dropped, so the list reads as a catalog of what DecentralOS can install.
 // Chromium Account is the sole Install row with anything left to hide for. The
 // Windows VM, whose guest can't run elsewhere, and the installers whose vendors
 // ship Linux builds for x86_64 alone hide only off x86_64, so any other `when:`
@@ -781,5 +781,5 @@ assert(
 JS
 
 font_charset=$(fc-query --format='%{charset}' "$ROOT/default/fonts/omarchy/omarchy.ttf")
-[[ $font_charset == *"e900-e90e"* ]] || fail "Omarchy icon font includes every custom menu glyph"
-pass "Omarchy icon font includes the official agent marks"
+[[ $font_charset == *"e900-e90e"* ]] || fail "DecentralOS icon font includes every custom menu glyph"
+pass "DecentralOS icon font includes the official agent marks"

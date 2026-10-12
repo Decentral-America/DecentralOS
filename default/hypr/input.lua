@@ -12,11 +12,11 @@ local vconsole = keyboard.selected()
 local kb_layout = vconsole.XKBLAYOUT or "us"
 local kb_variant = vconsole.XKBVARIANT or ""
 -- Caps Lock is Caps Lock, and Shift + Caps Lock is the compose key. Stock XKB
--- has no such option, so Omarchy defines it in /etc/xkb.
+-- has no such option, so DecentralOS defines it in /etc/xkb.
 local kb_options = "omarchy:shift_caps_compose"
 
 -- Hyprland resolves keybindings against the first entry in kb_layout, not the
--- layout that's currently active, so Omarchy's Latin-keysym bindings (SUPER + W
+-- layout that's currently active, so DecentralOS's Latin-keysym bindings (SUPER + W
 -- and friends) only fire when a Latin layout leads. Installing with a non-Latin
 -- one would otherwise leave the desktop unusable.
 if non_latin_layouts:find(" " .. kb_layout:match("^[^,]*") .. " ", 1, true) then

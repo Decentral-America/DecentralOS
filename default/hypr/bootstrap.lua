@@ -1,4 +1,4 @@
--- Hyprland bootstrap for Omarchy's Lua module path.
+-- Hyprland bootstrap for DecentralOS's Lua module path.
 
 local home = os.getenv("HOME")
 local reload_prefixes = {
@@ -29,7 +29,7 @@ for _, module in ipairs(modules_to_reload) do
 end
 
 -- Load generated state from ~/.local/state, user modules from ~/.config, and
--- Omarchy defaults from $OMARCHY_PATH.
+-- DecentralOS defaults from $OMARCHY_PATH.
 package.path = home
   .. "/.local/state/?.lua;"
   .. home

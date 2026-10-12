@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "id": "omarchy.system-update",
-  "name": "Omarchy update",
+  "name": "DecentralOS update",
   "version": "1.0.0",
-  "author": "Omarchy",
-  "description": "Indicates available Omarchy updates",
+  "author": "DecentralOS",
+  "description": "Indicates available DecentralOS updates",
   "kinds": [
     "bar-widget"
   ],
@@ -12,8 +12,8 @@
     "barWidget": "SystemUpdate.qml"
   },
   "barWidget": {
-    "displayName": "Omarchy update",
-    "description": "Indicates available Omarchy updates",
+    "displayName": "DecentralOS update",
+    "description": "Indicates available DecentralOS updates",
     "category": "System",
     "allowMultiple": false
   }

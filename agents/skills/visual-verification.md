@@ -1,6 +1,6 @@
 # Visual Verification
 
-Read this before finishing any change with a visual effect: Omarchy shell
+Read this before finishing any change with a visual effect: DecentralOS shell
 styling and layout, panels, menus, notifications, desktop appearance,
 animations, transitions, screenshots, and screen recording flows.
 

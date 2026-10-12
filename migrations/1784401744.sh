@@ -1,4 +1,4 @@
-echo "Backfill hardware support and tmux settings added before Omarchy quattro"
+echo "Backfill hardware support and tmux settings added before DecentralOS quattro"
 
 tmux_config="$HOME/.config/tmux/tmux.conf"
 if [[ -f $tmux_config ]]; then

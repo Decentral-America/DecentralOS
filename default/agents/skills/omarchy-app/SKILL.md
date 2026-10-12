@@ -1,18 +1,18 @@
 ---
 name: omarchy-app
 description: >
-  Build a new desktop app for Omarchy the way Omarchy's own apps are built
+  Build a new desktop app for DecentralOS the way DecentralOS's own apps are built
   (Hype, Monologue, Omacut): C++ and Qt Quick, compiled with qmake6 and make
-  into a single binary, following the Omarchy theme live, and installed as an
+  into a single binary, following the DecentralOS theme live, and installed as an
   Arch package so it shows up in the app launcher. Use when asked to make,
   build, or scaffold an app, tool, utility, or GUI program for the desktop.
   Triggers: new app, make me an app, desktop app, GUI, Qt, QML, Qt Quick, C++
   app, qmake, app launcher entry, PKGBUILD for my app.
 ---
 
-# Building an Omarchy App
+# Building an DecentralOS App
 
-Omarchy's own apps are dead simple on purpose: one window, one job, driven
+DecentralOS's own apps are dead simple on purpose: one window, one job, driven
 from the keyboard, following the desktop theme, and installed like any other
 package. Build new ones the same way. `templates.md` has the starter files;
 the published apps are the reference for anything bigger:
@@ -28,7 +28,7 @@ Pick a short lowercase name (`tally`, `pomo`); it is the binary, the package,
 the `.desktop` file, the icon, and the Wayland app id all at once. Create the
 project in `~/Work/<name>` unless the user says otherwise, and `git init` it.
 
-Everything an app needs is part of Omarchy: `qmake6`, `make`, a C++
+Everything an app needs is part of DecentralOS: `qmake6`, `make`, a C++
 compiler, Qt's base, declarative, multimedia, SVG, and Wayland modules, and
 `ffmpeg`. If `qmake6` is missing, install the set with `omarchy-pkg-add
 base-devel qt6-base qt6-declarative qt6-multimedia qt6-svg qt6-wayland ffmpeg`.
@@ -42,7 +42,7 @@ bin/test                builds and runs the Qt Test binary offscreen
 bin/install             makepkg -fsi, so the app lands in the launcher
 src/main.cpp            app setup; hands C++ objects to QML
 src/backend.{h,cpp}     the app's state and work, as a QObject
-src/theme.{h,cpp}       follows the Omarchy accent color
+src/theme.{h,cpp}       follows the DecentralOS accent color
 src/Main.qml            the window: layout, keys, nothing else
 src/resources.qrc       compiles the QML into the binary
 tests/<name>_tests.{pro,cpp}
@@ -74,13 +74,13 @@ files committed.
   `src/portalfilepicker.{h,cpp}` behind an abstract `src/filepicker.h` is the
   pattern to copy, with its attribution, and lets tests inject a fake picker.
 
-## Omarchy conventions
+## DecentralOS conventions
 
 - **Follow the theme live.** Read `accent` from
   `~/.local/state/omarchy/current/theme/colors.toml` and watch it; a theme
   switch replaces files and symlinks, so re-arm the watcher on every change.
-  Fall back to `#FFD60A` when Omarchy isn't there. `templates.md` has the
-  `Theme` class. Never change Omarchy's config.
+  Fall back to `#FFD60A` when DecentralOS isn't there. `templates.md` has the
+  `Theme` class. Never change DecentralOS's config.
 - **Keyboard first.** `?` shows every shortcut in an overlay, `Q` quits (and
   asks first when there's unsaved or unexported work), Space is the main
   action, Ctrl+Z / Ctrl+Shift+Z undo and redo. The README lists the shortcuts
@@ -103,5 +103,5 @@ files committed.
    save` and check the window against the theme before calling it done.
 4. `bin/install` builds the package with `makepkg -fsi`, which installs the
    binary, the `.desktop` entry, and the icon. The app then appears in the
-   Omarchy app launcher (`Super + Space`). Run it again after every change
+   DecentralOS app launcher (`Super + Space`). Run it again after every change
    the user should see there.

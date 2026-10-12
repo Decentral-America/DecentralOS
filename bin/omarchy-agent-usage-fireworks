@@ -274,7 +274,7 @@ def read_config() -> dict[str, Any]:
 def credentials(auth_path: Path, config: dict[str, Any]) -> tuple[str, str]:
   file_key, file_account = read_auth_file(auth_path)
   # Agent logins are the fallback ladder below an explicit key or a firectl
-  # login: pi first as Omarchy's default agent, opencode as the last resort.
+  # login: pi first as DecentralOS's default agent, opencode as the last resort.
   api_key = (
     str(os.environ.get("FIREWORKS_API_KEY", "")).strip()
     or file_key

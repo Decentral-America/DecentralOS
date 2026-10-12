@@ -59,7 +59,7 @@ OMASNAP_TEST_LOG="$capture_log" PATH="$stub_bin:$PATH" \
   "$ROOT/bin/omarchy-capture-screenshot" scroll --save
 [[ $(<"$capture_log") == $'\tscroll --save' ]] || fail "native Omasnap modes and flags pass through unchanged"
 
-pass "the Omarchy screenshot route delegates compatible arguments to Omasnap"
+pass "the DecentralOS screenshot route delegates compatible arguments to Omasnap"
 
 cat >"$stub_bin/omarchy-pkg-add" <<'SH'
 #!/bin/bash

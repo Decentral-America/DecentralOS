@@ -4,7 +4,7 @@ set -euo pipefail
 
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/base-test.sh"
 
-# Omarchy does not write a root-owned file through a heredoc whose delimiter is
+# DecentralOS does not write a root-owned file through a heredoc whose delimiter is
 # unquoted, and this check enforces that.
 #
 # With an unquoted delimiter (<<EOF rather than <<'EOF') the *installing user's*

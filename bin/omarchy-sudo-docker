@@ -5,7 +5,7 @@
 # omarchy:examples=omarchy-sudo-docker && echo "needs sudo" | omarchy-sudo-docker --configured
 # omarchy:hidden=true
 
-# The docker group is root-equivalent, so Omarchy leaves users out of it by
+# The docker group is root-equivalent, so DecentralOS leaves users out of it by
 # default and reaches the daemon through a prompt instead. Everything that has
 # to make that choice asks here rather than testing group membership itself.
 #

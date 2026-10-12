@@ -1,4 +1,4 @@
-echo "Move Elsewhen, the world clock, into Omarchy as omarchy.elsewhen"
+echo "Move Elsewhen, the world clock, into DecentralOS as omarchy.elsewhen"
 
 # The widget keeps its entry, and with it the cities and settings stored there.
 config_file="$HOME/.config/omarchy/shell.json"
