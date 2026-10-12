@@ -1,0 +1,43 @@
+# Maintainer: Decentral America
+
+pkgname=decentralchain-node
+pkgver=1.7.0
+pkgrel=1
+pkgdesc="DecentralChain blockchain node with first-boot setup for DecentralOS"
+arch=('any')
+url="https://github.com/Decentral-America/node-scala"
+license=('MIT')
+depends=('java-runtime-headless>=25' 'curl' 'jq' 'gum' 'python')
+makedepends=('git' 'sbt' 'java-environment>=25')
+backup=('etc/decentralchain/node.env')
+install=decentralchain-node.install
+source=("node-scala::git+$url.git#tag=v$pkgver"
+        'decentralchain-node'
+        'decentralos-node'
+        'decentralchain-node.service'
+        'decentralchain-node.desktop'
+        'node.env'
+        'sysusers.conf'
+        'tmpfiles.conf'
+        'sleep.conf')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+build() {
+  cd node-scala
+  sbt --batch node/Universal/packageZipTarball
+}
+
+package() {
+  install -d "$pkgdir/usr/share/decentralchain"
+  bsdtar -xf node-scala/node/target/universal/decentralchain*.tgz \
+    --strip-components=1 -C "$pkgdir/usr/share/decentralchain"
+
+  install -Dm755 decentralchain-node "$pkgdir/usr/bin/decentralchain-node"
+  install -Dm755 decentralos-node "$pkgdir/usr/bin/decentralos-node"
+  install -Dm644 decentralchain-node.service "$pkgdir/usr/lib/systemd/system/decentralchain-node.service"
+  install -Dm644 decentralchain-node.desktop "$pkgdir/usr/share/applications/decentralchain-node.desktop"
+  install -Dm644 node.env "$pkgdir/etc/decentralchain/node.env"
+  install -Dm644 sysusers.conf "$pkgdir/usr/lib/sysusers.d/decentralchain.conf"
+  install -Dm644 tmpfiles.conf "$pkgdir/usr/lib/tmpfiles.d/decentralchain.conf"
+  install -Dm644 sleep.conf "$pkgdir/usr/lib/systemd/sleep.conf.d/10-decentralchain.conf"
+}

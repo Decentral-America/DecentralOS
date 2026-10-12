@@ -1,0 +1,26 @@
+[Unit]
+Description=DecentralChain Node
+Wants=network-online.target
+After=network-online.target
+# Written by `decentralos-node setup`; the node stays off until it has run.
+ConditionPathExists=/etc/decentralchain/dcc.conf
+
+[Service]
+Type=simple
+User=decentralchain
+Group=decentralchain
+EnvironmentFile=/etc/decentralchain/node.env
+ExecStart=/usr/bin/decentralchain-node
+Restart=always
+RestartSec=10
+RestartPreventExitStatus=10 38 61 74
+SuccessExitStatus=143
+TimeoutStopSec=90
+LimitNOFILE=65536
+NoNewPrivileges=yes
+ProtectSystem=full
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

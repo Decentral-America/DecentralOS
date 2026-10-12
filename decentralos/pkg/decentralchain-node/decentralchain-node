@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Start the DecentralChain node in the foreground (run by decentralchain-node.service).
+
+set -euo pipefail
+
+home=/usr/share/decentralchain
+
+exec /usr/lib/jvm/default-runtime/bin/java \
+  -XX:+ExitOnOutOfMemoryError \
+  -Xmx"${DCC_HEAP_SIZE:-2g}" \
+  --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED \
+  --add-opens=java.base/sun.nio.ch=ALL-UNNAMED \
+  -Dlogback.stdout.level="${DCC_LOG_LEVEL:-INFO}" \
+  -Dlogback.file.directory=/var/log/decentralchain \
+  -Ddcc.config.directory=/etc/decentralchain \
+  -Ddcc.directory=/var/lib/decentralchain \
+  -cp "$home/lib/plugins/*:$home/lib/*" \
+  com.decentralchain.Application /etc/decentralchain/dcc.conf

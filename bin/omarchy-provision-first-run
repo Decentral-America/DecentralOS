@@ -93,6 +93,8 @@ run_first_run_step "show welcome notification" \
   bash "$OMARCHY_PATH/install/user/first-run/welcome.sh"
 run_first_run_step "schedule Wi-Fi/update notifications" \
   bash "$OMARCHY_PATH/install/user/first-run/wifi.sh"
+run_first_run_step "start DecentralChain node setup" \
+  bash "$OMARCHY_PATH/install/user/first-run/node-setup.sh"
 
 if (( first_run_failed == 0 )); then
   omarchy-done mark "$FIRST_RUN_DONE"

@@ -1,0 +1,13 @@
+post_install() {
+  echo ":: Run 'decentralos-node' to set up your DecentralChain node."
+}
+
+post_upgrade() {
+  if systemctl is-active --quiet decentralchain-node.service; then
+    systemctl try-restart decentralchain-node.service
+  fi
+}
+
+pre_remove() {
+  systemctl disable --now decentralchain-node.service 2>/dev/null || true
+}
