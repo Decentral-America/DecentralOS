@@ -2,26 +2,39 @@
 
 pkgname=decentralchain-node
 pkgver=1.7.0
-pkgrel=3
+pkgrel=4
 pkgdesc="DecentralChain blockchain node with first-boot setup for DecentralOS"
 arch=('any')
 url="https://github.com/Decentral-America/node-scala"
 license=('MIT')
-depends=('java-runtime-headless>=25' 'curl' 'jq' 'gum' 'python')
+depends=('java-runtime-headless>=25' 'curl' 'jq' 'python' 'qrencode' 'iproute2')
 makedepends=('git' 'sbt' 'java-environment>=25')
 backup=('etc/decentralchain/node.env')
 install=decentralchain-node.install
 source=("node-scala::git+$url.git#tag=v$pkgver"
         'decentralchain-node'
         'decentralos-node'
+        'decentralos-autologin'
+        'decentralos-node-update'
         'decentralchain-node.service'
+        'decentralchain-node.path'
+        'decentralchain-node-reload.service'
+        'decentralos-dashboard.service'
+        'decentralos-firewall.service'
+        'decentralos-autologin.service'
+        'decentralos-node-update.service'
+        'decentralos-node-update.timer'
+        'decentralos-kiosk.service'
         'decentralchain-node.desktop'
+        'network.rules'
         'node.env'
         'sysusers.conf'
         'tmpfiles.conf'
         'sleep.conf'
-        'seed-words.txt')
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+        'seed-words.txt'
+        'server.py'
+        'index.html')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 build() {
   cd node-scala
@@ -38,9 +51,15 @@ package() {
   done
   install -Dm644 seed-words.txt "$pkgdir/usr/share/decentralchain/seed-words.txt"
 
-  install -Dm755 decentralchain-node "$pkgdir/usr/bin/decentralchain-node"
-  install -Dm755 decentralos-node "$pkgdir/usr/bin/decentralos-node"
-  install -Dm644 decentralchain-node.service "$pkgdir/usr/lib/systemd/system/decentralchain-node.service"
+  install -Dm644 -t "$pkgdir/usr/share/decentralos/dashboard" server.py index.html
+
+  install -Dm755 -t "$pkgdir/usr/bin" decentralchain-node decentralos-node decentralos-autologin decentralos-node-update
+  install -Dm644 -t "$pkgdir/usr/lib/systemd/system" decentralchain-node.service decentralchain-node.path     decentralchain-node-reload.service decentralos-dashboard.service decentralos-firewall.service     decentralos-autologin.service decentralos-node-update.service decentralos-node-update.timer
+  # The kiosk starts in every graphical session without per-user setup.
+  install -Dm644 decentralos-kiosk.service "$pkgdir/usr/lib/systemd/user/decentralos-kiosk.service"
+  install -d "$pkgdir/usr/lib/systemd/user/graphical-session.target.wants"
+  ln -s ../decentralos-kiosk.service "$pkgdir/usr/lib/systemd/user/graphical-session.target.wants/decentralos-kiosk.service"
+  install -Dm644 network.rules "$pkgdir/usr/share/polkit-1/rules.d/50-decentralos-network.rules"
   install -Dm644 decentralchain-node.desktop "$pkgdir/usr/share/applications/decentralchain-node.desktop"
   install -Dm644 node.env "$pkgdir/etc/decentralchain/node.env"
   install -Dm644 sysusers.conf "$pkgdir/usr/lib/sysusers.d/decentralchain.conf"

@@ -1,17 +1,20 @@
 name: DecentralOS packages
 
-# Builds decentralos/pkg into a pacman repository and publishes it as the
-# assets of the `packages` release, which is what the [decentralos] pacman
-# repository on every DecentralOS machine points at.
+# Builds the DecentralOS pacman repository (node package plus our builds of the
+# OS packages) and publishes it as the assets of the `packages` release, which
+# is what the [decentralos] pacman repository on every device points at.
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['decentralos/pkg/**']
 
 permissions:
   contents: write
+
+concurrency:
+  group: decentralos-packages
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -20,15 +23,19 @@ jobs:
     steps:
       - name: Install build tools
         run: |
-          pacman -Syu --noconfirm --needed base-devel git sudo github-cli
+          pacman -Syu --noconfirm --needed base-devel git sudo github-cli jq imagemagick neovim nodejs npm tree-sitter-cli
           useradd -m build
           echo "build ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/build
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Build packages
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          cp -r decentralos/pkg /home/build/pkg
-          chown -R build /home/build/pkg
-          sudo -u build bash /home/build/pkg/build-repo.sh /home/build/repo
+          chown -R build .
+          sudo -u build git config --global --add safe.directory '*'
+          sudo -u build --preserve-env=GH_TOKEN bash decentralos/pkg/build-repo.sh /home/build/repo
       - name: Publish repository
         env:
           GH_TOKEN: ${{ github.token }}
@@ -39,3 +46,7 @@ jobs:
           gh release view packages -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 ||
             gh release create packages -R "$GITHUB_REPOSITORY" --title "Package repository" --notes "pacman repository for DecentralOS. Not a versioned release."
           gh release upload packages -R "$GITHUB_REPOSITORY" --clobber decentralos.db decentralos.files *.pkg.tar.zst
+          # Drop packages the new database no longer lists.
+          for asset in $(gh release view packages -R "$GITHUB_REPOSITORY" --json assets -q '.assets[].name'); do
+            [ -e "$asset" ] || gh release delete-asset packages "$asset" -R "$GITHUB_REPOSITORY" --yes
+          done

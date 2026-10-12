@@ -19,7 +19,7 @@ BarWidget {
   }
 
   function openNode() {
-    if (root.bar) root.bar.run("omarchy-launch-floating-terminal-with-presentation decentralos-node")
+    if (root.bar) root.bar.run("decentralos-node open")
   }
 
   function behindText() {

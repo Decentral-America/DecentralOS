@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DecentralChain Node</title>
+<style>
+  :root { --bg:#0B0F14; --raised:#111827; --sunken:#070A0E; --line:#1C2532; --text:#E6EDF5; --dim:#A0AEC0;
+          --accent:#00E5FF; --ok:#1FD98A; --warn:#F5B642; --bad:#FF6B6B; --info:#6AA8FF; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui,"Segoe UI",sans-serif; }
+  main { max-width:1100px; margin:0 auto; padding:24px 16px 48px; }
+  h1 { font-size:15px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); margin:0 0 20px; font-weight:600; }
+  h2 { font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:0 0 12px; font-weight:600; }
+  .card { background:var(--raised); border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); margin-top:16px; }
+  .hero { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .dot { width:18px; height:18px; border-radius:50%; background:var(--dim); flex:none; box-shadow:0 0 18px currentColor; }
+  .hero h3 { margin:0; font-size:30px; line-height:1.2; }
+  .hero p { margin:4px 0 0; color:var(--dim); }
+  .bar { height:10px; background:var(--sunken); border-radius:6px; overflow:hidden; margin-top:14px; }
+  .bar i { display:block; height:100%; background:var(--accent); width:0; transition:width .6s; }
+  .big { font:600 28px ui-monospace,"IBM Plex Mono",monospace; }
+  .mono { font-family:ui-monospace,"IBM Plex Mono",monospace; word-break:break-all; }
+  .dim { color:var(--dim); } .small { font-size:14px; }
+  .alert { border-left:4px solid var(--info); padding:10px 14px; background:var(--sunken); border-radius:8px; margin-top:10px; }
+  .alert.bad { border-color:var(--bad); } .alert.warn { border-color:var(--warn); }
+  .alert b { display:block; }
+  .qr { background:#fff; border-radius:10px; padding:6px; width:170px; height:170px; flex:none; }
+  .qr img { width:100%; height:100%; display:block; }
+  .row { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  button { background:var(--accent); color:var(--bg); border:0; border-radius:10px; padding:14px 22px; font:600 17px inherit; cursor:pointer; }
+  button[disabled] { opacity:.35; cursor:default; }
+  button.ghost { background:none; color:var(--accent); border:1px solid var(--line); padding:9px 14px; font-size:14px; }
+  input[type=text],input[type=password],textarea,select { width:100%; background:var(--sunken); color:var(--text); border:1px solid var(--line);
+    border-radius:8px; padding:10px; font:inherit; margin-top:8px; }
+  .words { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin:16px 0; }
+  .words span { background:var(--sunken); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font:600 17px ui-monospace,monospace; }
+  .words span i { color:var(--dim); font-style:normal; font-weight:400; margin-right:8px; font-size:13px; }
+  label.check { display:flex; gap:10px; align-items:flex-start; margin:14px 0; font-size:17px; }
+  label.check input { width:22px; height:22px; margin-top:2px; }
+  .hide { display:none !important; }
+  .err { color:var(--bad); margin-top:8px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>DecentralChain Node</h1>
+
+  <!-- First run: the one thing the owner has to do. -->
+  <section id="setup" class="hide">
+    <div class="card">
+      <div class="hero"><div><h3>Welcome. Let's start your node.</h3>
+        <p>One step: save the 15 words below. They are the key to your wallet.</p></div></div>
+      <div id="words" class="words"></div>
+      <div class="alert warn"><b>Write these words on paper, in order, and keep the paper safe.</b>
+        They are the only way to recover your wallet if this box breaks, and anyone who has them can take your funds. Nobody from DecentralChain will ever ask for them.</div>
+      <label class="check"><input type="checkbox" id="saved"><span>I have written down all 15 words and stored them safely.</span></label>
+      <button id="start" disabled>Start my node</button>
+      <div id="setupErr" class="err"></div>
+      <p class="small dim" style="margin-top:22px"><a href="#" id="showImport" style="color:var(--dim)">I already have a recovery phrase</a></p>
+      <div id="import" class="hide">
+        <textarea id="phrase" rows="3" placeholder="Type your existing recovery phrase"></textarea>
+        <p><button id="startImport" class="ghost">Use this phrase and start my node</button></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="dash" class="hide">
+    <div class="card">
+      <div class="hero">
+        <span class="dot" id="dot"></span>
+        <div style="flex:1;min-width:240px"><h3 id="headline">Checking…</h3><p id="sub"></p></div>
+      </div>
+      <div class="bar" id="barWrap"><i id="bar"></i></div>
+      <div id="alerts"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h2>Network status</h2>
+        <div class="row"><div><div class="big" id="height">–</div><div class="dim small">current block</div></div>
+        <div><div class="big" id="peers">–</div><div class="dim small">nodes connected</div></div></div>
+        <p class="dim small" id="netline" style="margin-bottom:0"></p>
+      </div>
+
+      <div class="card"><h2>Your wallet</h2>
+        <div class="row">
+          <div class="qr"><img id="addrQr" alt=""></div>
+          <div style="flex:1;min-width:180px"><div class="big" id="balance">–</div><div class="dim small">DCC balance</div>
+            <p class="mono small" id="address"></p></div>
+        </div>
+        <p id="seedBox" class="hide"><button class="ghost" id="showSeed">Show my 15 recovery words</button></p>
+        <div id="seedWords" class="words"></div>
+      </div>
+
+      <div class="card"><h2>Earning rewards</h2>
+        <div class="big"><span id="stake">0</span> <span class="dim" style="font-size:17px">of <span id="needed">1,000</span> DCC</span></div>
+        <div class="bar"><i id="stakeBar" style="background:var(--ok)"></i></div>
+        <p class="small" id="stakeText"></p>
+        <p class="small dim" style="margin-bottom:0">To add stake, send DCC to the wallet address shown here, or have others <b>lease</b> their DCC to it from a DecentralChain wallet. Leased coins stay in their owner's wallet. New stake starts counting after about 1,000 blocks.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="grid" id="extras">
+      <div class="card" id="pairCard"><h2>Use your phone</h2>
+        <div class="row">
+          <div class="qr"><img id="pairQr" alt=""></div>
+          <p class="small" style="flex:1;min-width:180px">Scan this with your phone's camera while on the same Wi-Fi. You can then finish setup and check on your node from your phone, with no screen or keyboard needed on the box.</p>
+        </div>
+      </div>
+      <div class="card hide" id="wifiCard"><h2>Network</h2>
+        <p class="small" id="wifiState"></p>
+        <p class="small dim">A cable from your router to the box is the most reliable. To use Wi-Fi instead:</p>
+        <select id="ssid"></select>
+        <input type="password" id="wifiPass" placeholder="Wi-Fi password">
+        <p><button class="ghost" id="join">Join Wi-Fi</button> <button class="ghost" id="scan">Search again</button></p>
+        <div id="wifiMsg" class="small"></div>
+      </div>
+  </div>
+  <p class="dim small" id="foot" style="margin-top:20px"></p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const api = (path, body) => fetch(path, body ? {method:'POST', headers:{'Content-Type':'application/json','X-DecentralOS':'1'}, body:JSON.stringify(body)} : {})
+  .then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Something went wrong.'); return j; });
+const num = n => Number(n).toLocaleString('en-US', {maximumFractionDigits: 2});
+const words = (el, phrase) => { el.innerHTML = ''; phrase.split(' ').forEach((w, i) => { const s = document.createElement('span'); s.innerHTML = '<i>' + (i + 1) + '</i>'; s.append(w); el.append(s); }); };
+const ago = s => { const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60); return d ? d + ' days ' + h + ' hours' : h ? h + ' hours ' + m + ' minutes' : m + ' minutes'; };
+
+let phraseLoaded = false, qrFor = '', pairFor = '', wifiLoaded = false;
+
+async function loadPhrase() {
+  if (phraseLoaded) return; phraseLoaded = true;
+  try { words($('words'), (await api('/api/setup/phrase')).phrase); } catch (e) { phraseLoaded = false; }
+}
+$('saved').onchange = e => $('start').disabled = !e.target.checked;
+async function begin(body) {
+  $('setupErr').textContent = ''; $('start').disabled = true;
+  try { await api('/api/setup', body); refresh(); } catch (e) { $('setupErr').textContent = e.message; $('start').disabled = !$('saved').checked; }
+}
+$('start').onclick = () => begin({confirm: true});
+$('showImport').onclick = e => { e.preventDefault(); $('import').classList.toggle('hide'); };
+$('startImport').onclick = () => begin({phrase: $('phrase').value});
+$('showSeed').onclick = async () => {
+  if ($('seedWords').innerHTML) { $('seedWords').innerHTML = ''; return; }
+  try { words($('seedWords'), (await api('/api/seed')).phrase); } catch (e) { $('seedWords').textContent = e.message; }
+};
+
+async function scanWifi() {
+  $('wifiMsg').textContent = 'Searching…';
+  try { const nets = (await api('/api/wifi')).networks; $('ssid').innerHTML = ''; nets.forEach(n => $('ssid').add(new Option(n.ssid + '  (' + n.signal + '%)', n.ssid))); $('wifiMsg').textContent = nets.length ? '' : 'No Wi-Fi networks found.'; }
+  catch (e) { $('wifiMsg').textContent = ''; }
+}
+$('scan').onclick = scanWifi;
+$('join').onclick = async () => {
+  $('wifiMsg').textContent = 'Joining…';
+  try { await api('/api/wifi', {ssid: $('ssid').value, password: $('wifiPass').value}); $('wifiMsg').textContent = 'Connected.'; refresh(); }
+  catch (e) { $('wifiMsg').textContent = e.message; }
+};
+
+function render(s) {
+  $('setup').classList.toggle('hide', s.configured);
+  $('dash').classList.toggle('hide', !s.configured);
+  // Network help is always reachable on the box itself, including before setup.
+  $('wifiCard').classList.toggle('hide', !s.local);
+  $('pairCard').classList.toggle('hide', !s.local || !s.net.ip);
+  if (s.local && s.net.ip && pairFor !== s.net.ip) { pairFor = s.net.ip; $('pairQr').src = '/api/qr?kind=pair&ip=' + s.net.ip; }
+  if (!s.configured) loadPhrase();
+  $('wifiState').textContent = s.net.kind === 'none' ? 'Not connected.' : (s.net.kind === 'wired' ? 'Connected by cable' : 'Connected by Wi-Fi') + (s.net.online ? ', internet is working.' : ', but the internet is not reachable.');
+  if (s.local && !wifiLoaded) { wifiLoaded = true; scanWifi(); }
+  if (!s.configured) return;
+
+  const view = {
+    synced:   ['var(--ok)',   'Your node is running and up to date', 'Everything is working. There is nothing you need to do.'],
+    syncing:  ['var(--warn)', 'Your node is catching up', s.progress + '% done. About ' + ago(s.behind) + ' of history left to download.'],
+    starting: ['var(--info)', 'Your node is starting', 'This takes a minute or two.'],
+    offline:  ['var(--bad)',  'Your node is not running', 'See the message below.'],
+  }[s.state] || ['var(--dim)', 'Checking…', ''];
+  $('dot').style.background = $('dot').style.color = view[0];
+  $('headline').textContent = view[1]; $('sub').textContent = view[2];
+  $('barWrap').classList.toggle('hide', s.state !== 'syncing'); $('bar').style.width = s.progress + '%';
+  $('alerts').innerHTML = '';
+  s.alerts.forEach(a => { const d = document.createElement('div'); d.className = 'alert ' + a.level; const b = document.createElement('b'); b.textContent = a.title; d.append(b, a.fix); $('alerts').append(d); });
+
+  $('height').textContent = s.height ? num(s.height) : '–';
+  $('peers').textContent = s.height ? s.peers : '–';
+  $('netline').textContent = s.net.ip ? 'This box is at ' + s.net.ip + ' on your network.' : '';
+  $('balance').textContent = s.address ? num(s.balance) : '–';
+  $('address').textContent = s.address;
+  if (s.address && qrFor !== s.address) { qrFor = s.address; $('addrQr').src = '/api/qr?kind=address&a=' + s.address; }
+  $('seedBox').classList.toggle('hide', !s.local);
+
+  $('stake').textContent = num(s.generating); $('needed').textContent = num(s.needed);
+  $('stakeBar').style.width = Math.min(100, 100 * s.generating / s.needed) + '%';
+  $('stakeText').textContent = s.generating >= s.needed
+    ? 'Your node has enough stake and takes part in creating blocks. Rewards arrive in the wallet above.'
+    : 'Your node needs ' + num(s.needed - s.generating) + ' more DCC before it can create blocks and earn rewards. It still supports the network in the meantime.';
+
+  $('foot').textContent = (s.version ? s.version + ' · ' : '') + s.disk.free_gb + ' GB of storage free';
+}
+
+async function refresh() { try { render(await api('/api/status')); } catch (e) { $('headline').textContent = 'Reconnecting…'; } }
+refresh(); setInterval(refresh, 5000);
+</script>
+</body>
+</html>

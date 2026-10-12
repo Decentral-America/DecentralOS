@@ -1,13 +1,22 @@
+_units=(decentralchain-node.service decentralchain-node.path decentralos-dashboard.service
+  decentralos-firewall.service decentralos-autologin.service decentralos-node-update.timer)
+
 post_install() {
-  echo ":: Run 'decentralos-node' to set up your DecentralChain node."
+  systemctl enable "${_units[@]}"
+  # Not running under systemd while the OS is being installed; first boot starts everything.
+  if [[ -d /run/systemd/system ]]; then
+    systemctl daemon-reload
+    systemctl start decentralchain-node.path decentralos-dashboard.service decentralos-firewall.service decentralos-node-update.timer
+  fi
 }
 
 post_upgrade() {
-  if systemctl is-active --quiet decentralchain-node.service; then
-    systemctl try-restart decentralchain-node.service
+  post_install
+  if [[ -d /run/systemd/system ]]; then
+    systemctl try-restart decentralos-dashboard.service decentralchain-node.service
   fi
 }
 
 pre_remove() {
-  systemctl disable --now decentralchain-node.service 2>/dev/null || true
+  systemctl disable --now "${_units[@]}" 2>/dev/null || true
 }

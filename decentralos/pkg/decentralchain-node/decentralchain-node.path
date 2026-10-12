@@ -1,0 +1,9 @@
+[Unit]
+Description=Restart the DecentralChain node when its configuration changes
+
+[Path]
+PathChanged=/etc/decentralchain/dcc.conf
+Unit=decentralchain-node-reload.service
+
+[Install]
+WantedBy=multi-user.target

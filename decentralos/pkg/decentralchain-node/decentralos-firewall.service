@@ -1,0 +1,15 @@
+[Unit]
+Description=Open the DecentralChain node and dashboard ports
+After=ufw.service
+
+[Service]
+Type=oneshot
+# Node peer-to-peer port: open to the internet so other nodes can connect.
+ExecStart=/usr/bin/ufw allow 6868/tcp
+# Dashboard: home and office networks only, never the internet.
+ExecStart=/usr/bin/ufw allow from 10.0.0.0/8 to any port 6870 proto tcp
+ExecStart=/usr/bin/ufw allow from 172.16.0.0/12 to any port 6870 proto tcp
+ExecStart=/usr/bin/ufw allow from 192.168.0.0/16 to any port 6870 proto tcp
+
+[Install]
+WantedBy=multi-user.target

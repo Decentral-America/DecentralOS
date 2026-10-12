@@ -1,0 +1,11 @@
+[Unit]
+Description=Sign the DecentralOS owner in automatically
+After=omarchy-provision-owner.service omarchy-provision-autologin-once.service
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/decentralos-autologin
+
+[Install]
+WantedBy=multi-user.target
