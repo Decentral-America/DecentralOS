@@ -28,3 +28,9 @@ Server = https://github.com/Decentral-America/DecentralOS/releases/download/pack
 REPO
 done
 grep -qx 'decentralchain-node' install/omarchy-base.packages || echo 'decentralchain-node' >>install/omarchy-base.packages
+
+# DecentralOS ships on appliances whose owner plugs in their own keyboard and
+# mouse after install, so USB approval stays off unless they turn it on in
+# Setup > Security. Left on, it locks them out of the very keyboard needed to
+# approve it.
+sed -i 's/^systemctl enable usbguard\.service$/systemctl disable usbguard.service/' install/config/usb-authorization.sh

@@ -23,4 +23,4 @@ usb_authorization_add_user "$OMARCHY_INSTALL_USER"
 
 # Installs are followed by a reboot, so enable the daemon without starting it
 # in the live ISO's chroot.
-systemctl enable usbguard.service
+systemctl disable usbguard.service
