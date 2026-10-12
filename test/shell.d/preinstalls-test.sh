@@ -43,7 +43,7 @@ export HOME="$test_home"
 export OMARCHY_TEST_PKG_LOG="$pkg_log"
 
 # Both scripts restore and remove the same set, and every package in it has to be
-# one Omarchy actually ships, or Remove Preinstalls takes out an app the user
+# one DecentralOS actually ships, or Remove Preinstalls takes out an app the user
 # chose from the menu and Install Preinstalls puts back one we retired.
 mapfile -t shipped < <(sed -e 's/[[:space:]]*#.*$//' -e '/^[[:space:]]*$/d' "$ROOT/install/omarchy-base.packages")
 

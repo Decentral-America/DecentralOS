@@ -300,7 +300,7 @@ pass "OpenClaw removal stops the gateway service"
 pass "OpenClaw removal keeps the user's agent state"
 
 # The command on PATH goes; the OpenClaw it pointed at stays with the state,
-# since only that copy is sure to open it. A link somewhere else is not Omarchy's.
+# since only that copy is sure to open it. A link somewhere else is not DecentralOS's.
 fresh_openclaw_home
 mkdir -p "$HOME/.openclaw/bin" "$HOME/.openclaw/tools/node-v24.19.0/lib" "$HOME/.local/bin"
 printf '#!/usr/bin/env bash\n' >"$HOME/.openclaw/bin/openclaw"

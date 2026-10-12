@@ -1,7 +1,7 @@
 # NetworkManager enablement is centralized in enable-services.sh.
 systemctl disable iwd.service 2>/dev/null || true
 
-# Fresh Omarchy uses NetworkManager. Archinstall's legacy "copy ISO network"
+# Fresh DecentralOS uses NetworkManager. Archinstall's legacy "copy ISO network"
 # mode enabled systemd-networkd and dropped DHCP .network files that compete
 # with NetworkManager, so retire that state whenever hardware setup runs.
 for unit in \

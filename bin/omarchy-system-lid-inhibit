@@ -8,7 +8,7 @@
 # on a connector type it lists (HDMI, DisplayPort, DVI, VGA...), and USB-C
 # displays on Apple Silicon arrive on "USB" connectors instead. Left alone,
 # logind suspends a laptop still in use on one. Holding its handle-lid-switch
-# inhibitor while such a display is in use leaves the lid to Omarchy's
+# inhibitor while such a display is in use leaves the lid to DecentralOS's
 # clamshell handling, as HandleLidSwitchDocked=ignore would. Once released, a
 # lid that is still shut suspends at once: logind rechecks a closed lid after
 # every event.
@@ -90,10 +90,10 @@ if (( wanted )); then
   if ! held; then
     mapfile -t bind < <(watcher_binding)
     systemd-run --user --quiet --collect --unit="$UNIT" \
-      --description="Omarchy clamshell lid inhibitor" \
+      --description="DecentralOS clamshell lid inhibitor" \
       --property=PartOf=graphical-session.target "${bind[@]}" \
       systemd-inhibit --no-ask-password --what=handle-lid-switch --mode=block \
-      --who=Omarchy --why="External display in use" sleep infinity
+      --who=DecentralOS --why="External display in use" sleep infinity
   fi
 elif held; then
   systemctl --user stop "$UNIT"

@@ -17,7 +17,7 @@ if (($# == 0)); then
     read -r agent <"$agent_file"
   fi
 
-  # Silent when unset rather than defaulting: Omarchy picks no agent for you, so
+  # Silent when unset rather than defaulting: DecentralOS picks no agent for you, so
   # the menu leaves every entry unchecked until one is chosen.
   [[ -n ${agent:-} ]] && echo "$agent"
   exit 0

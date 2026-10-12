@@ -14,7 +14,7 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = omarchy
 -- hl.monitor({ output = "DP-2", mode = "preferred", position = "auto", scale = 1, transform = 1 })
 
 -- GDK scale is GDK_SCALE, the factor GTK draws its own UI at. It's what
--- sizes X11/XWayland windows, which Omarchy leaves unscaled so they stay
+-- sizes X11/XWayland windows, which DecentralOS leaves unscaled so they stay
 -- crisp instead of being stretched by the compositor. GTK only honors whole
 -- numbers, so use the nearest integer to the monitor scale, and restart an
 -- app for a change to reach it.

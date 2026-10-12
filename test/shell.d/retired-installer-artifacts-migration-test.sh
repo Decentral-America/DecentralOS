@@ -75,7 +75,7 @@ run_migration() {
 # /etc/sudoers.d is 0750 root:root on a real machine, so the migration has to
 # escalate merely to see whether either grant is there. An empty call log is
 # therefore the wrong invariant: what must be absent unless a file really is
-# Omarchy's is a removal, or a unit being disabled or reloaded.
+# DecentralOS's is a removal, or a unit being disabled or reloaded.
 assert_changed_nothing() {
   local label="$1"
 
@@ -199,7 +199,7 @@ grep -q '^sudo rm -f .*/sudoers\.d/first-run$' "$CALLS" ||
   fail "migration removes the first-run grant with elevated privileges" "$(cat "$CALLS")"
 pass "migration removes the first-run grant with elevated privileges"
 
-# The grant is only recognisable as Omarchy's because every line in it is one the
+# The grant is only recognisable as DecentralOS's because every line in it is one the
 # installer emitted. One line an administrator added and the file is theirs.
 reset_machine
 cat >"$first_run" <<'EOF'
@@ -246,7 +246,7 @@ run_migration
   fail "migration leaves the cross-account first-run file byte for byte"
 pass "migration requires the cleanup path account to match the granted account"
 
-# Nothing in this file ties it to Omarchy's first run: no self-cleanup line.
+# Nothing in this file ties it to DecentralOS's first run: no self-cleanup line.
 reset_machine
 cat >"$first_run" <<'EOF'
 installer ALL=(ALL) NOPASSWD: /usr/bin/ufw
@@ -287,7 +287,7 @@ grep -q '^sudo rm -f .*/sudoers\.d/tsui$' "$CALLS" ||
   fail "migration removes the tsui grant with elevated privileges" "$(cat "$CALLS")"
 pass "migration removes the tsui grant pointing into the user's home"
 
-# The feature is gone from Omarchy either way, and unrestricted NOPASSWD on a TUI
+# The feature is gone from DecentralOS either way, and unrestricted NOPASSWD on a TUI
 # that can shell out escalates from a root-owned path too.
 reset_machine
 printf 'installer ALL=(ALL) NOPASSWD: /usr/bin/tsui\n' >"$tsui"
@@ -298,7 +298,7 @@ pass "migration removes the tsui grant wherever the path points"
 
 reset_machine
 cat >"$tsui" <<'EOF'
-# Kept after Omarchy dropped tsui, extended for our operators
+# Kept after DecentralOS dropped tsui, extended for our operators
 installer ALL=(ALL) NOPASSWD: /usr/bin/tsui
 operator ALL=(ALL) NOPASSWD: /usr/bin/tsui
 EOF

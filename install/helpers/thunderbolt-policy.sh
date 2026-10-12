@@ -146,7 +146,7 @@ tb_snapshot() {
      warnings: ([
        (if $recovery then "A firmware boot-access change needs recovery. Boot protection is not confirmed." else empty end),
        (.domains[] | if .SecurityLevel == "none" then
-         "This controller allows PCIe connections in firmware. Select user authorization in firmware settings; Omarchy cannot block its devices before their drivers load."
+         "This controller allows PCIe connections in firmware. Select user authorization in firmware settings; DecentralOS cannot block its devices before their drivers load."
          else empty end),
        (.domains[] | .SecurityLevel as $level | select(["none","user","secure","dponly","usbonly","nopcie"] | index($level) | not) |
          "The controller authorization mode could not be verified."),

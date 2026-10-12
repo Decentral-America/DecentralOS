@@ -8,7 +8,7 @@ if [[ -f $legacy_font && ! -L $legacy_font ]]; then
   legacy_hash=$(sha256sum "$legacy_font")
   if [[ ${legacy_hash%% *} == "e55e67119e82f56f92d90cbf54b7ccc1b2946b32c535a29370439d7ef5215966" ]]; then
     if [[ ! -f /usr/share/fonts/omarchy/omarchy.ttf ]]; then
-      echo "Packaged Omarchy icon font is missing; keeping the legacy font." >&2
+      echo "Packaged DecentralOS icon font is missing; keeping the legacy font." >&2
       exit 1
     fi
 

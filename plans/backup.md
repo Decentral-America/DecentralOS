@@ -4,14 +4,14 @@ Revision 2. Rev 2 incorporates adversarial review by codex (xhigh): honest threa
 
 ## Problem
 
-Omarchy has no answer for "my disk died", "my laptop was stolen", or "I deleted a folder I needed last month":
+DecentralOS has no answer for "my disk died", "my laptop was stolen", or "I deleted a folder I needed last month":
 
 - Snapper snapshots cover the root filesystem only, live on the same disk, and `manual/47-system-snapshots.md` says outright they don't recover personal files.
 - The dots plan (`plans/dots.md`) is config history + sync, and is explicit that it is *not* a backup — the local repo dies with the disk.
 - The manual's file-safety story is "install Dropbox", which is sync with bounded retention, not backup: it only covers folders you move into it, deleted-file recovery is time-limited, and your data's survival is tied to one account at one vendor.
 - Full-disk encryption (the install default) protects a lost laptop's *confidentiality*. Nothing protects your data's *existence*.
 
-The ask: paste S3-compatible credentials, and Omarchy handles incremental, versioned, off-site backup from then on. Status, pause, and back-up-now live in a shell panel. Zero ongoing hassle.
+The ask: paste S3-compatible credentials, and DecentralOS handles incremental, versioned, off-site backup from then on. Status, pause, and back-up-now live in a shell panel. Zero ongoing hassle.
 
 ## Threat model
 
@@ -56,12 +56,12 @@ A gum wizard in the terminal, in the mold of `omarchy-setup-security-sshd` (flag
 
 1. **Destination.** Choose: S3-compatible bucket — prompts for endpoint URL, bucket (with optional prefix), region (optional, defaulted), access key ID, secret key / any restic repository URL plus extra env vars (expert escape hatch — covers session tokens, custom CAs, path-style quirks) / local path (USB or NAS mount; recorded with its filesystem identity, see below). Unencrypted-disk installs get a plain warning here that the credentials will sit on an unencrypted drive.
 2. **Passphrase first.** Generate a strong passphrase (or accept an existing repository's), *then* probe: `restic cat config` distinguishes repository-absent (exit 10 → `restic init`), wrong passphrase (exit 12 → re-prompt), auth/network failures (→ fix credentials, nothing created). Never infer "safe to init" from an apparently empty bucket.
-3. **Recovery card.** The wizard writes and displays a recovery record — endpoint, bucket, prefix, repository ID, restore instructions, a blank line for the passphrase — and requires typed confirmation that passphrase and card are saved off this machine. Plain warning: lose the passphrase and the backups are unreadable; Omarchy cannot recover it. The card contains no live credentials.
+3. **Recovery card.** The wizard writes and displays a recovery record — endpoint, bucket, prefix, repository ID, restore instructions, a blank line for the passphrase — and requires typed confirmation that passphrase and card are saved off this machine. Plain warning: lose the passphrase and the backups are unreadable; DecentralOS cannot recover it. The card contains no live credentials.
 4. **First backup runs immediately** in the terminal with live progress, so the user watches it work once. On success: timer enabled, bar widget placed (`enablePlugin` IPC). On an existing repository (second machine or reinstall), the wizard detects prior hosts and offers the disaster-recovery restore (below) before any timer starts.
 
 Teardown is `omarchy-setup-backup --remove`: stop and wait for any running backup, unmount any browse session, disable the timer, remove the widget, delete local credentials and state — then state clearly that the repository and its snapshots remain untouched in the bucket, and that restic stays installed.
 
-**Secrets layout**: `~/.local/share/omarchy/backup/` (0700) holds `env` (`RESTIC_REPOSITORY`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, extras) and `passphrase` (0600, via `RESTIC_PASSWORD_FILE`); secrets pass to restic only via environment and files, never argv. Non-secret settings (destination label, retention, cadence) live separately in `~/.config/omarchy/backup/` — `~/.config/omarchy` is documented user-intent config that people version and that dots will sync, so live delete-capable credentials must not live there. Mode-restricted plain files are still the deliberate choice over the keyring: Omarchy's default keyring is configured passwordless by `install/user/default-keyring.sh` (so `secret-tool` adds a precedent while buying nothing), and a locked keyring at 3am would mean no backups. Full-disk encryption — the default, though not universal — covers the at-rest story; the threat model section covers the rest honestly.
+**Secrets layout**: `~/.local/share/omarchy/backup/` (0700) holds `env` (`RESTIC_REPOSITORY`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, extras) and `passphrase` (0600, via `RESTIC_PASSWORD_FILE`); secrets pass to restic only via environment and files, never argv. Non-secret settings (destination label, retention, cadence) live separately in `~/.config/omarchy/backup/` — `~/.config/omarchy` is documented user-intent config that people version and that dots will sync, so live delete-capable credentials must not live there. Mode-restricted plain files are still the deliberate choice over the keyring: DecentralOS's default keyring is configured passwordless by `install/user/default-keyring.sh` (so `secret-tool` adds a precedent while buying nothing), and a locked keyring at 3am would mean no backups. Full-disk encryption — the default, though not universal — covers the at-rest story; the threat model section covers the rest honestly.
 
 ## Automatic runs: systemd user timer
 

@@ -1,6 +1,6 @@
 [Unit]
-Description=Lock Omarchy before suspend
-# The monitor calls into the running Omarchy shell. Wait until UWSM has imported
+Description=Lock DecentralOS before suspend
+# The monitor calls into the running DecentralOS shell. Wait until UWSM has imported
 # OMARCHY_PATH and WAYLAND_DISPLAY, but keep the default target ordering so the
 # monitor starts before graphical-session.target is reached.
 After=dbus.socket wayland-session-waitenv.service

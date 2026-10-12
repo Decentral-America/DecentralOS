@@ -32,7 +32,7 @@ wtype -k Return
 wait_until "emoji picker selection closes" 15 layer_absent "omarchy-emojis"
 
 # Seed two clipboard entries, search for the older one, and copy it back out.
-clipboard_token="Omarchy acceptance clipboard $(date +%s)"
+clipboard_token="DecentralOS acceptance clipboard $(date +%s)"
 printf '%s' "$clipboard_token" | wl-copy
 wait_until "clipboard history captures test text" 15 grep -Fq "$clipboard_token" "$HOME/.local/state/omarchy/clipboard-history.json"
 printf '%s' "clipboard decoy" | wl-copy
@@ -41,7 +41,7 @@ sleep 1
 omarchy-shell shell summon omarchy.clipboard >/dev/null
 wait_until "clipboard opens" 15 layer_on_overlay "omarchy-clipboard"
 wtype "$clipboard_token"
-wait_until "clipboard search finds test text" 15 screen_contains "Omarchy acceptance clipboard"
+wait_until "clipboard search finds test text" 15 screen_contains "DecentralOS acceptance clipboard"
 screenshot "success-clipboard-search"
 wtype -M shift -k Return -m shift
 wait_until "clipboard selection closes" 15 layer_absent "omarchy-clipboard"

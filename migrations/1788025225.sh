@@ -1,4 +1,4 @@
-echo "Remove privileged files left behind by retired Omarchy installers"
+echo "Remove privileged files left behind by retired DecentralOS installers"
 
 sudoers_dir="${OMARCHY_SUDOERS_DIR:-/etc/sudoers.d}"
 systemd_dir="${OMARCHY_SYSTEMD_SYSTEM_DIR:-/etc/systemd/system}"
@@ -16,7 +16,7 @@ as_root() {
 }
 
 # Three installers that no longer exist each left a root-owned file behind, and
-# nothing in Omarchy has ever removed any of them. Each is judged against what
+# nothing in DecentralOS has ever removed any of them. Each is judged against what
 # the installer that wrote it actually produced, so a file of the same name that
 # an administrator wrote themselves is left alone.
 #
@@ -181,7 +181,7 @@ first_run_sudoers_is_generated() {
 # /etc/sudoers.d/tsui" one line after installing tsui by piping a vendor script
 # to bash with no sudo at all, so the path it resolved was usually the user's own
 # ~/.local/bin. Overwrite that file, run sudo tsui, and you are root. The grant
-# goes whatever the path turned out to be: the feature was dropped from Omarchy,
+# goes whatever the path turned out to be: the feature was dropped from DecentralOS,
 # and unrestricted NOPASSWD on a TUI that can shell out is an escalation from a
 # root-owned path too.
 tsui_sudoers_is_generated() {

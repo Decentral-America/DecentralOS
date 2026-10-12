@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A file Omarchy writes into /usr belongs to nobody, and the
+# A file DecentralOS writes into /usr belongs to nobody, and the
 # day a package starts shipping that same path, pacman refuses the upgrade for
 # everyone who has the file. omarchy-update-system-pkgs-when-conflicted recovers from
 # that, but the cheaper answer is to ship the file in the package instead.
@@ -22,7 +22,7 @@ from pathlib import Path
 
 root = Path(sys.argv[1])
 
-# Paths Omarchy writes into /usr that no package owns, with the reason.
+# Paths DecentralOS writes into /usr that no package owns, with the reason.
 allowed = {
   # Symlinks into another package's icon theme; owning them would mean owning
   # paths inside Yaru.
@@ -32,7 +32,7 @@ allowed = {
   "/usr/lib/systemd/system-sleep",
   # Written through a variable, so the scan below cannot see them at the point
   # they are written. These drop configuration into another project's tree
-  # rather than Omarchy's and are not candidates for omarchy-settings.
+  # rather than DecentralOS's and are not candidates for omarchy-settings.
   "/usr/share/chromium/extensions",
   "/usr/lib/firefox/distribution",
   # Claude's extension is registered only when the user selects Claude.
@@ -66,7 +66,7 @@ if pkgs_root is None:
 packaged = "\n".join(p.read_text() for p in pkgs_root.glob("*/PKGBUILD"))
 
 # Commands that put a file somewhere, as opposed to reading one.
-# /etc is administrator territory that Omarchy legitimately edits. /usr is
+# /etc is administrator territory that DecentralOS legitimately edits. /usr is
 # package territory, where writing anything is the thing worth catching.
 writer = re.compile(r"\b(tee|cp|install|ln)\b|>\s*/usr/")
 target = re.compile(r"/usr/[A-Za-z0-9._@/+-]+")
@@ -107,7 +107,7 @@ for base in ("bin", "install", "migrations"):
         if not tokens or not tokens[-1].startswith("/usr/"):
           continue
         hit = tokens[-1].rstrip("/")
-      # Omarchy's own tree and its binaries are covered elsewhere.
+      # DecentralOS's own tree and its binaries are covered elsewhere.
       if hit.startswith(("/usr/share/omarchy", "/usr/bin")) or hit.count("/") < 3:
         continue
       # Directory or file form of a recorded path both count as recorded, but
@@ -123,7 +123,7 @@ for base in ("bin", "install", "migrations"):
       problems.append(f"{rel}:{lineno}: {hit}")
 
 if problems:
-  print("not ok - Omarchy writes paths under /usr that no package owns", file=sys.stderr)
+  print("not ok - DecentralOS writes paths under /usr that no package owns", file=sys.stderr)
   for p in problems:
     print(f"  {p}", file=sys.stderr)
   print(
@@ -134,7 +134,7 @@ if problems:
   sys.exit(1)
 PYTHON
 
-pass "no Omarchy script writes a path under /usr that no package owns"
+pass "no DecentralOS script writes a path under /usr that no package owns"
 
 for script in bin/omarchy-hibernation-setup bin/omarchy-toggle-hybrid-gpu; do
   grep -F '"${destination%/*}/.${destination##*/}.omarchy.XXXXXX"' "$ROOT/$script" >/dev/null ||

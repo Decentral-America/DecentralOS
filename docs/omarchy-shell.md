@@ -1,7 +1,7 @@
 # omarchy-shell
 
 A single long-running [Quickshell](https://quickshell.org/) instance
-that hosts the Omarchy desktop. The bar, panels, overlays, menus, and
+that hosts the DecentralOS desktop. The bar, panels, overlays, menus, and
 services all run inside as plugins. Hyprland autostart launches the
 shell via `omarchy-launch-shell`; restart it with `omarchy-restart-shell`.
 IPC is the canonical way for CLIs to talk to a running shell —
@@ -397,7 +397,7 @@ size-vertical   = 28   # left/right bar width at base-size 12
 
 Set `scale-with-font = false` to keep those bar sizes as fixed pixels.
 
-A panel with a camera cutout (a notch) at its top keeps a top bar out of it: the bar is never shorter than the cutout, and its center section sits beside the right one. Omarchy knows no panel's cutout itself; the platform's own package describes them in `/usr/share/omarchy-platform/display-cutouts.json`, a fixed path no environment variable moves (see [file-layout.md](file-layout.md#platform-root)):
+A panel with a camera cutout (a notch) at its top keeps a top bar out of it: the bar is never shorter than the cutout, and its center section sits beside the right one. DecentralOS knows no panel's cutout itself; the platform's own package describes them in `/usr/share/omarchy-platform/display-cutouts.json`, a fixed path no environment variable moves (see [file-layout.md](file-layout.md#platform-root)):
 
 ```json
 { "panels": [ { "connector": "eDP", "width": 3024, "height": 1964, "top": 64 } ] }

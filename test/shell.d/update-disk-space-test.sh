@@ -103,7 +103,7 @@ output=$(run_update -y)
 status=$?
 set -e
 (( status == 1 )) || fail "non-interactive update exits non-zero with low disk space"
-[[ $output == *"You need at least 10 GiB free to safely update Omarchy."* ]] || fail "low disk space emits a warning"
+[[ $output == *"You need at least 10 GiB free to safely update DecentralOS."* ]] || fail "low disk space emits a warning"
 [[ ! -f $gum_marker ]] || fail "non-interactive update does not prompt for low disk space"
 [[ ! -f $snapshot_marker ]] || fail "non-interactive update stops before snapshotting with low disk space"
 pass "non-interactive update stops with low disk space"
@@ -114,7 +114,7 @@ output=$(run_update)
 status=$?
 set -e
 (( status == 1 )) || fail "interactive update exits non-zero with low disk space"
-[[ $output == *"You need at least 10 GiB free to safely update Omarchy."* ]] || fail "interactive low-space update explains the requirement"
+[[ $output == *"You need at least 10 GiB free to safely update DecentralOS."* ]] || fail "interactive low-space update explains the requirement"
 [[ ! -f $gum_marker ]] || fail "interactive update stops before confirmation with low disk space"
 [[ ! -f $snapshot_marker ]] || fail "interactive update stops before snapshotting with low disk space"
 pass "interactive update stops before confirmation with low disk space"

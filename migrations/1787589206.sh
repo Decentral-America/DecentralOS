@@ -1,6 +1,6 @@
-echo "Require signed packages from the Omarchy repository"
+echo "Require signed packages from the DecentralOS repository"
 
-# The [omarchy] repo predates the Omarchy packaging key, so existing installs
+# The [omarchy] repo predates the DecentralOS packaging key, so existing installs
 # carry a SigLevel override that also accepts unsigned packages. Packages are
 # signed now, so drop the override and let the repo inherit the global
 # SigLevel = Required DatabaseOptional like every other repo. Machine-wide and

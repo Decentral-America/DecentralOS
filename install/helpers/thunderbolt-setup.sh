@@ -143,7 +143,7 @@ tb_boot_change() {
   saved=$(tb_boot_saved <<< "$inventory" | jq -c --argjson state "$state" '. + {state:$state}') || return 1
   if [[ $enabled == "true" ]]; then
     jq -e 'all(.domains[]; (.SecurityLevel == "user" or .SecurityLevel == "secure") and (.BootACL|length > 0))' <<< "$inventory" >/dev/null || {
-      tb_fail 'This controller has no supported firmware boot allowlist. Disable Thunderbolt pre-boot/PCIe boot support in firmware settings; Omarchy cannot verify that setting.'; return 1;
+      tb_fail 'This controller has no supported firmware boot allowlist. Disable Thunderbolt pre-boot/PCIe boot support in firmware settings; DecentralOS cannot verify that setting.'; return 1;
     }
     desired=$(jq -c '{policies:(.stored | map({key:.Uid,value:"manual"}) | from_entries),
       acls:(.domains | map({key:.Uid,value:(.BootACL | map(""))}) | from_entries)}' <<< "$inventory") || return 1
@@ -185,7 +185,7 @@ tb_unit_state() {
 
 tb_handoff_policies() {
   local state=$1
-  # StoreTime distinguishes a record recreated outside Omarchy. A completed
+  # StoreTime distinguishes a record recreated outside DecentralOS. A completed
   # enrollment and matching consent are both required, including offline
   # accessories. Never promote somebody else's manual policy.
   jq -c --argjson state "$state" '{policies:([.stored[] |

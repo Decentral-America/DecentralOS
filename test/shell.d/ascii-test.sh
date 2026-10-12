@@ -26,7 +26,7 @@ expected=$(
 WORDMARK
 )
 
-output=$(omarchy-ascii Omarchy)
+output=$(omarchy-ascii DecentralOS)
 [[ $output == "$expected" ]] || fail "the wordmark matches the reference rendering" "expected:
 $expected
 actual:
@@ -58,25 +58,25 @@ actual:
 $output"
 pass "a leading M keeps the blanks figlet.js gives it"
 
-output=$(printf 'Omarchy' | omarchy-ascii)
+output=$(printf 'DecentralOS' | omarchy-ascii)
 [[ $output == "$expected" ]] || fail "text can arrive on stdin"
 pass "text can arrive on stdin"
 
 # The route is the way a user reaches this, and it dispatches on whether the
 # metadata says an argument is required -- so a piped run has to be exercised
 # through `omarchy` itself, not just through the binary.
-output=$(printf 'Omarchy' | omarchy ascii)
+output=$(printf 'DecentralOS' | omarchy ascii)
 [[ $output == "$expected" ]] || fail "piped text renders through the omarchy route" "got:
 $output"
 pass "piped text renders through the omarchy route"
 
 # The block characters are three bytes each, so the column arithmetic has to
 # count columns rather than bytes wherever the locale lands.
-output=$(LC_ALL=C omarchy-ascii Omarchy)
+output=$(LC_ALL=C omarchy-ascii DecentralOS)
 [[ $output == "$expected" ]] || fail "a byte-only locale draws the same wordmark"
 pass "a byte-only locale draws the same wordmark"
 
-blanks=$(omarchy-ascii Omarchy | grep -c ' $' || true)
+blanks=$(omarchy-ascii DecentralOS | grep -c ' $' || true)
 [[ $blanks == "0" ]] || fail "no line is padded with trailing blanks" "$blanks lines end in a blank"
 pass "no line is padded with trailing blanks"
 
@@ -108,13 +108,13 @@ pass "a backslash in the text is not an escape"
 # Delta Corps Priest 1 carries letters and spaces only. Dropping the rest in
 # silence would leave a version number looking like a bug in the renderer.
 status=0
-warning=$(omarchy-ascii "Omarchy 4.0" 2>&1 >/dev/null) || status=$?
+warning=$(omarchy-ascii "DecentralOS 4.0" 2>&1 >/dev/null) || status=$?
 (( status == 0 )) || fail "text with unusable characters still draws" "exited $status"
 [[ $warning == *"Skipped"* && $warning == *"4"* && $warning == *"."* && $warning == *"0"* ]] ||
   fail "skipped characters are named on stderr" "got: $warning"
 pass "skipped characters are named on stderr"
 
-output=$(omarchy-ascii "Omarchy 4.0" 2>/dev/null)
+output=$(omarchy-ascii "DecentralOS 4.0" 2>/dev/null)
 [[ $output == "$expected" ]] || fail "the drawable characters still render"
 pass "the drawable characters still render"
 

@@ -16,6 +16,6 @@ fi
 pass "Windows VM does not restart automatically at boot"
 
 # Tolerate either shell quoting of the argument.
-rg -q 'title:"?Windows VM - Omarchy"' "$windows_vm_command" ||
+rg -q 'title:"?Windows VM - DecentralOS"' "$windows_vm_command" ||
   fail "Windows VM launches FreeRDP with its expected title"
 pass "Windows VM launches FreeRDP with its expected title"

@@ -1,5 +1,5 @@
 name: omarchy
-description: Omarchy system theme
+description: DecentralOS system theme
 colors:
   background: "{{ background }}"
   ui_text: "{{ foreground }}"

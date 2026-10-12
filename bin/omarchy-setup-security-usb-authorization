@@ -19,7 +19,7 @@ while (( $# > 0 )); do
     echo "Usage: omarchy-setup-security-usb-authorization [--boot] [--yes] [--review-existing]"
     echo
     echo "Trusts USB devices that are connected now, then blocks new devices"
-    echo "until you approve them from an Omarchy notification."
+    echo "until you approve them from an DecentralOS notification."
     echo
     echo "--boot also blocks USB devices from the start of kernel boot. Connected"
     echo "devices are added to USBGuard's policy, but remain unavailable before"
@@ -56,7 +56,7 @@ daemon_config=/etc/usbguard/usbguard-daemon.conf
 source "$OMARCHY_PATH/install/helpers/usb-authorization.sh"
 
 if (( review_existing )); then
-  # Older Omarchy rules have no per-rule ownership marker. They cannot safely
+  # Older DecentralOS rules have no per-rule ownership marker. They cannot safely
   # be distinguished from intentionally restricted administrator rules.
   (( ! assume_yes && ! from_boot )) || { echo "Review requires individual confirmation; do not combine it with --yes or --boot." >&2; exit 2; }
   policy=$(usbguard list-rules)
@@ -94,7 +94,7 @@ fi
 # or incomplete installations, including dangling dev-link unit symlinks.
 session_environment=$(systemctl --user show-environment)
 grep -Fqx -- "OMARCHY_PATH=$OMARCHY_PATH" <<<"$session_environment" || {
-  echo "The session and this command use different Omarchy installations. Update the session before enabling USB protection." >&2
+  echo "The session and this command use different DecentralOS installations. Update the session before enabling USB protection." >&2
   exit 1
 }
 for required in "$unit_source" /usr/share/omarchy/install/helpers/usb-authorization-policy.sh; do

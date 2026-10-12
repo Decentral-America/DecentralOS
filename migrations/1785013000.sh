@@ -31,6 +31,6 @@ if [[ -z $settings || $settings =~ ^\[zram0\]compression-algorithm=[[:alnum:]-]+
   sudo rm -f "$zram_conf" || true
 else
   echo "Keeping $zram_conf; it has local edits."
-  echo "Omarchy's drop-in overrides it. Move your changes to"
+  echo "DecentralOS's drop-in overrides it. Move your changes to"
   echo "/etc/systemd/zram-generator.conf.d/99-local.conf to keep them in effect."
 fi

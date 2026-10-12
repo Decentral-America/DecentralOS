@@ -1,6 +1,6 @@
 #!/bin/bash -p
 
-# omarchy:summary=Update Omarchy and system packages
+# omarchy:summary=Update DecentralOS and system packages
 # omarchy:alias=omarchy up
 # omarchy:args=[-y]
 # omarchy:examples=omarchy update | omarchy update -y
@@ -98,7 +98,7 @@ omarchy_security_install_signal_exit_traps
 
 omarchy-update-requires-free-space
 
-# -y suppresses Omarchy confirmation prompts; sudo authorization is still
+# -y suppresses DecentralOS confirmation prompts; sudo authorization is still
 # required. Interactive review steps report and move on instead of waiting.
 [[ ${1:-} != "-y" ]] || export OMARCHY_UPDATE_UNATTENDED=1
 

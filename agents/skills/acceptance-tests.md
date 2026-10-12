@@ -4,7 +4,7 @@ Read this before writing or running the graphical acceptance suite under
 `test/acceptance.d/`.
 
 The graphical acceptance suite lives in `test/acceptance` with test files under
-`test/acceptance.d/*-test.sh`. It exercises a real installed Omarchy desktop,
+`test/acceptance.d/*-test.sh`. It exercises a real installed DecentralOS desktop,
 including session health, shell surfaces, panels, keyboard navigation,
 representative applications, and system setup. Source
 `test/acceptance.d/base-test.sh` for the shared helpers.

@@ -1,4 +1,4 @@
-# The Omarchy CLI router
+# The DecentralOS CLI router
 
 `bin/omarchy` maps spaced commands onto the flat `bin/omarchy-*` namespace:
 `omarchy theme set foo` becomes `exec bin/omarchy-theme-set foo`. There is no

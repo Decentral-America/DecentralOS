@@ -56,6 +56,6 @@ sleep_monitor="$OMARCHY_PATH/bin/omarchy-system-sleep-monitor"
 exec systemd-inhibit \
   --what=sleep \
   --mode=delay \
-  --who=Omarchy \
+  --who=DecentralOS \
   --why="Lock screen before suspend" \
   "$sleep_monitor" --inhibited

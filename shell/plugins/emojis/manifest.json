@@ -3,7 +3,7 @@
   "id": "omarchy.emojis",
   "name": "Emojis",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Search, copy, and type emojis",
   "kinds": [
     "overlay"

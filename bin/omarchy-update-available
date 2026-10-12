@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Check whether Omarchy updates are available.
+# omarchy:summary=Check whether DecentralOS updates are available.
 
 set -euo pipefail
 
@@ -39,6 +39,6 @@ if (( ${#updates[@]} > 0 )); then
   printf '%s\n' "${updates[@]}"
   exit 0
 else
-  echo "Omarchy is up to date"
+  echo "DecentralOS is up to date"
   exit 1
 fi

@@ -1,10 +1,10 @@
-echo "Repair legacy XCompose and remove vulnerable Omarchy 3 power udev rules"
+echo "Repair legacy XCompose and remove vulnerable DecentralOS 3 power udev rules"
 
 xcompose="$HOME/.XCompose"
 packaged_xcompose="$OMARCHY_PATH/default/xcompose"
 legacy_xcompose_pattern='^[[:space:]]*include[[:space:]]+"[^"]*/\.local/share/omarchy/default/xcompose"[[:space:]]*$'
 
-# Omarchy 3 pointed the user's compose file through the checkout compatibility
+# DecentralOS 3 pointed the user's compose file through the checkout compatibility
 # link. Preserve their own sequences while moving that include to the packaged
 # tree. A failed live restart is harmless: the next graphical login reads the
 # repaired file.
@@ -32,7 +32,7 @@ as_root() {
   fi
 }
 
-# Omarchy 3 generated these two rules with an unquoted heredoc, so the installing
+# DecentralOS 3 generated these two rules with an unquoted heredoc, so the installing
 # user's $HOME was expanded and the file on disk names that absolute home path.
 # udev runs RUN+= as root, and
 # ~/.local/share/omarchy is a symlink that same unprivileged user owns: replacing
@@ -42,7 +42,7 @@ as_root() {
 # install that came up through the 3.x line keeps the old file until this
 # migration removes it.
 #
-# Pre-4 layout work normally belongs in the Omarchy 4 upgrade command, but that
+# Pre-4 layout work normally belongs in the DecentralOS 4 upgrade command, but that
 # command only runs on a machine still making the crossing, so an install that
 # crossed already would never see it. The upgrade command ends by running
 # omarchy-migrate, so this covers the installs still to upgrade as well.
@@ -135,7 +135,7 @@ rule_is_exact_generated() {
         [[ $home == /* && $home != *'"'* && ${lines[1]} == "$expected" ]] && return 0
       fi
 
-      # The final Omarchy 3 revision dropped the fixed transient-unit name.
+      # The final DecentralOS 3 revision dropped the fixed transient-unit name.
       prefix='SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="/usr/bin/systemd-run --no-block --collect --property=After=power-profiles-daemon.service '
       suffix='/.local/share/omarchy/bin/omarchy-powerprofiles-set"'
       if [[ ${lines[0]} == "$prefix"*"$suffix" ]]; then

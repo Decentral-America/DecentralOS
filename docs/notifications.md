@@ -49,7 +49,7 @@ service's `doNotDisturb` property.
 Two kinds of notification punch through DND, chosen to be intentional and
 rare:
 
-- `app_name` = `omarchy-action` — Omarchy's own user-action confirmation
+- `app_name` = `omarchy-action` — DecentralOS's own user-action confirmation
   toasts ("Theme changed"). The user just did something; their feedback shows.
 - urgency critical *and* `app_name` = `notify-send` — bare-CLI emergency
   alerts. Critical alone is not enough, because chat apps abuse it to force
@@ -62,7 +62,7 @@ Ephemeral ones (the freedesktop `transient` hint, or an `app_name` of
 
 ## The sender contract
 
-`bin/omarchy-notification-send` is the one way Omarchy code sends
+`bin/omarchy-notification-send` is the one way DecentralOS code sends
 notifications — never raw `notify-send`. It calls
 `org.freedesktop.Notifications.Notify` directly over the session bus (via
 `busctl --user`), so each value is one typed D-Bus parameter and there is no

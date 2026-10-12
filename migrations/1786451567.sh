@@ -7,7 +7,7 @@ echo "Repair theme symlinks the state-move migration left dangling"
 # migration reported success anyway. That migration is already marked applied
 # everywhere it ran, so this one repairs any link it left dangling.
 #
-# No shipped Omarchy code ever wrote these six targets with a literal tilde, so
+# No shipped DecentralOS code ever wrote these six targets with a literal tilde, so
 # this is expected to be a no-op almost everywhere, and it stays deliberately
 # narrow to keep it that way. Only a target that starts with a literal "~/" is
 # repaired: the filesystem never expands one, so such a link cannot ever have

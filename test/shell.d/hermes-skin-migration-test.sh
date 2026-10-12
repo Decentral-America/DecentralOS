@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-# The migration hands an existing Hermes Desktop install the Omarchy skin. It
+# The migration hands an existing Hermes Desktop install the DecentralOS skin. It
 # is exercised here with the package probe and the skin hook stubbed, so a
-# migration that reached a Hermes Omarchy did not install, or that marked a
+# migration that reached a Hermes DecentralOS did not install, or that marked a
 # failed hand-over done, shows up in what it ran.
 
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/base-test.sh"
@@ -46,7 +46,7 @@ run_migration() {
 
 OMARCHY_TEST_DESKTOP_INSTALLED=0 run_migration || fail "migration exits clean without Hermes Desktop"
 [[ ! -s $calls ]] || fail "a machine without Hermes Desktop is left alone" "$(cat "$calls")"
-pass "migration only applies where Omarchy installed Hermes Desktop"
+pass "migration only applies where DecentralOS installed Hermes Desktop"
 
 run_migration || fail "migration exits clean with Hermes Desktop installed"
 [[ $(cat "$calls") == "omarchy-theme-set-hermes --activate" ]] ||
@@ -54,6 +54,6 @@ run_migration || fail "migration exits clean with Hermes Desktop installed"
 pass "migration hands the skin over through the hook"
 
 if OMARCHY_TEST_HOOK_FAILS=1 run_migration; then
-  fail "a hand-over that failed on Omarchy's side stays pending"
+  fail "a hand-over that failed on DecentralOS's side stays pending"
 fi
 pass "migration stays pending when the hand-over fails"

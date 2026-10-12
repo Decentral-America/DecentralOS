@@ -4,7 +4,7 @@
 # omarchy:hidden=true
 
 # gsettings needs a user DBus session. During ISO installs this command can be
-# reached from arch-chroot while applying the initial Omarchy theme; defer until
+# reached from arch-chroot while applying the initial DecentralOS theme; defer until
 # the user has a real session instead of emitting dconf warnings.
 if [[ -z ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
   exit 0

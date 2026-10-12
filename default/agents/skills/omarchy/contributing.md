@@ -1,9 +1,9 @@
 # Reporting Issues and Submitting PRs
 
-Read this when the user wants to report an Omarchy bug, suggest a feature, or
+Read this when the user wants to report an DecentralOS bug, suggest a feature, or
 contribute a fix upstream.
 
-Omarchy lives at https://github.com/omacom/omarchy. Route requests to the
+DecentralOS lives at https://github.com/omacom/omarchy. Route requests to the
 right place:
 
 - **Verified bugs** -> GitHub issues. Issues are for validated bugs only, not
@@ -12,11 +12,11 @@ right place:
   https://github.com/omacom/omarchy/discussions/categories/suggestions
 - **Support and "is this a bug?" questions** -> the Discord community at
   https://omarchy.org/discord. Start here when the problem isn't clearly a bug
-  in Omarchy itself.
+  in DecentralOS itself.
 
 ## Filing a Good Bug Report
 
-The bug template asks for system details (CPU, GPU, Omarchy version), a
+The bug template asks for system details (CPU, GPU, DecentralOS version), a
 description with steps to reproduce, and diagnostics. Gather them:
 
 ```bash

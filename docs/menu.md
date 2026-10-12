@@ -1,4 +1,4 @@
-# The Omarchy menu
+# The DecentralOS menu
 
 The menu is the `omarchy.menu` plugin of the Quickshell desktop, with its
 content defined as data in `default/omarchy/omarchy-menu.jsonc` (read at
@@ -90,7 +90,7 @@ The three guards differ in what failure means:
   unselectable: cursor, pointer, and Enter all step over it, and search omits
   it. The Install submenus use it so software already on the machine reads as
   installed rather than vanishing from the list it was installed from — the
-  list stays a catalog of what Omarchy can install. Since a dimmed row means
+  list stays a catalog of what DecentralOS can install. Since a dimmed row means
   "you already have this", it earns the same ✓ as `checked` does elsewhere.
 
 Install rows should therefore carry `disabled:` with the presence check, not

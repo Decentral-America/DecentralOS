@@ -36,7 +36,7 @@ source omarchy-branding-about-animation
 
 # A user's own fastfetch config can relocate or restyle the logo in ways this
 # measurement cannot see, so leave sizing to the float rule in that case. It can
-# sit in any of several directories fastfetch searches ahead of Omarchy's own, so
+# sit in any of several directories fastfetch searches ahead of DecentralOS's own, so
 # ask fastfetch for that order rather than keep a copy here for its next release
 # to outdate.
 custom_fastfetch_config() {

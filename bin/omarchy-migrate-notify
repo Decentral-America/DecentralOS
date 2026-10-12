@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Notify the user when Omarchy has pending migrations
+# omarchy:summary=Notify the user when DecentralOS has pending migrations
 
 set -euo pipefail
 
@@ -40,13 +40,13 @@ fi
 
 # The shell keeps the click command with the toast, so this oneshot can hand the
 # invitation over and exit instead of staying activated until it is answered.
-omarchy-notification-send -u critical -g  "Pending Omarchy Migrations" "$message" \
+omarchy-notification-send -u critical -g  "Pending DecentralOS Migrations" "$message" \
   --exec omarchy-launch-floating-terminal-with-presentation omarchy-migrate && exit 0
 
 # Reached when the notification could not be handed off, so fall back to telling
 # the user in the terminal.
 print_pending_migrations() {
-  echo "Omarchy has pending migrations. Run omarchy-migrate in a terminal to apply them:"
+  echo "DecentralOS has pending migrations. Run omarchy-migrate in a terminal to apply them:"
   while IFS= read -r migration; do
     [[ -n $migration ]] || continue
     printf '  %s\n' "$migration"

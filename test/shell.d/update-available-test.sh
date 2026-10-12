@@ -123,7 +123,7 @@ fi
 [[ $status -eq 0 ]] || fail "update checker exits successfully when omarchy update is available"
 grep -q '^omarchy ' "$stdout" || fail "update checker prints omarchy updates"
 ! grep -q '^omarchy-settings ' "$stdout" || fail "update checker ignores omarchy-settings updates"
-! grep -q '^linux ' "$stdout" || fail "update checker ignores non-Omarchy package updates"
+! grep -q '^linux ' "$stdout" || fail "update checker ignores non-DecentralOS package updates"
 ! grep -q '^omarchy-dev ' "$stdout" || fail "update checker ignores omarchy-dev when omarchy is installed"
 pass "update checker detects installed omarchy package updates"
 
@@ -153,8 +153,8 @@ if capture_checker "$stdout" "$stderr" TEST_CHECKUPDATES=updates TEST_INSTALLED_
 else
   status=$?
 fi
-[[ $status -eq 1 ]] || fail "update checker exits non-zero when no Omarchy package is installed"
-[[ ! -s $stderr ]] || fail "update checker is quiet when no Omarchy package is installed"
+[[ $status -eq 1 ]] || fail "update checker exits non-zero when no DecentralOS package is installed"
+[[ ! -s $stderr ]] || fail "update checker is quiet when no DecentralOS package is installed"
 pass "update checker ignores systems without omarchy or omarchy-dev installed"
 
 if capture_checker "$stdout" "$stderr" TEST_CHECKUPDATES=none TEST_INSTALLED_PACKAGE=omarchy; then
@@ -163,8 +163,8 @@ else
   status=$?
 fi
 [[ $status -eq 1 ]] || fail "update checker exits non-zero when no updates are available"
-grep -q '^Omarchy is up to date$' "$stdout" || fail "update checker prints up-to-date message"
-pass "update checker reports up-to-date Omarchy packages"
+grep -q '^DecentralOS is up to date$' "$stdout" || fail "update checker prints up-to-date message"
+pass "update checker reports up-to-date DecentralOS packages"
 
 : >"$git_log"
 if capture_checker "$stdout" "$stderr" \
@@ -193,7 +193,7 @@ else
   status=$?
 fi
 [[ $status -eq 1 ]] || fail "update checker exits non-zero when the dev checkout is current"
-grep -q '^Omarchy is up to date$' "$stdout" || fail "update checker reports a current dev checkout"
+grep -q '^DecentralOS is up to date$' "$stdout" || fail "update checker reports a current dev checkout"
 pass "update checker ignores a current dev checkout"
 
 if capture_checker "$stdout" "$stderr" \

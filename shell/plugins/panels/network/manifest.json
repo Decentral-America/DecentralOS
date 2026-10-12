@@ -3,7 +3,7 @@
   "id": "omarchy.network",
   "name": "Network",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Wi-Fi list and connection state",
   "kinds": [
     "bar-widget"

@@ -6,7 +6,7 @@ multi-machine sync design.
 
 ## Problem
 
-Omarchy declares `~/.config` "your files" but does little to preserve them:
+DecentralOS declares `~/.config` "your files" but does little to preserve them:
 
 - `omarchy-refresh-config` litters `*.bak.<timestamp>` files next to originals.
 - `omarchy-reinstall-configs` clobbers everything back to `/etc/skel` defaults.
@@ -31,7 +31,7 @@ desktop."
   is a home-directory-eraser; `git add -A` can ingest `~/.ssh` and the object
   store into itself (`status.showUntrackedFiles no` only affects `status`);
   `remote add` + `push` silently defeats local-only. Experts can construct the
-  raw invocation themselves; Omarchy will not bless it.
+  raw invocation themselves; DecentralOS will not bless it.
 - **Distributed git across machines**: two machines auto-committing timer and
   update snapshots into a shared branch conflict constantly. History and sync
   are different products (see Sync below).
@@ -45,7 +45,7 @@ git init --bare ~/.local/share/omarchy/dots.git   # mode 0700
 No `.git` in any directory tools walk; files stay plain files in place. All
 access goes through one internal helper that runs git **hermetically**:
 
-- Repo-local config only: synthetic identity (`Omarchy <omarchy@localhost>`),
+- Repo-local config only: synthetic identity (`DecentralOS <omarchy@localhost>`),
   `commit.gpgsign=false`, `core.hooksPath` disabled, `--no-verify`,
   `GIT_CONFIG_GLOBAL=/dev/null` so user signing/hooks/templates/excludes and a
   `$HOME/.gitignore` can never break or intercept an automatic commit.
@@ -59,7 +59,7 @@ access goes through one internal helper that runs git **hermetically**:
 ### Audited manifest, not a derived whitelist
 
 Tracking is `git add -f --pathspec-from-file=<manifest>` only. The manifest is
-a hand-audited file shipped with Omarchy — explicitly **not** derived from
+a hand-audited file shipped with DecentralOS — explicitly **not** derived from
 `$OMARCHY_PATH/config` (which ships Chromium Preferences, fcitx5,
 `opencode/opencode.json` where users put API keys, etc.):
 
@@ -114,7 +114,7 @@ internal `omarchy-dots-snapshot "<label>"`:
    make it reversible and we don't claim it does.
 5. **Timer**: an hourly-ish systemd user timer committing only if dirty, so
    hand edits are captured — without it, "restore my bindings from last week"
-   fails for any edit not followed by an Omarchy operation.
+   fails for any edit not followed by an DecentralOS operation.
 
 `.bak` files **stay** in v1. They serve symlink users, they're documented
 (manual, agent skill, `refresh-config-test.sh` asserts them), and git history

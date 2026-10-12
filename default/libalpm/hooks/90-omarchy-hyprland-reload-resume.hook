@@ -6,7 +6,7 @@ Target = omarchy-settings
 Target = omarchy-settings-dev
 
 [Action]
-Description = Reloading Hyprland after Omarchy settings update...
+Description = Reloading Hyprland after DecentralOS settings update...
 When = PostTransaction
 Depends = omarchy
 Exec = /usr/bin/omarchy-hyprland-reload-guard resume

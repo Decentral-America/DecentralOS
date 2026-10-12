@@ -51,7 +51,7 @@ fixture() {
   old_name="test.efi_sha256_$digest"
   cp "$esp/image.efi" "$history/$old_name"
   hash=$(b2sum "$esp/image.efi"); hash=${hash%% *}
-  printf '/Omarchy\ncomment: machine-id=%s\n  //snapshot\n  comment: kernel-id=linux\n  path: boot():/%s/limine_history/%s#%s\n  cmdline: %s rootflags=subvol=/snapshot\n' \
+  printf '/DecentralOS\ncomment: machine-id=%s\n  //snapshot\n  comment: kernel-id=linux\n  path: boot():/%s/limine_history/%s#%s\n  cmdline: %s rootflags=subvol=/snapshot\n' \
     "$machine" "$machine" "$old_name" "$hash" "$embedded" >"$config"
   jq -n --arg name "$old_name" --arg hash "$hash" --arg machine "$machine" --arg cmdline "$embedded" '
     def kernel:
@@ -95,7 +95,7 @@ for expected in enabled disabled; do
     # Both cached and structured restore representations must regenerate valid entries.
     for format in cached structured; do
       {
-        printf '/Omarchy\ncomment: machine-id=%s\n  //snapshot\n' "$machine"
+        printf '/DecentralOS\ncomment: machine-id=%s\n  //snapshot\n' "$machine"
         if [[ $format == cached ]]; then
           jq -r '.snapshotEntries[0].kernelEntries[0].allInSnapshotConfig[]' "$file"
         else

@@ -3,7 +3,7 @@
   "id": "omarchy.clipboard",
   "name": "Clipboard",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "A clipboard manager to view and paste history",
   "kinds": [
     "overlay"

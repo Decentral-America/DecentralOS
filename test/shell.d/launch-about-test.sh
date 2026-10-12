@@ -94,7 +94,7 @@ pass "the sheen is given fastfetch's own colour to restore"
 pass "the sheen is given the columns left of the module column"
 
 # fastfetch reads the first config it finds across several directories, and any
-# of them ahead of Omarchy's own can put the logo somewhere else entirely.
+# of them ahead of DecentralOS's own can put the logo somewhere else entirely.
 for directory in .config/fastfetch fastfetch; do
   mkdir -p "$HOME/$directory"
   touch "$HOME/$directory/config.jsonc"
@@ -102,12 +102,12 @@ for directory in .config/fastfetch fastfetch; do
   rm -r "${HOME:?}/$directory"
 done
 
-# One fastfetch would never read, because Omarchy's own comes first, is not a
+# One fastfetch would never read, because DecentralOS's own comes first, is not a
 # reason to stop: the logo on screen is still the one About drew.
 mkdir -p "$HOME/searched-later/fastfetch"
 touch "$HOME/searched-later/fastfetch/config.jsonc"
-build_sheen || fail "a config fastfetch searches after Omarchy's own still animates"
-pass "a config fastfetch searches after Omarchy's own still animates"
+build_sheen || fail "a config fastfetch searches after DecentralOS's own still animates"
+pass "a config fastfetch searches after DecentralOS's own still animates"
 rm -r "${HOME:?}/searched-later"
 
 # A window with no room for the cursor past the layout's last line has scrolled,

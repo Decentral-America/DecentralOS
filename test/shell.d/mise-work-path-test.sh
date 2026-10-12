@@ -173,7 +173,7 @@ run_migration "$stock_home" >/dev/null
 [[ ! -e $stock_config ]] || fail "stock migration is idempotent"
 pass "migration removes the repository bin directory and revokes the Work trust root"
 
-assert_unsafe_variant_removed inline-comment '_.path = "{{ cwd }}/bin" # Omarchy default'
+assert_unsafe_variant_removed inline-comment '_.path = "{{ cwd }}/bin" # DecentralOS default'
 assert_unsafe_variant_removed single-quoted "_.path = '{{ cwd }}/bin'"
 pass "migration removes annotated and single-quoted project bin paths"
 

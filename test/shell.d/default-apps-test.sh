@@ -228,7 +228,7 @@ grep -Fxq 'omarchy-install-chromium-ytdlp:' "$setup_log" ||
   fail "Chromium browser installer registers the yt-dlp host"
 grep -Fxq 'omarchy-theme-set-browser:' "$setup_log" ||
   fail "Chromium browser installer applies the current theme"
-pass "Chromium browser installer restores the complete Omarchy setup"
+pass "Chromium browser installer restores the complete DecentralOS setup"
 
 : >"$install_log"
 : >"$setup_log"
@@ -243,7 +243,7 @@ grep -Fxq 'sudo:find /usr/lib/firefox/distribution -mindepth 1 -maxdepth 1 ! -us
 grep -Fxq "sudo:install -m 644 -o root -g root -T $ROOT/default/firefox/policies.json /usr/lib/firefox/distribution/policies.json" "$setup_log" ||
   fail "Firefox browser installer copies policies.json without following a destination symlink"
 [[ -e $installed_dir/firefox ]] || fail "Firefox browser installer marks firefox installed"
-pass "Firefox browser installer restores the complete Omarchy setup"
+pass "Firefox browser installer restores the complete DecentralOS setup"
 
 : >"$install_log"
 : >"$setup_log"
@@ -258,7 +258,7 @@ grep -Fxq 'sudo:find /opt/zen-browser/distribution -mindepth 1 -maxdepth 1 ! -us
 grep -Fxq "sudo:install -m 644 -o root -g root -T $ROOT/default/firefox/policies.json /opt/zen-browser/distribution/policies.json" "$setup_log" ||
   fail "Zen browser installer copies policies.json without following a destination symlink"
 [[ -e $installed_dir/zen-browser ]] || fail "Zen browser installer marks zen-browser installed"
-pass "Zen browser installer restores the complete Omarchy setup"
+pass "Zen browser installer restores the complete DecentralOS setup"
 
 omarchy-default-browser zen
 rm -f "$installed_dir/chromium"

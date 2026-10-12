@@ -13,15 +13,15 @@ verify_core_packages() {
 
   # Without this, a missing manifest reads as an empty package list and the
   # audit passes having checked nothing.
-  [[ -f $manifest ]] || fail "all Omarchy core packages are installed" "package manifest not found: $manifest"
+  [[ -f $manifest ]] || fail "all DecentralOS core packages are installed" "package manifest not found: $manifest"
 
   while IFS= read -r package; do
     [[ -z $package || $package == \#* ]] && continue
     pacman -Q "$package" >/dev/null 2>&1 || missing+=("$package")
   done <"$manifest"
 
-  (( ${#missing[@]} == 0 )) || fail "all Omarchy core packages are installed" "missing packages: ${missing[*]}"
-  pass "all Omarchy core packages are installed (${#missing[@]} missing)"
+  (( ${#missing[@]} == 0 )) || fail "all DecentralOS core packages are installed" "missing packages: ${missing[*]}"
+  pass "all DecentralOS core packages are installed (${#missing[@]} missing)"
 }
 
 verify_kernel_headers() {
@@ -123,7 +123,7 @@ verify_user_setup() {
   [[ -e $HOME/.local/state/omarchy/current/background ]] || fail "current background state exists"
   [[ -s $HOME/.config/omarchy/shell.json ]] || fail "shell configuration exists"
   jq empty "$HOME/.config/omarchy/shell.json" || fail "shell configuration is valid JSON"
-  pass "Omarchy user state and shell configuration exist"
+  pass "DecentralOS user state and shell configuration exist"
 }
 
 for check in verify_core_packages verify_kernel_headers verify_defaults verify_services verify_runtime_tools verify_user_setup; do

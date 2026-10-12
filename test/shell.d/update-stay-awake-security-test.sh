@@ -163,7 +163,7 @@ start_identity_process() {
   local token="$1"
 
   /usr/bin/bash -c 'trap "exit 0" TERM; while :; do sleep 0.05; done' \
-    omarchy-test "--why=Omarchy update in progress [$token]" &
+    omarchy-test "--why=DecentralOS update in progress [$token]" &
   identity_pid=$!
   test_processes+=("$identity_pid")
   identity_start=$(awk '{ print $22 }' "/proc/$identity_pid/stat")
@@ -329,7 +329,7 @@ token=44444444444444444444444444444444
   while [[ ! -e $1 ]]; do sleep 0.05; done
   trap "exit 0" TERM
   while :; do sleep 0.05; done
-' omarchy-retry "$retry_flag" "--why=Omarchy update in progress [$token]" &
+' omarchy-retry "$retry_flag" "--why=DecentralOS update in progress [$token]" &
 retry_pid=$!
 test_processes+=("$retry_pid")
 retry_start=$(awk '{ print $22 }' "/proc/$retry_pid/stat")
@@ -571,7 +571,7 @@ if run_fallback 1000 /tmp/victim-home stop 2>/tmp/refusal; then
   echo "foreign fallback state was accepted" >&2
   exit 1
 fi
-grep -q 'unsafe Omarchy update inhibitor state path' /tmp/refusal
+grep -q 'unsafe DecentralOS update inhibitor state path' /tmp/refusal
 kill -0 "$victim_pid"
 
 rm -rf /tmp/omarchy-1000
@@ -592,7 +592,7 @@ if run_fallback 1000 /tmp/victim-home stop 2>/tmp/refusal; then
   echo "foreign state file was accepted" >&2
   exit 1
 fi
-grep -q 'unsafe Omarchy update sleep inhibitor state' /tmp/refusal
+grep -q 'unsafe DecentralOS update sleep inhibitor state' /tmp/refusal
 kill -0 "$victim_pid"
 
 # A legacy-looking record owned by another account is still untrusted.

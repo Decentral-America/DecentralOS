@@ -3,7 +3,7 @@
   "id": "omarchy.media",
   "name": "Media",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "MPRIS media control service",
   "kinds": [
     "service",

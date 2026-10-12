@@ -1,4 +1,4 @@
-echo "Switch mise to the mise-bin package from the Omarchy repo"
+echo "Switch mise to the mise-bin package from the DecentralOS repo"
 
 # mise-bin carries mise's own release artifacts -- PGO+BOLT-optimized on x86_64,
 # glibc-native on both arches -- and takes over from Arch's mise, which it both

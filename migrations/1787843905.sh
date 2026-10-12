@@ -1,4 +1,4 @@
-echo "Link Omarchy agent skills into Hermes skill directories"
+echo "Link DecentralOS agent skills into Hermes skill directories"
 
 OMARCHY_PATH="${OMARCHY_PATH:-/usr/share/omarchy}"
 skills_source="$OMARCHY_PATH/default/agents/skills"

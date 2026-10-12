@@ -1,5 +1,5 @@
 {
-  // Extend the Quickshell Omarchy menu with JSONC.
+  // Extend the Quickshell DecentralOS menu with JSONC.
   //
   // IDs are object keys. The parent is inferred from the dotted id, so
   // "personal.notes" appears under "personal", and "personal" appears on the

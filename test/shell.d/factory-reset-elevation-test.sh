@@ -66,7 +66,7 @@ if CALL_LOG="$tmp/call" PATH="$tmp/bin:/usr/bin:/bin" "$tmp/reset-link" >"$tmp/m
   fail "mismatched reset implementation was accepted"
 fi
 [[ ! -e $tmp/call ]] || fail "mismatched reset requested elevation"
-grep -Fq 'Install the matching Omarchy package' "$tmp/mismatch" || fail "mismatch explains recovery"
+grep -Fq 'Install the matching DecentralOS package' "$tmp/mismatch" || fail "mismatch explains recovery"
 if unshare -Ur true >/dev/null 2>&1; then
   status=0
   unshare -Ur "$tmp/reset-link" >"$tmp/root-mismatch" 2>&1 || status=$?

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Launch the Omarchy shell with its log kept in the journal
+# omarchy:summary=Launch the DecentralOS shell with its log kept in the journal
 # omarchy:hidden=true
 
 # Quickshell only logs to its instance runtime dir (tmpfs), so when the shell
@@ -10,7 +10,7 @@
 # Backgrounded because bash defers a trap until a foreground command returns but
 # interrupts wait. systemd-cat execs, so the job is Quickshell itself.
 #
-# Quickshell's own reloading is off; Omarchy restarts the shell deliberately.
+# Quickshell's own reloading is off; DecentralOS restarts the shell deliberately.
 # A package upgrade rewriting $OMARCHY_PATH/shell would otherwise reload it
 # against a half-written tree, and that failed reload leaves a second engine
 # generation behind that turns the next restart's IPC kill into a crash.
@@ -84,10 +84,10 @@ while true; do
   fi
 
   if (( ++attempts > 5 )); then
-    logger -t omarchy-shell "Giving up on the Omarchy shell after $attempts relaunches in under a minute."
+    logger -t omarchy-shell "Giving up on the DecentralOS shell after $attempts relaunches in under a minute."
     exit 1
   fi
 
-  logger -t omarchy-shell "Omarchy shell exited with status $status; relaunching."
+  logger -t omarchy-shell "DecentralOS shell exited with status $status; relaunching."
   sleep 1
 done

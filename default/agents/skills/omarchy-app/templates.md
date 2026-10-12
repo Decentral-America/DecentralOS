@@ -1,4 +1,4 @@
-# Omarchy App Templates
+# DecentralOS App Templates
 
 Read this when starting an app from the omarchy-app skill. Replace `<name>`
 with the app's name and `<Name>` with its display name. These come from
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
 
 ## `src/theme.h` and `src/theme.cpp`
 
-Follows the Omarchy accent live, and hands QML a readable color to put on it.
+Follows the DecentralOS accent live, and hands QML a readable color to put on it.
 Tests construct it with a temp directory.
 
 ```cpp
@@ -199,7 +199,7 @@ void Theme::reload() {
 
     // A theme switch replaces symlinks and files, so watch the parents too and
     // re-arm after every change. Watching the nearest existing ancestor means
-    // installing Omarchy later works without restarting the app.
+    // installing DecentralOS later works without restarting the app.
     QString ancestor = m_directory;
     while (!QFileInfo::exists(ancestor) && ancestor != "/")
         ancestor = QFileInfo(ancestor).absolutePath();
@@ -392,7 +392,7 @@ package() {
 ```
 
 Add `ffmpeg`, `qt6-multimedia`, or `qt6-svg` to `depends` when the app uses
-them. Omarchy installs all three, but the package should still say what it
+them. DecentralOS installs all three, but the package should still say what it
 needs. `package()` also installs `LICENSE` from the project root (the MIT text
 with the user's name and year) and the icon below, so both must exist.
 

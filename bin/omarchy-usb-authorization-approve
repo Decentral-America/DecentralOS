@@ -16,7 +16,7 @@ unset USBGUARD_DAEMON_CONF USBGUARD_DEBUG
 source /usr/share/omarchy/install/helpers/usb-authorization-policy.sh
 
 (( $# == 2 )) || exit 64
-# Omarchy persists to this file. Refuse custom daemon storage rather than
+# DecentralOS persists to this file. Refuse custom daemon storage rather than
 # mistaking a stale copy of a rule for a successful persistent decision.
 rules_file=$(awk -F= '/^[[:space:]]*RuleFile[[:space:]]*=/ { value=$2; gsub(/^[[:space:]]+|[[:space:]]+$/, "", value); print value; exit }' /etc/usbguard/usbguard-daemon.conf)
 [[ $rules_file == "/etc/usbguard/rules.conf" ]] || exit 1

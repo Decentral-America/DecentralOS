@@ -7,7 +7,7 @@
 TOGGLES_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/toggles/hypr"
 
 # Opaque and glassy are toggle files loaded after every theme: opaque makes the
-# windows Omarchy makes transparent solid, and glassy blurs what is behind any
+# windows DecentralOS makes transparent solid, and glassy blurs what is behind any
 # see-through window and gives terminals a see-through background. Transparent,
 # the default, removes both.
 current_mode() {

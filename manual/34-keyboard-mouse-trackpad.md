@@ -1,6 +1,6 @@
 # Keyboard, Mouse, Trackpad
 
-Hyprland lets you configure all your inputs in great detail. You can change the keyboard repeat to be supersonically fast or make the trackpad use natural scrolling. You change all of it in `~/.config/hypr/input.lua`, which you can also reach via _Setup > Input_ in the Omarchy menu (`Super + Space`). Anything you set there replaces Omarchy's defaults.
+Hyprland lets you configure all your inputs in great detail. You can change the keyboard repeat to be supersonically fast or make the trackpad use natural scrolling. You change all of it in `~/.config/hypr/input.lua`, which you can also reach via _Setup > Input_ in the DecentralOS menu (`Super + Space`). Anything you set there replaces DecentralOS's defaults.
 
 Here's an example:
 
@@ -59,13 +59,13 @@ On Dell XPS laptops with a haptic touchpad, you can also set the click strength 
 
 ### Typing in Chinese, Japanese, and other languages
 
-Select Japanese, Korean, Chinese (Simplified, Pinyin), or Chinese (Traditional, Zhuyin) when the installer asks for your keyboard. Omarchy configures the keyboard and matching input engine automatically, including during offline first-boot setup. Japanese uses Mozc, Korean uses standard two-set Hangul, Simplified Chinese uses Pinyin, and Traditional Chinese uses Chewing's standard Zhuyin arrangement. Japanese (US keyboard) provides Mozc with a US keyboard layout.
+Select Japanese, Korean, Chinese (Simplified, Pinyin), or Chinese (Traditional, Zhuyin) when the installer asks for your keyboard. DecentralOS configures the keyboard and matching input engine automatically, including during offline first-boot setup. Japanese uses Mozc, Korean uses standard two-set Hangul, Simplified Chinese uses Pinyin, and Traditional Chinese uses Chewing's standard Zhuyin arrangement. Japanese (US keyboard) provides Mozc with a US keyboard layout.
 
 Typing starts in Latin mode. Press `Super + I` to cycle through configured input methods, and `Super + Shift + I` to cycle back. Tap `Shift` on its own to step out of an input method like Pinyin into Latin letters, and tap it again to go back, the way Sogou, Microsoft Pinyin, and macOS work; `Shift` plus a letter still types a capital. On Japanese keyboards, 全角/半角 toggles input, 変換 turns it on, and 無変換 turns it off. On a Korean keyboard layout, dedicated 한/영 and 한자 keys switch Hangul and convert to Hanja. `Ctrl + Space` stays available for Tmux and Herdr; `Shift + CapsLock` stays the compose key.
 
 The keyboard indicator appears on the right of the bar when you have multiple keyboard layouts or input methods. Click it to switch input languages; Japanese displays あ for hiragana. For Japanese character choices, switch to Japanese, type a word such as `nihongo`, then press Space twice. Press Enter to accept your choice. If you also have multiple keyboard layouts, right-click the indicator to cycle those.
 
-Use _Setup > Typing > Keyboard Layouts_ to select layouts such as English and French, from the same choices offered during installation. Use _Setup > Typing > Input Methods_ to select which composition engines are active. Both pickers open inside the Omarchy menu with your current selections checked. Click or press Enter to toggle a choice; each change applies immediately. Deselecting an input method removes it from the cycle without uninstalling it; the keyboard remains available.
+Use _Setup > Typing > Keyboard Layouts_ to select layouts such as English and French, from the same choices offered during installation. Use _Setup > Typing > Input Methods_ to select which composition engines are active. Both pickers open inside the DecentralOS menu with your current selections checked. Click or press Enter to toggle a choice; each change applies immediately. Deselecting an input method removes it from the cycle without uninstalling it; the keyboard remains available.
 
 Run `omarchy setup keyboard` or `omarchy setup input` to open the same pickers. To append one language from the command line, use `omarchy setup input mozc`, `hangul`, `pinyin`, or `chewing`. Your custom switching keys are preserved. For alternative engine layouts or keys, install `fcitx5-configtool` with `omarchy pkg add fcitx5-configtool` and launch it from a terminal. Selecting an input language does not change the desktop language.
 

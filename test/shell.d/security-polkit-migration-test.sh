@@ -4,7 +4,7 @@ set -euo pipefail
 
 source "$(dirname "$0")/base-test.sh"
 
-# Exercises migrations/1788256455.sh, which repairs an Omarchy-created
+# Exercises migrations/1788256455.sh, which repairs an DecentralOS-created
 # /etc/pam.d/polkit-1 that lists pam_unix directly (dropping pam_faillock)
 # instead of including system-auth. The migration keeps its production path
 # fixed; as in sshd-hardening-migration-test.sh, this test rewrites that one
@@ -95,7 +95,7 @@ password  include system-auth
 session   include system-auth
 '
 # An administrator's own stack that happens to use pam_fprintd but carries an
-# extra directive Omarchy never writes.
+# extra directive DecentralOS never writes.
 admin_stack='auth      sufficient pam_fprintd.so
 auth      required pam_unix.so
 auth      optional pam_permit.so
@@ -162,7 +162,7 @@ pass "migration is idempotent: an already-fixed stack is untouched"
 run_migration admin "$admin_stack"
 [[ "$(result admin)" == "$(printf '%s' "$admin_stack")" ]] || fail "an administrator-authored stack is left unchanged"
 ! grep -q '^sudo ' "$test_dir/admin.calls" || fail "an administrator-authored stack triggers no privileged writes"
-pass "migration refuses a stack carrying non-Omarchy directives"
+pass "migration refuses a stack carrying non-DecentralOS directives"
 
 # Privilege failure is the retryable case: the migration must exit non-zero so
 # omarchy-migrate does not record it complete, and must leave the file unchanged.

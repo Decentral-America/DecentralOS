@@ -3,9 +3,9 @@
   "id": "omarchy.dropbox",
   "name": "Dropbox",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "license": "MIT",
-  "description": "Dropbox status, storage usage, login, and recent synced files in the Omarchy bar.",
+  "description": "Dropbox status, storage usage, login, and recent synced files in the DecentralOS bar.",
   "kinds": [
     "bar-widget"
   ],

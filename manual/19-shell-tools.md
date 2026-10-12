@@ -1,6 +1,6 @@
 # Shell Tools
 
-In addition to the standard Linux tools, Omarchy also ships with a bunch of enhanced shell tools. Here are the key ones.
+In addition to the standard Linux tools, DecentralOS also ships with a bunch of enhanced shell tools. Here are the key ones.
 
 ## fzf
 
@@ -58,4 +58,4 @@ The full manual can be found via `man yt-dlp`.
 
 [try](https://github.com/tobi/try) makes it easy to manage programming experiments with date-stamped directories. All experiments live in `~/Work/tries` and you can access them via `try`.
 
-Omarchy does not add a project's `bin/` directory to `PATH` automatically. Run trusted project-local tools with an explicit relative path, such as `bin/rails` or `./bin/dev`.
+DecentralOS does not add a project's `bin/` directory to `PATH` automatically. Run trusted project-local tools with an explicit relative path, such as `bin/rails` or `./bin/dev`.

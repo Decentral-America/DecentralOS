@@ -16,7 +16,7 @@ while (( $# > 0 )); do
   -h | --help)
     echo "Usage: omarchy-remove-security-usb-authorization [--boot-only] [--yes]"
     echo
-    echo "Disables Omarchy's USB approval prompts and restores the kernel's"
+    echo "Disables DecentralOS's USB approval prompts and restores the kernel's"
     echo "normal default-allow behavior."
     echo "Use --boot-only to keep USBGuard enabled after the system starts."
     exit 0

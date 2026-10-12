@@ -160,7 +160,7 @@ for unit_file in "$unit_dir"/hermes-gateway*.service; do
   fi
 done
 
-# The installer leaves a unit waiting to hand the app the Omarchy theme; it
+# The installer leaves a unit waiting to hand the app the DecentralOS theme; it
 # runs Hermes itself to do so, so it is stopped before the sweep reaches it.
 systemctl --user stop omarchy-hermes-theme.service 2>/dev/null || true
 
@@ -168,7 +168,7 @@ hermes_holders stop
 omarchy-pkg-drop hermes-desktop
 
 # Upstream's installer writes this when the runtime under ~/.hermes has landed,
-# whether Omarchy ran it for the app or the app's own first launch did, and it
+# whether DecentralOS ran it for the app or the app's own first launch did, and it
 # is the only thing that tells that runtime apart from one the user installed
 # themselves -- the paths are the same either way. Without it the install never
 # got that far: a machine where the package landed but nothing set Hermes up

@@ -23,7 +23,7 @@ grep -Fx 'PACKAGED_PATH=/usr/bin/omarchy-dns' "$dns" >/dev/null ||
   fail "omarchy-dns elevates the path the sudoers rule names"
 
 # `sudo -l` on its own answers whether a command is permitted, not whether it
-# is passwordless, and Omarchy ships a blanket %wheel rule that permits
+# is passwordless, and DecentralOS ships a blanket %wheel rule that permits
 # everything. Only the long listing prints the matched entry's tags.
 grep -E 'sudo -n -l -l' "$dns" >/dev/null ||
   fail "omarchy-dns reads the grant from the long sudo listing"

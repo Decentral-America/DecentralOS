@@ -18,7 +18,7 @@ echo -e "\e[32m\nUpdate system packages\e[0m"
 errors=$(mktemp)
 trap 'rm -f "$errors"' EXIT
 
-# /usr/share/omarchy is wholly Omarchy's; files can land there unowned and would
+# /usr/share/omarchy is wholly DecentralOS's; files can land there unowned and would
 # otherwise abort the upgrade. Packaged content wins there.
 #
 # Progress bars stay on stdout. Errors are on stderr, kept for the conflict

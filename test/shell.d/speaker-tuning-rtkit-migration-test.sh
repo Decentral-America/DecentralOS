@@ -24,14 +24,14 @@ grep -q 'args = { rtportal.enabled = false }' "$host_source" ||
   fail "the shipped tuning host asks RTKit directly"
 pass "the shipped tuning host asks RTKit directly"
 
-# The copy an earlier Omarchy installed: the same file with the old setting.
+# The copy an earlier DecentralOS installed: the same file with the old setting.
 sed 's/args = { rtportal.enabled = false }/args = { }/' "$host_source" > "$host_config"
 : > "$CALL_LOG"
 bash -euo pipefail "$migration" >/dev/null
-cmp -s "$host_source" "$host_config" || fail "an installed Omarchy host is replaced"
+cmp -s "$host_source" "$host_config" || fail "an installed DecentralOS host is replaced"
 grep -Fxq -- "--user try-restart omarchy-speaker-tuning.service" "$CALL_LOG" ||
   fail "a replaced host is restarted if it runs"
-pass "an installed Omarchy host is replaced and restarted"
+pass "an installed DecentralOS host is replaced and restarted"
 
 : > "$CALL_LOG"
 bash -euo pipefail "$migration" >/dev/null

@@ -42,7 +42,7 @@ usb_authorization_require_secure_setting() {
 
   actual=$(usb_authorization_config_value "$config" "$key")
   if [[ $actual != "$expected" ]]; then
-    echo "USBGuard's $key must be '$expected' before Omarchy enables it." >&2
+    echo "USBGuard's $key must be '$expected' before DecentralOS enables it." >&2
     echo "Current value: ${actual:-<unset>} in $config" >&2
     return 1
   fi

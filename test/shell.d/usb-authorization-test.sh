@@ -364,7 +364,7 @@ objcopy --rename-section .data=.cmdline,alloc,load,readonly,data,contents "$hist
 embedded_hash=$(b2sum "$historical_uki")
 embedded_hash=${embedded_hash%% *}
 cat >"$boot_conf" <<CONF
-/+Omarchy
+/+DecentralOS
 comment: machine-id=$machine_id
   //linux
   comment: kernel-id=linux
@@ -431,12 +431,12 @@ usb_authorization_rebuild_and_verify disabled "$boot_conf" "$scratch" "$machine_
   fail "boot authorization removes the parameter from current and snapshot entries"
 
 snapshot_config="$scratch/limine-defaults"
-printf 'TARGET_OS_NAME="Omarchy"\n' >"$snapshot_config"
+printf 'TARGET_OS_NAME="DecentralOS"\n' >"$snapshot_config"
 usb_authorization_enable_snapshot_setting "$snapshot_config"
 grep -Fqx 'SNAPSHOT_KERNEL_PARAMETERS+=usbcore.authorized_default=0' "$snapshot_config" ||
   fail "future Limine snapshots inherit boot-time USB authorization"
 usb_authorization_enable_snapshot_setting "$snapshot_config"
-[[ $(grep -Fxc '# Omarchy USB authorization begin' "$snapshot_config") == 1 ]] ||
+[[ $(grep -Fxc '# DecentralOS USB authorization begin' "$snapshot_config") == 1 ]] ||
   fail "the snapshot setting remains idempotent"
 usb_authorization_disable_snapshot_setting "$snapshot_config"
 ! grep -Fq 'usbcore.authorized_default=0' "$snapshot_config" ||
@@ -461,7 +461,7 @@ for expected in enabled disabled; do
   # Model both Limine render paths: cached lines and structured details.
   for representation in cached structured; do
     {
-      printf '/Omarchy\ncomment: machine-id=%s\n  //linux\n' "$machine_id"
+      printf '/DecentralOS\ncomment: machine-id=%s\n  //linux\n' "$machine_id"
       if [[ $representation == "cached" ]]; then
         jq -r '.snapshotEntries[0].kernelEntries[0].allInSnapshotConfig[]' "$manifest"
       else
@@ -942,7 +942,7 @@ pass "USB removal preserves approval prompts if stopping enforcement fails"
 
 [[ $(<"$sysfs/usb1/authorized_default") == 1 ]] || fail "removal restores root-hub default authorization"
 [[ $(<"$sysfs/1-2/authorized") == 1 ]] || fail "removal reauthorizes devices left connected"
-grep -Fqx 'systemctl <disable --now usbguard.service>' "$calls" || fail "removal stops a service Omarchy enabled"
+grep -Fqx 'systemctl <disable --now usbguard.service>' "$calls" || fail "removal stops a service DecentralOS enabled"
 grep -Fqx 'usbguard <remove-user> <tester>' "$calls" || fail "removal drops the user's USBGuard IPC access"
 grep -Fqx 'sudo <omarchy-usb-authorization-restore-default>' "$calls" ||
   fail "removal restores USB authorization only through the fixed-path root helper"

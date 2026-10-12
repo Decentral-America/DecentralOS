@@ -66,7 +66,7 @@ chmod +x "$test_tmp/wrapper/chromium"
 ! CHROME_USER_DATA_DIR=/elsewhere "$ROOT/bin/omarchy-cmd-browser-handoff" chromium https://example.test ||
   fail "a data directory from the environment is left to a browser of its own"
 
-# The handoff forwards no flags file, so any flag beyond Omarchy's own, which
+# The handoff forwards no flags file, so any flag beyond DecentralOS's own, which
 # may be meant for each launch, needs the launcher.
 for flag in '--new-window' '--enable-features=A --profile-directory="Profile 1"'; do
   cp "$ROOT/config/chromium-flags.conf" "$flags_file"

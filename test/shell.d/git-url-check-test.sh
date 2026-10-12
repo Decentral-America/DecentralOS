@@ -31,7 +31,7 @@ pass "a <helper>::<address> URL is refused"
 for url in "ext://sh -c id" "fd://17" "gcrypt://example.com/x" "zzz://a" "ZZZ://a" "HTTPS://github.com/a/b"; do
   output=$(check "$url") &&
     fail "omarchy-git-url-check refuses the '$url' transport" "$output"
-  grep -qF "which Omarchy does not clone from" <<<"$output" ||
+  grep -qF "which DecentralOS does not clone from" <<<"$output" ||
     fail "omarchy-git-url-check names the transport rejection for '$url'" "$output"
 done
 

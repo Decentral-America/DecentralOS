@@ -46,5 +46,5 @@ if [[ $url =~ ^([A-Za-z0-9][A-Za-z0-9+.-]*):// ]]; then
     fi
   done
 
-  fail "'$url' names the '$scheme' transport, which Omarchy does not clone from."
+  fail "'$url' names the '$scheme' transport, which DecentralOS does not clone from."
 fi

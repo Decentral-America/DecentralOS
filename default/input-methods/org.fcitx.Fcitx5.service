@@ -1,4 +1,4 @@
-# Installed per-user so D-Bus activation uses the supervised Omarchy unit.
+# Installed per-user so D-Bus activation uses the supervised DecentralOS unit.
 [D-BUS Service]
 Name=org.fcitx.Fcitx5
 Exec=/usr/bin/fcitx5

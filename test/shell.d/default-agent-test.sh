@@ -249,7 +249,7 @@ source "$ROOT/migrations/1786719479.sh" >/dev/null
 [[ -e $test_home/.local/bin/gemini ]] ||
   fail "Antigravity migration leaves a wrapper that only mentions the installer line"
 rm -f "$test_home/.local/bin/gemini"
-pass "Antigravity migration only removes the Gemini wrapper Omarchy wrote"
+pass "Antigravity migration only removes the Gemini wrapper DecentralOS wrote"
 
 [[ -L "$test_home/.gemini/config/skills/omarchy" && $(readlink "$test_home/.gemini/config/skills/omarchy") == "$ROOT/default/agents/skills/omarchy" ]] ||
    fail "Antigravity migration provisions the omarchy skill"
@@ -552,8 +552,8 @@ for selection in "${!expected_agents[@]}"; do
 done
 pass "default agent selects and opens every supported provider and alias"
 [[ -f $agent_file && ! -e $test_home/.local/state/omarchy/defaults/agent ]] ||
-  fail "default agent stores its selection in Omarchy user config"
-pass "default agent stores its selection in Omarchy user config"
+  fail "default agent stores its selection in DecentralOS user config"
+pass "default agent stores its selection in DecentralOS user config"
 
 OMARCHY_TEST_AGENT_INSTALLED=true omarchy-default-agent pi
 : >"$agent_open_log"
@@ -722,7 +722,7 @@ grep -F "Could not set Muse Code as the default coding agent" "$test_tmp/muse-fa
 pass "default agent reports Muse mise failures without changing the selection"
 
 # A manually installed launcher belongs to the user; selecting it must not
-# install a second copy or replace it with the Omarchy wrapper.
+# install a second copy or replace it with the DecentralOS wrapper.
 printf '#!/bin/bash\necho user-muse\n' >"$test_home/.local/bin/muse"
 chmod +x "$test_home/.local/bin/muse"
 : >"$mise_history"

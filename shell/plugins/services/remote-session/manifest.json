@@ -3,7 +3,7 @@
   "id": "omarchy.remote-session",
   "name": "Remote Session",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Detects a gliff remote-desktop session on this machine for the bar indicator.",
   "kinds": [
     "service"

@@ -3,7 +3,7 @@
   "id": "omarchy.background",
   "name": "Background",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Desktop background renderer with click handling and transitions",
   "kinds": [
     "service"

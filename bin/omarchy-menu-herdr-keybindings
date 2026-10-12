@@ -24,7 +24,7 @@ while (($#)); do
 done
 
 # With no config file, Herdr runs on its own built-in defaults. Substituting the
-# Omarchy seed config here would describe bindings Herdr never loaded.
+# DecentralOS seed config here would describe bindings Herdr never loaded.
 [[ -f $config_file ]] || config_file="/dev/null"
 
 # Herdr has no CLI that dumps resolved keybindings, so the action list and its

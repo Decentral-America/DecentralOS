@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Sync the generated Omarchy theme to Hermes as a skin
+# omarchy:summary=Sync the generated DecentralOS theme to Hermes as a skin
 # omarchy:args=[--activate] [--wait]
 # omarchy:hidden=true
 
@@ -59,7 +59,7 @@ if [[ ! -f $HERMES_SOURCE_PATH ]]; then
 
   if [[ ! -s $HERMES_THEME_NAME_PATH ]]; then
     echo "Hermes skin source missing: $HERMES_SOURCE_PATH" >&2
-    echo "Select an Omarchy theme first." >&2
+    echo "Select an DecentralOS theme first." >&2
     exit 1
   fi
 
@@ -86,7 +86,7 @@ if (( HERMES_WAIT == 1 )); then
   done
 fi
 
-# Provisioning creates ~/.hermes on every machine for the Omarchy skill; the
+# Provisioning creates ~/.hermes on every machine for the DecentralOS skill; the
 # config is what Hermes writes once it has actually run.
 if [[ ! -f $HERMES_CONFIG_PATH ]]; then
   note "Hermes is not set up yet; launch it once, then run omarchy-theme-set-hermes --activate."
@@ -180,7 +180,7 @@ active_config_path() {
   fi
 }
 
-# A theme switch finishes the hand-over only for the app Omarchy installed, and
+# A theme switch finishes the hand-over only for the app DecentralOS installed, and
 # only Hermes' default is ever replaced, so a config plainly naming another skin
 # ends it here without starting Hermes. Anything less plain is for Hermes to read.
 if (( HERMES_ACTIVATE == 0 )); then
@@ -196,7 +196,7 @@ fi
 # The probe vets the command before anything here runs it: a wrapper that is
 # not a working Hermes, or the retired mise stub that would build one.
 if ! omarchy-install-hermes-cli --check 2>/dev/null; then
-  note "Hermes is not ready, so the Omarchy skin is published but not active."
+  note "Hermes is not ready, so the DecentralOS skin is published but not active."
   note "Once Hermes runs, activate it with: hermes config set display.skin $HERMES_SKIN_NAME"
   exit 0
 fi
@@ -204,7 +204,7 @@ fi
 # Only Hermes' own default is replaced, so a skin chosen in Hermes stays; an
 # answer that did not come is not a default.
 if ! current_skin=$(timeout 15 "$HERMES_COMMAND" config get display.skin 2>/dev/null); then
-  note "Hermes did not say which skin it is on, so the Omarchy skin is published but not active."
+  note "Hermes did not say which skin it is on, so the DecentralOS skin is published but not active."
   exit 0
 fi
 
@@ -216,11 +216,11 @@ fi
 # Hermes' own writer: it updates the active profile's config and touches the
 # skin file so a running gateway broadcasts the change. A refusal is cosmetic.
 if ! timeout 30 "$HERMES_COMMAND" config set display.skin "$HERMES_SKIN_NAME" >/dev/null 2>&1; then
-  note "Hermes refused to switch skins, so the Omarchy skin is published but not active."
+  note "Hermes refused to switch skins, so the DecentralOS skin is published but not active."
   exit 0
 fi
 
-note "Hermes is on the Omarchy skin."
+note "Hermes is on the DecentralOS skin."
 
 # The desktop applies a skin only from a broadcast, and a config written before
 # the gateway seeded its watcher goes unannounced; a later write is announced.

@@ -1,4 +1,4 @@
-# Omarchy core package list pacstrapped by the ISO.
+# DecentralOS core package list pacstrapped by the ISO.
 # The ISO builder also reads this file when constructing the offline mirror.
 
 aether

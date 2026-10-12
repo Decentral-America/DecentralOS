@@ -22,15 +22,15 @@ cat >"$mock_bin/t3" <<'SH'
 #!/bin/bash
 [[ $1 == "theme" && $2 == "set" && $3 == "omarchy" && $4 == "--base-dir" && $5 == "$T3CODE_HOME" ]] || exit 1
 palette="$T3CODE_HOME/userdata/themes/omarchy.json"
-if [[ ! -f $palette ]] || ! jq -e '.name == "Omarchy" and (.accent | test("^#[0-9a-fA-F]{6}$"))' "$palette" >/dev/null; then
-  echo "No published Omarchy theme"
+if [[ ! -f $palette ]] || ! jq -e '.name == "DecentralOS" and (.accent | test("^#[0-9a-fA-F]{6}$"))' "$palette" >/dev/null; then
+  echo "No published DecentralOS theme"
   exit 1
 fi
 if [[ ${OMARCHY_TEST_T3_FAIL:-0} == "1" ]]; then
   echo "T3 theme selection failed"
   exit 1
 fi
-echo "T3 selected Omarchy"
+echo "T3 selected DecentralOS"
 SH
 
 cat >"$mock_bin/setsid" <<'SH'
@@ -56,7 +56,7 @@ cp "$ROOT/themes/tokyo-night/colors.toml" "$state/theme/colors.toml"
 run_installer || fail "installing after an update succeeds" "$(cat "$test_tmp/output")"
 [[ -f $state/theme/t3code.json && -f $palette ]] || fail "the missing palette is rendered and published"
 cmp -s "$state/theme/t3code.json" "$palette" || fail "T3 receives the current theme's palette"
-grep -q 'T3 selected Omarchy' "$test_tmp/output" || fail "the published palette is selected"
+grep -q 'T3 selected DecentralOS' "$test_tmp/output" || fail "the published palette is selected"
 grep -q 'Opening T3 Code' "$test_tmp/output" || fail "the themed app opens"
 [[ ! -e $test_home/.t3 ]] || fail "the custom T3 home is respected"
 pass "an update with no staged T3 palette renders, publishes and selects it before launch"

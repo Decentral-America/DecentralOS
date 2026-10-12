@@ -1,4 +1,4 @@
-echo "Prioritize the Omarchy package repository over Arch repositories"
+echo "Prioritize the DecentralOS package repository over Arch repositories"
 
 # Move the existing section rather than replacing pacman.conf so channel URLs,
 # custom repositories, and administrator options survive the migration.

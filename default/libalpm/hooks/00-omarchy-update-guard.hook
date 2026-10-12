@@ -4,7 +4,7 @@ Type = Package
 Target = *
 
 [Action]
-Description = Checking Omarchy update entrypoint...
+Description = Checking DecentralOS update entrypoint...
 When = PreTransaction
 Depends = omarchy
 Exec = /usr/bin/omarchy-update-pacman-guard

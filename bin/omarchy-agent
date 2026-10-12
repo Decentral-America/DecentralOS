@@ -37,7 +37,7 @@ done
 
 agent=$(omarchy-default-agent)
 
-# Omarchy ships without a default, so there is nothing to launch until one is
+# DecentralOS ships without a default, so there is nothing to launch until one is
 # picked. --pick offers the choice instead of the error, which is what the
 # keybinding wants: a keypress that opens nothing explains nothing.
 if [[ -z $agent ]]; then

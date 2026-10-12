@@ -56,7 +56,7 @@ export LEAF_CALLS="$test_tmp/leaf-calls" REBUILDS="$test_tmp/rebuilds"
 fake_platform "$test_tmp/hw" aarch64-apple
 base_path="$test_tmp/hw/bin:$stub_bin:$ROOT/bin:/usr/local/bin:/usr/bin:/bin"
 
-# An Omarchy tree whose hardware setup is three leaves that log their runs.
+# An DecentralOS tree whose hardware setup is three leaves that log their runs.
 # Leaves a and b write initramfs drop-ins; b then fails while $FAIL_B exists.
 fixture="$test_tmp/omarchy"
 mkdir -p "$fixture/install/helpers" "$fixture/install/provisioning" "$fixture/install/hardware/apple" "$fixture/bin"
@@ -470,7 +470,7 @@ grep -qx 'ConditionPathExists=|/var/lib/omarchy/image/pacman-keyring' "$ROOT/ins
   fail "the first-boot unit also starts for a keyring request alone"
 pass "a keyring request with no queued step still gets the machine's own keyring"
 
-# A leaf a later Omarchy no longer ships is dropped; a queue entry outside the
+# A leaf a later DecentralOS no longer ships is dropped; a queue entry outside the
 # hardware setup stops the run before anything runs.
 reset_logs
 root=$(new_root gone)
@@ -480,7 +480,7 @@ printf '%s\n' install/hardware/removed.sh install/hardware/c.sh >"$root/var/lib/
 output=$(first_boot "$root") || fail "a step no longer shipped does not block the rest" "$output"
 [[ $output == *"Skipping deferred hardware step install/hardware/removed.sh"* && $(cat "$RUNS") == "c" ]] ||
   fail "a step no longer shipped is skipped and the rest run" "$output"
-pass "a deferred step Omarchy no longer ships is skipped"
+pass "a deferred step DecentralOS no longer ships is skipped"
 
 # A step that would build the boot image itself asks for the rebuild after the
 # last step instead: one rebuild, even when no

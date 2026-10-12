@@ -3,7 +3,7 @@
   "id": "omarchy.idle",
   "name": "Idle",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Quickshell-based idle detection for screensaver, lock, and display wake.",
   "kinds": [
     "service"

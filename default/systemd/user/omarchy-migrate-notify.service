@@ -1,5 +1,5 @@
 [Unit]
-Description=Notify about pending Omarchy migrations
+Description=Notify about pending DecentralOS migrations
 # Login-only. There used to be an omarchy-update-user-notify.path watching
 # /usr/share/omarchy/migrations, but pacman writes that directory during every
 # update -- including the blessed `omarchy update`, which runs omarchy-migrate

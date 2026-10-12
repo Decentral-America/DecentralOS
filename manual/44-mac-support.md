@@ -1,16 +1,16 @@
 # Mac support
 
-Omarchy has built-in support for **Intel Macs**. There are a couple of known limitations at the moment, but as long as you're aware and OK with those; you can breathe some new life into your old Macs by loading Omarchy.
+DecentralOS has built-in support for **Intel Macs**. There are a couple of known limitations at the moment, but as long as you're aware and OK with those; you can breathe some new life into your old Macs by loading DecentralOS.
 
 Please note that installing on an M-series Mac is not directly supported at this time. You can find out more about the state of this in #omarchy-on-other in our [Discord](https://discord.gg/tXFUdasqhY).
 
-In a simple test, we were able to achieve 36% performance gains on a 2019 MacBook Pro just by installing Omarchy.
+In a simple test, we were able to achieve 36% performance gains on a 2019 MacBook Pro just by installing DecentralOS.
 
  ![macbook-omarchy](images/macbook-omarchy.webp)
 
-### Installing Omarchy on Mac
+### Installing DecentralOS on Mac
 
-Omarchy only supports being the **only** OS installed at the moment. During the installation, the drive will be wiped and MacOS will no longer be bootable.
+DecentralOS only supports being the **only** OS installed at the moment. During the installation, the drive will be wiped and MacOS will no longer be bootable.
 
 You can still restore it later via Internet Recovery if you'd like.
 

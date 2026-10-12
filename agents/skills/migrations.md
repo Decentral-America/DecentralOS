@@ -1,8 +1,8 @@
-# Omarchy migrations
+# DecentralOS migrations
 
 Read this before creating or changing migrations under `migrations/`.
 
-Omarchy migrations are one-time repair scripts for existing installs. They are
+DecentralOS migrations are one-time repair scripts for existing installs. They are
 used when a package update needs to change state that pacman cannot safely own by
 itself.
 
@@ -14,7 +14,7 @@ Migrations live in:
 migrations/*.sh
 ```
 
-They run as the current Omarchy user through `omarchy-migrate`, normally during
+They run as the current DecentralOS user through `omarchy-migrate`, normally during
 `omarchy update`. A migration may touch user/session state (`~/.config`,
 `~/.local`, user systemd, browser/editor prefs, DBus/session state), and may also
 perform machine-wide repairs when needed.
@@ -124,13 +124,13 @@ New migration format:
   with `bash -euo pipefail`, not through executable bits.
 - No shebang line.
 - Start with an `echo` describing what the migration does.
-- Use `$OMARCHY_PATH` to reference the Omarchy directory.
+- Use `$OMARCHY_PATH` to reference the DecentralOS directory.
 - Be idempotent. Check existing state before changing it.
 - Migrations are strictly ordered and synchronous. A migration that cannot finish must exit non-zero, remain pending, and stop the queue; never mark later migrations complete against state an earlier migration has not established.
 - Use helper commands such as `omarchy-cmd-present`, `omarchy-cmd-missing`,
   `omarchy-pkg-add`, `omarchy-pkg-drop`, `omarchy-pkg-present`, and
   `omarchy-pkg-missing` when appropriate.
-- Never restart the Omarchy shell. `omarchy update` restarts it unconditionally
+- Never restart the DecentralOS shell. `omarchy update` restarts it unconditionally
   after migrations run, and the login-time shell already runs current code and
   hot-reloads `shell.json` edits.
 - Raw `pacman`, `command -v`, and direct config edits are acceptable when
@@ -139,7 +139,7 @@ New migration format:
 Example:
 
 ```bash
-echo "Relink Neovim theme to Omarchy current state"
+echo "Relink Neovim theme to DecentralOS current state"
 
 theme_link="$HOME/.config/nvim/lua/plugins/theme.lua"
 current_relative_target="../../../../.local/state/omarchy/current/theme/neovim.lua"
@@ -163,9 +163,9 @@ rm ~/.local/state/omarchy/migrations/<migration>.sh
 omarchy-migrate
 ```
 
-Keep a dedicated test while the migration is still being written or bugfixed, if it calls an Omarchy helper whose interface can still change, or if it is a security-sensitive privileged repair (FIDO2, leftover installer artifacts, udev, sshd). Once a one-shot rewrite has shipped in a tagged release and is frozen, drop the test even when that rewrite used sudo, pacman, or limine-mkinitcpio. Keep the migration itself for late-updaters. Tests of `omarchy-migrate`, the login notifier, and `omarchy-upgrade-to-quattro` stay.
+Keep a dedicated test while the migration is still being written or bugfixed, if it calls an DecentralOS helper whose interface can still change, or if it is a security-sensitive privileged repair (FIDO2, leftover installer artifacts, udev, sshd). Once a one-shot rewrite has shipped in a tagged release and is frozen, drop the test even when that rewrite used sudo, pacman, or limine-mkinitcpio. Keep the migration itself for late-updaters. Tests of `omarchy-migrate`, the login notifier, and `omarchy-upgrade-to-quattro` stay.
 
-Omarchy 4.0 is upgraded through `bin/omarchy-upgrade-to-quattro`, not through the
+DecentralOS 4.0 is upgraded through `bin/omarchy-upgrade-to-quattro`, not through the
 normal migration runner. Do not add compatibility migrations for old installer
 layouts; put pre-4 package-layout transition work in the upgrade command instead.
 

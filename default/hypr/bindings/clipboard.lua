@@ -1,6 +1,6 @@
 -- Send with explicit mods to the focused surface by omitting the window target,
 -- so universal clipboard shortcuts reach both normal windows and focused
--- layer-shell surfaces such as Omarchy panels. A virtual keyboard (wtype) won't
+-- layer-shell surfaces such as DecentralOS panels. A virtual keyboard (wtype) won't
 -- do: the physically held SUPER merges into the injected chord at the seat.
 -- The down/up split works around Hyprland send_shortcut sometimes leaving
 -- synthetic key state stuck/repeating.

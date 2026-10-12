@@ -15,5 +15,5 @@ grep -Fxq 'KERNEL_CMDLINE[default]+=" systemd.tty.term.console=dumb"' "$packaged
 pass "packaged Limine defaults keep PID 1 from waiting on the console"
 
 grep -Fxq 'BOOT_ORDER="linux-t2, linux-omarchy, linux-omarchy-*, *, *fallback, Snapshots"' "$packaged_defaults" ||
-  fail "packaged Limine defaults protect T2 Macs and prefer the exact Omarchy kernel elsewhere"
-pass "packaged Limine defaults protect T2 Macs and prefer the exact Omarchy kernel elsewhere"
+  fail "packaged Limine defaults protect T2 Macs and prefer the exact DecentralOS kernel elsewhere"
+pass "packaged Limine defaults protect T2 Macs and prefer the exact DecentralOS kernel elsewhere"

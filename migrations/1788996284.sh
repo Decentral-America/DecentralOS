@@ -17,7 +17,7 @@ done
 
 [[ -f $nvim_provider ]] || exit 0
 
-# Replace only known Omarchy versions, including the June file-backed provider
+# Replace only known DecentralOS versions, including the June file-backed provider
 # and the two earlier proposed fixes. Preserve all user-authored changes.
 provider_hash=$(sha256sum "$nvim_provider")
 case ${provider_hash%% *} in

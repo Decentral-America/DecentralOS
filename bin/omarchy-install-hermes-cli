@@ -52,7 +52,7 @@ legacy_stub() {
   [[ -f $command_path ]] && grep -qxF "$legacy_marker" "$command_path"
 }
 
-# Only the wrapper Omarchy wrote proves the environment is Omarchy's to remove:
+# Only the wrapper DecentralOS wrote proves the environment is DecentralOS's to remove:
 # the regular file at its path, or the copy a run of this installer saved aside
 # before upstream's installer took the name, since a user who chose Hermes
 # before the migration ran has it there and the environment still requested.
@@ -88,7 +88,7 @@ mise_retired() {
 
 # Removes the environment the retired wrapper built, judged by what is left
 # rather than by what the commands claimed. Only for a caller that has proved
-# it Omarchy's.
+# it DecentralOS's.
 retire_mise() {
   if mise_retired; then
     return 0
@@ -109,7 +109,7 @@ retire_mise() {
 
 # Once the environment is gone the proof has done its work. Left behind it
 # would keep --check answering no for an install that is finished, and claim
-# an environment the user builds later as Omarchy's. The copies are Omarchy's
+# an environment the user builds later as DecentralOS's. The copies are DecentralOS's
 # own wrapper, so removing them takes nothing of the user's; a backup directory
 # that held nothing else goes with them.
 forget_legacy() {
@@ -164,7 +164,7 @@ ours() {
   [[ -f $command_path && ! -L $command_path ]] && grep -qF "$HERMES_HOME/" "$command_path"
 }
 
-# What omarchy-agent runs is whichever hermes is first on PATH, and Omarchy puts
+# What omarchy-agent runs is whichever hermes is first on PATH, and DecentralOS puts
 # mise's shims ahead of ~/.local/bin. So the command the probe vets has to be
 # the one PATH finds, or the agent is on a different Hermes than the one set
 # up. A PATH that finds none is not in the way: the theme unit asks from a
@@ -328,7 +328,7 @@ case "$mode" in
   ;;
 --retire-mise)
   # The migration's whole job. The environment goes before the wrapper, since
-  # once the wrapper is gone nothing marks the environment as Omarchy's and a
+  # once the wrapper is gone nothing marks the environment as DecentralOS's and a
   # rerun could not finish what a failed removal left behind.
   if legacy_owned; then
     retire_mise || exit 1
@@ -528,7 +528,7 @@ fi
 # What omarchy-agent runs is the command, not the venv, so the command is what
 # has to answer for the seeded sessions.
 if ! hermes_prompt_ready; then
-  echo "Hermes is installed at $runtime, but $command_path does not run the interactive seeded sessions Omarchy needs." >&2
+  echo "Hermes is installed at $runtime, but $command_path does not run the interactive seeded sessions DecentralOS needs." >&2
   echo "Update Hermes with 'hermes update', then run omarchy-install-hermes-cli --now again." >&2
   exit 1
 fi

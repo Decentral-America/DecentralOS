@@ -1,6 +1,6 @@
 #!/bin/bash -p
 
-# omarchy:summary=Overwrite the package configuration for /etc/pacman with the Omarchy default of using its dedicated mirrors and repositories, then update all packages.
+# omarchy:summary=Overwrite the package configuration for /etc/pacman with the DecentralOS default of using its dedicated mirrors and repositories, then update all packages.
 # omarchy:requires-sudo=true
 
 if [[ $- != *p* ]]; then
@@ -38,7 +38,7 @@ fi
 templates=$(omarchy_pacman_templates "$platform") || exit 1
 [[ -n $channel ]] || channel=$(omarchy_pacman_default_channel "$platform") || exit 1
 if [[ ! -f $templates/pacman-$channel.conf || ! -f $templates/mirrorlist-$channel ]]; then
-  echo "Omarchy has no $channel channel for $platform. No repository configuration changed." >&2
+  echo "DecentralOS has no $channel channel for $platform. No repository configuration changed." >&2
   exit 1
 fi
 

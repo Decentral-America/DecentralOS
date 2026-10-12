@@ -1,6 +1,6 @@
 """Only the hardware fixture is Python: upstream Bolt uses UMockdev/GObject.
 
-All Omarchy behavior and assertions run in bolt-exercise.sh against real boltd,
+All DecentralOS behavior and assertions run in bolt-exercise.sh against real boltd,
 real busctl, a private system bus, and disposable sysfs/firmware/store state.
 """
 import importlib.machinery
@@ -44,7 +44,7 @@ class ApprovalIntegration(u.BoltTest):
     self.daemon_start()
     subprocess.run(command + ['restart'], env=env, check=True)
     # The real Bash daemon publishes a fresh readable snapshot and reconnects
-    # to Bolt after a restart. No custom Omarchy D-Bus server is involved.
+    # to Bolt after a restart. No custom DecentralOS D-Bus server is involved.
     child = subprocess.Popen(command + ['daemon'], env=env)
     try:
       for _ in range(100):

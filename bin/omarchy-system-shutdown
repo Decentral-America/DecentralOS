@@ -18,7 +18,7 @@ elif [[ ${1:-} == "--inhibit" ]]; then
   # Report failures from inside the service, independently of the launching terminal.
   # Block lid handling explicitly: it ignores high-level sleep inhibitors.
   systemd-inhibit --what=sleep:idle:handle-lid-switch \
-    --who=Omarchy --why="Shutdown in progress" --mode=block \
+    --who=DecentralOS --why="Shutdown in progress" --mode=block \
     "$0" --inhibited || {
     status=$?
     omarchy-notification-send -u critical "Shutdown failed" "Could not complete shutdown. Please try again."

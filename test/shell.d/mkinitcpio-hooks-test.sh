@@ -46,7 +46,7 @@ for fixture in "$test_tmp"/platforms/*; do
 done
 
 # mkinitcpio's stock mkinitcpio.conf, which the baseline replaces, plus every
-# drop-in Omarchy ships, on a machine with no PCI devices.
+# drop-in DecentralOS ships, on a machine with no PCI devices.
 new_etc() {
   rm -rf "$etc" "$devices"
   mkdir -p "$etc/mkinitcpio.conf.d" "$devices"
@@ -124,9 +124,9 @@ assert_hooks() {
 # Each platform starts from its own baseline, whatever mkinitcpio.conf says.
 new_etc
 assert_hooks "Apple Silicon starts from the systemd baseline" aarch64-apple "$apple_hooks"
-assert_hooks "plain aarch64 starts from the Omarchy baseline" aarch64 "$omarchy_hooks"
-assert_hooks "x86 starts from the Omarchy baseline" x86 "$omarchy_hooks"
-assert_hooks "without the detector the Omarchy baseline stays" no-detector "$omarchy_hooks"
+assert_hooks "plain aarch64 starts from the DecentralOS baseline" aarch64 "$omarchy_hooks"
+assert_hooks "x86 starts from the DecentralOS baseline" x86 "$omarchy_hooks"
+assert_hooks "without the detector the DecentralOS baseline stays" no-detector "$omarchy_hooks"
 
 if composed=$(compose contradiction 2>"$test_tmp/contradiction.err"); then
   fail "a platform the detector cannot place stops the build" "composed: $composed"
@@ -161,7 +161,7 @@ for platform in aarch64-apple no-detector; do
 done
 new_etc
 sed -i "s/^HOOKS=.*/HOOKS=(base udev autodetect modconf block encrypt filesystems fsck)/" "$etc/mkinitcpio.conf"
-assert_hooks "busybox encrypt off Apple Silicon still gets the Omarchy baseline" x86 "$omarchy_hooks"
+assert_hooks "busybox encrypt off Apple Silicon still gets the DecentralOS baseline" x86 "$omarchy_hooks"
 new_etc
 sed -i "s/^HOOKS=.*/HOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block filesystems fsck)/" "$etc/mkinitcpio.conf"
 assert_hooks "a Mac with a stock busybox line and no asahi hook gets the systemd baseline" aarch64-apple "$apple_hooks"

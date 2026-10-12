@@ -118,7 +118,7 @@ for bad in "ext://sh -c id" "gcrypt://example.com/x"; do
   rm -f "$clone_marker"
   output=$(add_url "$bad") &&
     fail "plugin add rejects a transport-scheme URL: $bad" "$output"
-  grep -qF "which Omarchy does not clone from" <<<"$output" ||
+  grep -qF "which DecentralOS does not clone from" <<<"$output" ||
     fail "plugin add names the transport-scheme rejection: $bad" "$output"
   [[ ! -e $clone_marker ]] ||
     fail "plugin add reached git clone for a transport-scheme URL: $bad"

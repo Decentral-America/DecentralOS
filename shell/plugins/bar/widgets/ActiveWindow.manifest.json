@@ -3,7 +3,7 @@
   "id": "omarchy.active-window",
   "name": "Active window",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Title of the focused window",
   "kinds": [
     "bar-widget"

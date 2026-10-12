@@ -1,10 +1,10 @@
 # Shell Plugins
 
-The Omarchy desktop runs as a single long-lived Quickshell process called `omarchy-shell`, and almost everything you see on screen is a plugin inside it. The bar is a plugin. So are the panels that drop down from it, the fullscreen overlays like the emoji picker and the clipboard manager, the Omarchy menu itself, the lock screen, the polkit dialog, and the headless services that watch your battery and warm your screen up at night.
+The DecentralOS desktop runs as a single long-lived Quickshell process called `omarchy-shell`, and almost everything you see on screen is a plugin inside it. The bar is a plugin. So are the panels that drop down from it, the fullscreen overlays like the emoji picker and the clipboard manager, the DecentralOS menu itself, the lock screen, the polkit dialog, and the headless services that watch your battery and warm your screen up at night.
 
-That's not just an implementation detail. It means you can turn pieces of the desktop off, swap them out, or write your own without touching a line of Omarchy's source.
+That's not just an implementation detail. It means you can turn pieces of the desktop off, swap them out, or write your own without touching a line of DecentralOS's source.
 
-The first-party plugins ship with Omarchy and live in `$OMARCHY_PATH/shell/plugins/`. Anything you add yourself — your own experiments, or something you found on GitHub — lives in `~/.config/omarchy/plugins/`. Both are discovered the same way at startup, but built-ins receive trusted shell interfaces while third-party plugins receive a limited interface scoped to their own service and lifecycle. Clones of built-ins keep only the source-specific configuration and UI calls needed for the original behavior.
+The first-party plugins ship with DecentralOS and live in `$OMARCHY_PATH/shell/plugins/`. Anything you add yourself — your own experiments, or something you found on GitHub — lives in `~/.config/omarchy/plugins/`. Both are discovered the same way at startup, but built-ins receive trusted shell interfaces while third-party plugins receive a limited interface scoped to their own service and lifecycle. Clones of built-ins keep only the source-specific configuration and UI calls needed for the original behavior.
 
 ## Seeing what you have
 
@@ -101,4 +101,4 @@ For plugin development, see the [shell reference](https://github.com/omacom/omar
 
 Once you've made something you like, put it in a public git repo. That's the whole distribution mechanism — anyone can then run `omarchy plugin add` against your URL and have it running in seconds.
 
-To help people actually find it, list it at [plugins.omarchy.org](https://plugins.omarchy.org). That's the marketplace for Omarchy shell plugins, and it's the first place to look when you're wondering whether someone has already built the widget you're about to write. Browse it before you start!
+To help people actually find it, list it at [plugins.omarchy.org](https://plugins.omarchy.org). That's the marketplace for DecentralOS shell plugins, and it's the first place to look when you're wondering whether someone has already built the widget you're about to write. Browse it before you start!

@@ -1,5 +1,5 @@
 {
-  "name": "Omarchy",
+  "name": "DecentralOS",
   "appearance": "{{ mode }}",
   "canvas": "{{ background }}",
   "accent": "{{ accent }}",

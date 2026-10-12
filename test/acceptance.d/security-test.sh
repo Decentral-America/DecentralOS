@@ -43,7 +43,7 @@ sudo_available() {
 }
 
 verify_asdcontrol_sudoers() {
-  # Omarchy used to ship a passwordless sudoers grant for asdcontrol; that
+  # DecentralOS used to ship a passwordless sudoers grant for asdcontrol; that
   # authorization now belongs to the package alone.
   if sudo -n test -e /etc/sudoers.d/omarchy-asdcontrol; then
     fail "no omarchy asdcontrol sudoers grant is shipped" "/etc/sudoers.d/omarchy-asdcontrol exists"

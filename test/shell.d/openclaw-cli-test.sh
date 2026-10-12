@@ -98,7 +98,7 @@ new_home() {
   : >"$events"
 }
 
-# PATH puts a directory ahead of ~/.local/bin the way Omarchy's does, where a
+# PATH puts a directory ahead of ~/.local/bin the way DecentralOS's does, where a
 # test can drop another openclaw.
 mkdir -p "$test_tmp/usr-bin"
 run() {
@@ -132,7 +132,7 @@ mv "$test_home/.openclaw" "$test_home/.openclaw.gone"
 run omarchy-install-openclaw-cli --check && fail "--check calls a dangling link installed"
 run omarchy-install-openclaw-cli --now || fail "--now reseeds behind its own dangling link" "$(cat "$test_tmp/output")"
 [[ -x $runtime && $(readlink -- "$command") == "$runtime" ]] || fail "--now reseeds behind its own dangling link"
-pass "a link Omarchy left behind is rewritten, and a missing runtime reseeded"
+pass "a link DecentralOS left behind is rewritten, and a missing runtime reseeded"
 
 new_home old-package
 touch "$test_tmp/package-installed"
@@ -254,7 +254,7 @@ grep -q "Could not move the OpenClaw gateway service" "$test_tmp/output" && grep
   fail "a moved gateway that does not start is named, and so is its being stopped" "$(cat "$test_tmp/output")"
 pass "a gateway that was running is running again from the runtime, or the install fails saying it is stopped"
 
-# With the runtime already in place nothing is seeded, so the move is Omarchy's.
+# With the runtime already in place nothing is seeded, so the move is DecentralOS's.
 new_home runtime-first
 run omarchy-install-openclaw-cli --now || fail "--now sets OpenClaw up" "$(cat "$test_tmp/output")"
 mkdir -p "$test_home/.config/systemd/user"

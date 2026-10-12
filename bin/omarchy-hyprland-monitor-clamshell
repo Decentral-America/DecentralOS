@@ -99,9 +99,9 @@ configured_monitor_scale() {
   scale=$(configured_internal_monitor_value scale)
   # An internal rule that names a scale settles it, even when the name resolves
   # to nothing usable. Only a rule that names none at all defers to the catch-all,
-  # which is the scale Omarchy has always applied for that config.
+  # which is the scale DecentralOS has always applied for that config.
   [[ -n $scale ]] || scale=$(configured_monitor_value "" scale)
-  # No rule carries a scale at all: fall back to Omarchy's own knob.
+  # No rule carries a scale at all: fall back to DecentralOS's own knob.
   [[ -n $scale ]] || scale=$(lua_local_value omarchy_monitor_scale)
 
   printf '%s\n' "$scale"

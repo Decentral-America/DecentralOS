@@ -1,4 +1,4 @@
-// Omarchy's own XKB option. libxkbcommon reads /etc/xkb before the system
+// DecentralOS's own XKB option. libxkbcommon reads /etc/xkb before the system
 // rules, which supply everything else.
 ! include %S/evdev
 

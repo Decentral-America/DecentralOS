@@ -19,7 +19,7 @@ function wholeNamePattern(pattern) {
 }
 
 // A platform's audio hints, which its own package ships in the platform root
-// (/usr/share/omarchy-platform/audio.json, read by AudioNodes.qml; Omarchy
+// (/usr/share/omarchy-platform/audio.json, read by AudioNodes.qml; DecentralOS
 // ships none): nodes of its audio processing that are neither devices nor apps.
 //
 //   { "hidden": ["<pattern>", ...],

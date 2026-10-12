@@ -3,7 +3,7 @@
   "id": "omarchy.microphone",
   "name": "Microphone",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Mic input state and mute toggle",
   "kinds": [
     "bar-widget"

@@ -3,7 +3,7 @@
   "id": "omarchy.notifications",
   "name": "Notifications",
   "version": "1.0.0",
-  "author": "Omarchy",
+  "author": "DecentralOS",
   "description": "Notification daemon, popups, DND, and history",
   "kinds": [
     "service"

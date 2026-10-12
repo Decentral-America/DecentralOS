@@ -65,7 +65,7 @@ OMARCHY_SNAPPER_CONFIG_PATH="$test_tmp/etc/snapper/configs/root" \
 OMARCHY_SNAPPER_CONF_PATH="$test_tmp/etc/conf.d/snapper" \
   bash -euo pipefail "$ROOT/install/config/snapper.sh" >/dev/null
 
-cmp -s "$template" "$test_tmp/etc/snapper/configs/root" || fail "snapshot configure installs the Omarchy Snapper template"
+cmp -s "$template" "$test_tmp/etc/snapper/configs/root" || fail "snapshot configure installs the DecentralOS Snapper template"
 grep -Fx 'SNAPPER_CONFIGS="root"' "$test_tmp/etc/conf.d/snapper" >/dev/null || fail "snapshot configure writes /etc/conf.d/snapper"
 grep -Fx 'systemctl disable --now snapper-timeline.timer' "$test_tmp/calls.log" >/dev/null || fail "snapshot configure disables timeline snapshots"
 grep -Fx 'systemctl enable --now snapper-cleanup.timer limine-snapper-sync.service' "$test_tmp/calls.log" >/dev/null || fail "snapshot configure enables cleanup and Limine snapshot sync"
@@ -149,7 +149,7 @@ manifest="$iso_root/manifests/fresh-4-semantic.json"
 # The phases/manifest assertions cover the newer ISO orchestrator structure.
 # Skip them when the checkout predates that layout.
 if [[ -f $phases && -f $manifest ]]; then
-  ! grep -F '_configure_snapper_root' "$phases" >/dev/null || fail "ISO does not duplicate Omarchy Snapper setup"
+  ! grep -F '_configure_snapper_root' "$phases" >/dev/null || fail "ISO does not duplicate DecentralOS Snapper setup"
   grep -F 'run_system_finalizer' "$phases" >/dev/null || fail "ISO runs packaged system setup"
   grep -F '/etc/systemd/system/timers.target.wants/snapper-cleanup.timer' "$manifest" >/dev/null || fail "fresh ISO manifest has snapper-cleanup timer enabled"
   ! grep -F '/etc/systemd/system/timers.target.wants/snapper-timeline.timer' "$manifest" >/dev/null || fail "fresh ISO manifest does not enable snapper timeline timer"

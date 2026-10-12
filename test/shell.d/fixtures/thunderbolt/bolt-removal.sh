@@ -50,7 +50,7 @@ case "$1" in
     touch "$TB_MARKER"
     identity=$(tb_snapshot | jq -c --arg uid "$TB_TEST_UID" '.devices[]|select(.identity.Uid==$uid)|.identity')
     tb_approve "$identity" true true >/dev/null
-    # An existing manual record, even explicitly trusted through Omarchy,
+    # An existing manual record, even explicitly trusted through DecentralOS,
     # must keep the policy its administrator chose before enrollment.
     inventory=$(tb_inventory)
     owner=$(jq -r .owner <<< "$inventory")

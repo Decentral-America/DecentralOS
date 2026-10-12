@@ -1,6 +1,6 @@
-# Tailscale Omarchy Widget
+# Tailscale DecentralOS Widget
 
-Native Omarchy bar widget for Tailscale.
+Native DecentralOS bar widget for Tailscale.
 
 ## Features
 

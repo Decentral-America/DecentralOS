@@ -10,7 +10,7 @@
 omarchy-mac
 omarchy-mac-boot
 
-# Picks the startup volume (macOS or Omarchy) from Linux.
+# Picks the startup volume (macOS or DecentralOS) from Linux.
 asahi-bless
 
 # Hardware video decode.

@@ -1,4 +1,4 @@
-# The setup form: every question Omarchy asks a human to describe their machine
+# The setup form: every question DecentralOS asks a human to describe their machine
 # — keyboard, account, hostname, timezone — plus the rules those answers are
 # checked against. Shared by the two places that ask them: the ISO
 # configurator's user step and this package's first-boot owner setup

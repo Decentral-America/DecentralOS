@@ -27,7 +27,7 @@ if [[ -e $config || -L $config ]]; then
 fi
 
 # Earlier versions enabled sshd before importing the key, but did not leave a
-# marker saying that Omarchy configured it. Limit the repair to a daemon that is
+# marker saying that DecentralOS configured it. Limit the repair to a daemon that is
 # enabled or currently exposed and a user who already has a usable authorized
 # key. A machine that never set SSH up exits without prompting for privileges.
 if ! systemctl is-enabled --quiet sshd.service 2>/dev/null &&
@@ -63,7 +63,7 @@ fi
 
 # The old setup command enabled sshd before importing a key, so an aborted run
 # left a password-only server exposed. Without a usable key there is nothing to
-# harden: close the hole Omarchy opened by disabling the server. Omarchy is a
+# harden: close the hole DecentralOS opened by disabling the server. DecentralOS is a
 # desktop distro, so the console remains; re-enabling password SSH afterwards
 # is an intentional, informed choice the warning explains how to make.
 if [[ ! -f $authorized_keys ]] || ! has_usable_key; then
@@ -89,7 +89,7 @@ fi
 
 echo "Disabling SSH password authentication on the existing key-based SSH setup..."
 if ! as_root install -Dm644 /dev/stdin "$config" <<'CONF'
-# Written by Omarchy once an SSH key was already authorized.
+# Written by DecentralOS once an SSH key was already authorized.
 # Delete this file and reload sshd to allow password logins again.
 PasswordAuthentication no
 KbdInteractiveAuthentication no

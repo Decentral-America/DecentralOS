@@ -1,4 +1,4 @@
-echo "Move current Omarchy theme state to ~/.local/state"
+echo "Move current DecentralOS theme state to ~/.local/state"
 
 legacy_current_dir="$HOME/.config/omarchy/current"
 current_state_dir="$HOME/.local/state/omarchy/current"

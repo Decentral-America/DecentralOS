@@ -51,7 +51,7 @@ SH
 cat > "$scratch/bin/limine-entry-tool" <<'SH'
 #!/bin/bash
 [[ $* == "--tree" ]] || exit 99
-printf '%s\n' 'Omarchy' '  linux-ptl' '  linux-omarchy-ptl-novrr-mm' '  linux-omarchy-bore' '  linux-omarchy-fallback' '  Snapshots'
+printf '%s\n' 'DecentralOS' '  linux-ptl' '  linux-omarchy-ptl-novrr-mm' '  linux-omarchy-bore' '  linux-omarchy-fallback' '  Snapshots'
 if [[ ${MISSING_ENTRY:-0} == "0" ]]; then
   printf '%s\n' '  linux-omarchy'
 fi
@@ -95,7 +95,7 @@ run_migration() {
 }
 
 assert_preferred() {
-  grep -Fxq "$boot_order" "$1" || fail "Omarchy kernels are preferred in $1"
+  grep -Fxq "$boot_order" "$1" || fail "DecentralOS kernels are preferred in $1"
 }
 
 assert_skipped() {
@@ -112,7 +112,7 @@ for old_kernel in linux linux-lts linux-zen linux-ptl linux-omarchy-ptl-novrr-mm
   grep -Fxq "$kernel-headers" "$INSTALLED_PACKAGES" || fail "its headers are installed"
   grep -Fxq "$old_kernel" "$INSTALLED_PACKAGES" || fail "the previous kernel remains available"
   assert_preferred "$OMARCHY_KERNEL_LIMINE_CONF"
-  pass "$old_kernel systems receive the generic Omarchy kernel and retain their recovery kernel"
+  pass "$old_kernel systems receive the generic DecentralOS kernel and retain their recovery kernel"
 done
 
 for installed in linux-t2 $'linux-t2\nlinux\nlinux-ptl\nlinux-omarchy'; do
@@ -213,7 +213,7 @@ fi
 ! grep -q '^state ' "$CALL_LOG" || fail "a missing boot entry must not request a reboot"
 run_migration
 [[ -f $OMARCHY_KERNEL_REBUILD_MARKER ]] || fail "a missing boot entry can be repaired on retry"
-pass "older Omarchy variants and fallback entries cannot satisfy generic kernel verification"
+pass "older DecentralOS variants and fallback entries cannot satisfy generic kernel verification"
 
 reset_fixture
 cat >> "$OMARCHY_KERNEL_LIMINE_CONF" <<'CONF'
