@@ -34,6 +34,7 @@ CONF = os.path.join(CONF_DIR, "dcc.conf")
 API_KEY_FILE = os.path.join(CONF_DIR, "api-key")
 TOKEN_FILE = os.path.join(DATA_DIR, "dashboard-token")
 NODE_API = "http://127.0.0.1:6869"
+PUBLIC_API = "https://mainnet-node.decentralchain.io"  # the wider network, for comparison
 SERVICE = "decentralchain-node.service"
 STAKE_NEEDED = 1000  # DCC held or leased before a node may generate blocks
 UNIT = 10**8
@@ -107,8 +108,8 @@ def run(*cmd, timeout=8):
         return ""
 
 
-def node(path, key=None, timeout=3):
-    req = urllib.request.Request(NODE_API + path)
+def node(path, key=None, timeout=3, base=NODE_API):
+    req = urllib.request.Request(base + path)
     if key:
         req.add_header("X-API-Key", key)
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -165,6 +166,48 @@ def cached(name, ttl, fn):
     value = fn()
     _cache[name] = (time.time(), value)
     return value
+
+
+TX_NAMES = {3: "Token created", 4: "Transfer", 5: "Token reissued", 6: "Token burned", 7: "Exchange trade",
+            8: "Lease started", 9: "Lease cancelled", 10: "Alias created", 11: "Mass transfer", 12: "Data stored",
+            13: "Script set", 14: "Sponsorship", 15: "Token script set", 16: "App call", 17: "Token updated"}
+chain = {"online": False}
+
+
+def watch_chain():
+    """Keep a picture of the public network, so the dashboard has something true
+    to show while this node is still syncing, starting or stopped."""
+    global chain
+
+    def pub(path):
+        return node(path, timeout=10, base=PUBLIC_API)
+
+    while True:
+        try:
+            height = pub("/blocks/height")["height"]
+            headers = pub(f"/blocks/headers/seq/{height - 99}/{height}")
+            txs = []
+            for h in [b["height"] for b in reversed(headers) if b["transactionCount"]][:5]:
+                for t in pub(f"/blocks/at/{h}")["transactions"][-10:]:
+                    amount = t.get("amount")
+                    txs.append({
+                        "name": TX_NAMES.get(t.get("type"), "Transaction"), "id": t.get("id", ""),
+                        "sender": t.get("sender", ""), "recipient": t.get("recipient", ""),
+                        "amount": amount / UNIT if isinstance(amount, int) and not t.get("assetId") else None,
+                        "time": t.get("timestamp", 0) // 1000, "height": h,
+                    })
+            span = (headers[-1]["timestamp"] - headers[0]["timestamp"]) / 1000
+            chain = {
+                "online": True, "height": height, "last_block": headers[-1]["timestamp"] // 1000,
+                "block_seconds": round(span / max(1, len(headers) - 1)),
+                "scanned": len(headers),
+                "blocks": [{"height": b["height"], "time": b["timestamp"] // 1000, "txs": b["transactionCount"],
+                            "generator": b["generator"]} for b in reversed(headers[-6:])],
+                "txs": sorted(txs, key=lambda t: -t["time"])[:10],
+            }
+        except Exception:
+            chain = dict(chain, online=False)
+        time.sleep(30)
 
 
 def new_phrase():
@@ -255,7 +298,10 @@ def status():
             first = cached("genesis", 86400, lambda: node("/blocks/headers/at/1")["timestamp"] / 1000)
             now = time.time()
             s["behind"] = max(0, int(now - last))
-            s["progress"] = round(min(100, 100 * (last - first) / max(1, now - first)), 1)
+            if chain.get("height"):  # blocks done out of the network's total is the truest measure
+                s["progress"] = round(min(100, 100 * s["height"] / chain["height"]), 1)
+            else:
+                s["progress"] = round(min(100, 100 * (last - first) / max(1, now - first)), 1)
             s["state"] = "synced" if s["behind"] < 180 else "syncing"
             s["version"] = cached("version", 3600, lambda: node("/node/version")["version"])
             addresses = node("/addresses")
@@ -268,6 +314,7 @@ def status():
             active = run("systemctl", "is-active", SERVICE) in ("active", "activating")
             fresh = time.time() - os.path.getmtime(CONF) < 300
             s["state"] = "starting" if active or fresh else "offline"
+    s["chain"] = chain
     s["alerts"] = alerts(s)
     return s
 
@@ -405,5 +452,6 @@ if __name__ == "__main__":
         assert base58(b"hello world") == "StV1DL6CwTryKyV" and unbase58("StV1DL6CwTryKyV") == b"hello world"
         print(base58(secure_hash(sys.argv[2].encode())) if len(sys.argv) > 2 else "ok")
         sys.exit(0)
+    threading.Thread(target=watch_chain, daemon=True).start()
     ThreadingHTTPServer.address_family = socket.AF_INET
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()

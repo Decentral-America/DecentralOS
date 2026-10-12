@@ -2,7 +2,7 @@
 
 pkgname=decentralchain-node
 pkgver=1.7.0
-pkgrel=4
+pkgrel=5
 pkgdesc="DecentralChain blockchain node with first-boot setup for DecentralOS"
 arch=('any')
 url="https://github.com/Decentral-America/node-scala"
