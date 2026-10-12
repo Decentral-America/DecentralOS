@@ -16,3 +16,15 @@ git grep -lIz -e 'Omarchy' -e 'OMARCHY INSTALL LOG' -e 'Linux by DHH' -- . ':!de
 
 # Artwork and hand-written files that replace upstream's wholesale.
 cp -r decentralos/overlay/. .
+
+# Ship the DecentralChain node: make our package repository known to pacman and
+# add the node to the default package set.
+for conf in $(git ls-files 'default/pacman/**pacman*.conf'); do
+  grep -q '^\[decentralos\]' "$conf" || cat >>"$conf" <<'REPO'
+
+[decentralos]
+SigLevel = Optional TrustAll
+Server = https://github.com/Decentral-America/DecentralOS/releases/download/packages
+REPO
+done
+grep -qx 'decentralchain-node' install/omarchy-base.packages || echo 'decentralchain-node' >>install/omarchy-base.packages
