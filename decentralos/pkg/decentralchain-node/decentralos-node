@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set up and monitor this computer's DecentralChain node.
-# Usage: decentralos-node [setup|status|logs|seed]
+# Usage: decentralos-node [setup|status|logs|seed|bar]
 # With no argument: runs setup on an unconfigured machine, status otherwise.
 
 set -euo pipefail
@@ -224,8 +224,27 @@ status() {
   done
 }
 
+# One line of JSON for the bar widget. Short timeouts: it is polled every few seconds.
+bar_status() {
+  if [[ ! -f $CONF ]]; then
+    echo '{"state":"unconfigured"}'
+    return
+  fi
+  local height peers last behind state=syncing
+  if ! height=$(curl -fsS --max-time 2 "$API/node/status" 2>/dev/null | jq -er .blockchainHeight); then
+    echo '{"state":"offline"}'
+    return
+  fi
+  peers=$(curl -fsS --max-time 2 "$API/peers/connected" 2>/dev/null | jq -r '.peers | length' || echo 0)
+  last=$(curl -fsS --max-time 2 "$API/blocks/headers/last" 2>/dev/null | jq -r .timestamp || echo 0)
+  behind=$(($(date +%s) - ${last:-0} / 1000))
+  ((behind < 180)) && state=synced
+  jq -cn --arg state "$state" --argjson height "$height" --argjson peers "${peers:-0}" --argjson behind "$behind"     '{state: $state, height: $height, peers: $peers, behind: $behind}'
+}
+
 case "${1:-}" in
   setup) setup ;;
+  bar) bar_status ;;
   status) status ;;
   logs) journalctl -u "$SERVICE" -f -n 200 ;;
   seed) api /wallet/seed -H "X-API-Key: $(sudo cat "$API_KEY_FILE")" | jq -r .seed | unbase58 ;;

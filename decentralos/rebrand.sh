@@ -34,3 +34,8 @@ grep -qx 'decentralchain-node' install/omarchy-base.packages || echo 'decentralc
 # Setup > Security. Left on, it locks them out of the very keyboard needed to
 # approve it.
 sed -i 's/^systemctl enable usbguard\.service$/systemctl disable usbguard.service/' install/config/usb-authorization.sh
+
+# Make the DecentralOS theme the default and put the node widget on the bar.
+sed -i 's/omarchy-theme-set "Tokyo Night"/omarchy-theme-set "DecentralOS"/' install/user/theme.sh
+grep -q 'omarchy.decentralchain-node' config/omarchy/shell.json ||
+  perl -0pi -e 's/("right": \[)(\r?\n)(\s*)\{/$1$2$3\{$2$3  "id": "omarchy.decentralchain-node"$2$3\},$2$3\{/' config/omarchy/shell.json
