@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Regenerate the rebranded `decentralos` branch from `decentralos-src`.
+# Regenerate the rebranded `main` branch from `decentralos-src`.
 #
 # decentralos-src = upstream Omarchy + our additions, un-rebranded (merges cleanly)
-# decentralos     = decentralos-src with rebrand.sh applied (what devices install)
+# main            = decentralos-src with rebrand.sh applied (what devices install)
 #
 # Each release is a merge commit whose tree is computed, never hand-resolved, so
 # the branch always fast-forwards and upstream changes can't conflict with the rebrand.
@@ -12,7 +12,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 src=decentralos-src
-out=decentralos
+out=main
 
 if [[ -n $(git status --porcelain) ]]; then
   echo "Working tree is dirty; commit or stash first." >&2
