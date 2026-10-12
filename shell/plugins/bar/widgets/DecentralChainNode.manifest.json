@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "omarchy.decentralchain-node",
+  "name": "DecentralChain node",
+  "version": "1.0.0",
+  "author": "Decentral America",
+  "description": "Shows whether this computer's DecentralChain node is running and in sync",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "DecentralChainNode.qml"
+  },
+  "barWidget": {
+    "displayName": "DecentralChain node",
+    "description": "Shows whether this computer's DecentralChain node is running and in sync",
+    "category": "System",
+    "allowMultiple": false
+  }
+}

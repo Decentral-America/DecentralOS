@@ -39,6 +39,9 @@
       ],
       "right": [
         {
+          "id": "omarchy.decentralchain-node"
+        },
+        {
           "id": "omarchy.keyboard-layout"
         },
         {
