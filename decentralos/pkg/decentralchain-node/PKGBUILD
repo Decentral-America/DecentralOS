@@ -2,7 +2,7 @@
 
 pkgname=decentralchain-node
 pkgver=1.7.0
-pkgrel=1
+pkgrel=2
 pkgdesc="DecentralChain blockchain node with first-boot setup for DecentralOS"
 arch=('any')
 url="https://github.com/Decentral-America/node-scala"
@@ -19,8 +19,9 @@ source=("node-scala::git+$url.git#tag=v$pkgver"
         'node.env'
         'sysusers.conf'
         'tmpfiles.conf'
-        'sleep.conf')
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+        'sleep.conf'
+        'seed-words.txt')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 build() {
   cd node-scala
@@ -31,6 +32,11 @@ package() {
   install -d "$pkgdir/usr/share/decentralchain"
   bsdtar -xf node-scala/node/target/universal/decentralchain*.tgz \
     --strip-components=1 -C "$pkgdir/usr/share/decentralchain"
+
+  for network in mainnet testnet; do
+    install -Dm644 "node-scala/node/decentralchain-$network.conf" "$pkgdir/usr/share/decentralchain/conf/$network.conf"
+  done
+  install -Dm644 seed-words.txt "$pkgdir/usr/share/decentralchain/seed-words.txt"
 
   install -Dm755 decentralchain-node "$pkgdir/usr/bin/decentralchain-node"
   install -Dm755 decentralos-node "$pkgdir/usr/bin/decentralos-node"

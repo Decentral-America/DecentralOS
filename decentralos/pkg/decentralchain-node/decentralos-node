@@ -11,6 +11,7 @@ CONF=$CONF_DIR/dcc.conf
 API_KEY_FILE=$CONF_DIR/api-key
 SERVICE=decentralchain-node.service
 API=http://127.0.0.1:6869
+SHARE=/usr/share/decentralchain
 
 declare -A P2P_PORT=([mainnet]=6868 [testnet]=6863)
 
@@ -30,6 +31,23 @@ while n:
 print("1" * (len(b) - len(b.lstrip(b"\0"))) + s)'
 }
 
+new_phrase() {
+  python3 -c '
+import secrets, sys
+words = open(sys.argv[1]).read().split()
+print(" ".join(secrets.choice(words) for _ in range(15)))' "$SHARE/seed-words.txt"
+}
+
+unbase58() {
+  python3 -c '
+import sys
+a = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+n = 0
+for c in sys.stdin.read().strip():
+    n = n * 58 + a.index(c)
+print(n.to_bytes((n.bit_length() + 7) // 8, "big").decode(errors="replace"))'
+}
+
 wait_for_api() {
   local i
   for ((i = 0; i < 90; i++)); do
@@ -46,17 +64,15 @@ write_conf() {
   tmp=$(mktemp)
   cat >"$tmp" <<EOF
 # Written by decentralos-node setup. Re-run it to change these settings.
-dcc {
-  blockchain.type = ${network^^}
+# The chain itself (genesis, peers, protocol settings) comes from the packaged file.
+include file("$SHARE/conf/$network.conf")
 
-  network {
-    node-name = "$node_name"
-    port = ${P2P_PORT[$network]}
-  }
+dcc {
+  network.node-name = "$node_name"
 
   wallet {
-    password = "$wallet_password"${seed:+
-    seed = "$seed"}
+    password = "$wallet_password"
+    seed = "$seed"
   }
 
   rest-api {
@@ -76,7 +92,8 @@ EOF
 setup() {
   if [[ -f $CONF ]]; then
     say "This node is already set up."
-    gum confirm --default=false "Reconfigure it? The existing wallet file is kept unless you import a different seed." || return 0
+    say "Reconfiguring replaces this node's wallet. Make sure its seed phrase is"       "written down first (decentralos-node seed), or its funds are lost."
+    gum confirm --default=false "Reconfigure and replace the wallet?" || return 0
   fi
 
   title "Welcome to your DecentralChain node"
@@ -107,15 +124,25 @@ setup() {
   say "The node needs a wallet. Its address receives block rewards and is" \
     "where DCC is leased to. A wallet is defined by its secret seed:" \
     "whoever has the seed controls the funds."
-  seed=""
-  new_wallet=1
-  if [[ $(gum choose "Create a new wallet" "Import an existing seed phrase") == Import* ]]; then
+  if [[ $(gum choose "Create a new wallet for me" "Import a seed phrase I already have") == Import* ]]; then
     phrase=$(gum input --password --placeholder "Seed phrase" --width 100)
     [[ -n $phrase ]] || { say "No seed phrase entered."; return 1; }
-    seed=$(printf '%s' "$phrase" | base58)
-    new_wallet=0
-    sudo rm -f /var/lib/decentralchain/wallet/wallet.dat
+  else
+    phrase=$(new_phrase)
+    title "Your new wallet's seed phrase"
+    say "These 15 words ARE the wallet. They are the only way to recover it if"       "this computer dies, and anyone who has them can take its funds."       "Write them down on paper, in order, and keep them somewhere safe."       "They also open this wallet in the DecentralChain wallet apps."
+    gum style --margin "0 2" --border double --padding "1 2" --width 60 "$phrase"
+    if command -v wl-copy >/dev/null && gum confirm --default=false "Also copy it to the clipboard?"; then
+      printf '%s' "$phrase" | wl-copy
+      say "Copied. Paste it somewhere safe, then clear your clipboard."
+    fi
+    until gum confirm --default=false "I have saved the seed phrase"; do :; done
+    command -v wl-copy >/dev/null && wl-copy --clear || true
+    clear
   fi
+  seed=$(printf '%s' "$phrase" | base58)
+  unset phrase
+  sudo rm -f /var/lib/decentralchain/wallet/wallet.dat
 
   title "4/4  Block generation"
   say "Generating blocks earns rewards but needs at least 1000 DCC held or" \
@@ -149,16 +176,6 @@ setup() {
   gum spin --title "Securing the node's API..." -- bash -c 'sleep 5; wait_for_api' || true
 
   address=$(api /addresses | jq -r '.[0] // empty' || true)
-
-  if ((new_wallet)); then
-    title "Back up your wallet seed"
-    say "This is the ONLY way to recover the wallet if this computer dies." \
-      "Write it down on paper and store it somewhere safe. Never share it." \
-      "" \
-      "$(api /wallet/seed -H "X-API-Key: $api_key" | jq -r .seed)"
-    until gum confirm --default=false "I have written the seed down"; do :; done
-    clear
-  fi
 
   title "Your node is running"
   say "Address:  ${address:-unavailable, check 'decentralos-node status'}" \
@@ -211,7 +228,7 @@ case "${1:-}" in
   setup) setup ;;
   status) status ;;
   logs) journalctl -u "$SERVICE" -f -n 200 ;;
-  seed) api /wallet/seed -H "X-API-Key: $(sudo cat "$API_KEY_FILE")" | jq -r .seed ;;
+  seed) api /wallet/seed -H "X-API-Key: $(sudo cat "$API_KEY_FILE")" | jq -r .seed | unbase58 ;;
   "") if [[ -f $CONF ]]; then status; else setup; fi ;;
   *)
     echo "Usage: decentralos-node [setup|status|logs|seed]" >&2
