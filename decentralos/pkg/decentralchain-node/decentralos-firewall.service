@@ -10,6 +10,12 @@ ExecStart=/usr/bin/ufw allow 6868/tcp
 ExecStart=/usr/bin/ufw allow from 10.0.0.0/8 to any port 6870 proto tcp
 ExecStart=/usr/bin/ufw allow from 172.16.0.0/12 to any port 6870 proto tcp
 ExecStart=/usr/bin/ufw allow from 192.168.0.0/16 to any port 6870 proto tcp
+# Setup hotspot (the box hands out 10.42.0.x): addresses, name lookups and the page itself.
+ExecStart=/usr/bin/ufw allow 67/udp
+ExecStart=/usr/bin/ufw allow from 10.42.0.0/24 to any port 53
+ExecStart=/usr/bin/ufw allow from 10.42.0.0/24 to any port 80 proto tcp
+# decentralos.local name on the home network.
+ExecStart=/usr/bin/ufw allow 5353/udp
 
 [Install]
 WantedBy=multi-user.target

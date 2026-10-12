@@ -122,10 +122,21 @@
           <p class="small" style="flex:1;min-width:180px">Scan this with your phone's camera while on the same Wi-Fi. You can then finish setup and check on your node from your phone, with no screen or keyboard needed on the box.</p>
         </div>
       </div>
+      <div class="card hide" id="hotCard"><h2>Connect this box</h2>
+        <div class="row">
+          <div class="qr"><img id="hotQr" alt=""></div>
+          <div class="small" style="flex:1;min-width:180px">
+            <p style="margin-top:0"><b>With your phone:</b> scan this code, or join the Wi-Fi network <b>DecentralOS-Setup</b> with the password <b>decentralchain</b>. A page opens where you choose your home Wi-Fi.</p>
+            <p style="margin-bottom:0"><b>Or with a cable:</b> plug the box into your router. Nothing else to do.</p>
+          </div>
+        </div>
+      </div>
+
       <div class="card hide" id="wifiCard"><h2>Network</h2>
         <p class="small" id="wifiState"></p>
-        <p class="small dim">A cable from your router to the box is the most reliable. To use Wi-Fi instead:</p>
+        <p class="small dim">Choose your home Wi-Fi and enter its password. A cable from your router to the box also works and is the most reliable.</p>
         <select id="ssid"></select>
+        <input type="text" id="ssidOther" class="hide" placeholder="Wi-Fi network name">
         <input type="password" id="wifiPass" placeholder="Wi-Fi password">
         <p><button class="ghost" id="join">Join Wi-Fi</button> <button class="ghost" id="scan">Search again</button></p>
         <div id="wifiMsg" class="small"></div>
@@ -141,7 +152,7 @@ const num = n => Number(n).toLocaleString('en-US', {maximumFractionDigits: 2});
 const words = (el, phrase) => { el.innerHTML = ''; phrase.split(' ').forEach((w, i) => { const s = document.createElement('span'); s.innerHTML = '<i>' + (i + 1) + '</i>'; s.append(w); el.append(s); }); };
 const ago = s => { const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60); return d ? d + ' days ' + h + ' hours' : h ? h + ' hours ' + m + ' minutes' : m + ' minutes'; };
 
-let phraseLoaded = false, qrFor = '', pairFor = '', wifiLoaded = false;
+let phraseLoaded = false, qrFor = '', pairFor = '', wifiLoaded = false, joining = 0, viaHotspot = false, homeLink = '', hotQr = false;
 
 async function loadPhrase() {
   if (phraseLoaded) return; phraseLoaded = true;
@@ -162,14 +173,22 @@ $('showSeed').onclick = async () => {
 
 async function scanWifi() {
   $('wifiMsg').textContent = 'Searching…';
-  try { const nets = (await api('/api/wifi')).networks; $('ssid').innerHTML = ''; nets.forEach(n => $('ssid').add(new Option(n.ssid + '  (' + n.signal + '%)', n.ssid))); $('wifiMsg').textContent = nets.length ? '' : 'No Wi-Fi networks found.'; }
+  try { const nets = (await api('/api/wifi')).networks; $('ssid').innerHTML = ''; nets.forEach(n => $('ssid').add(new Option(n.ssid + '  (' + n.signal + '%)', n.ssid))); $('ssid').add(new Option('Other network…', '')); $('ssidOther').classList.toggle('hide', nets.length > 0); $('wifiMsg').textContent = ''; }
   catch (e) { $('wifiMsg').textContent = ''; }
 }
 $('scan').onclick = scanWifi;
+$('ssid').onchange = () => $('ssidOther').classList.toggle('hide', $('ssid').value !== '');
 $('join').onclick = async () => {
-  $('wifiMsg').textContent = 'Joining…';
-  try { await api('/api/wifi', {ssid: $('ssid').value, password: $('wifiPass').value}); $('wifiMsg').textContent = 'Connected.'; refresh(); }
-  catch (e) { $('wifiMsg').textContent = e.message; }
+  const msg = $('wifiMsg');
+  try {
+    await api('/api/wifi', {ssid: $('ssid').value || $('ssidOther').value, password: $('wifiPass').value});
+    joining = Date.now();
+    msg.textContent = 'Joining… this takes about half a minute. ';
+    if (viaHotspot) {
+      msg.append('The setup Wi-Fi will now switch off. Put your phone back on your home Wi-Fi, then open ');
+      const a = document.createElement('a'); a.href = homeLink; a.textContent = 'decentralos.local'; a.style.color = 'var(--accent)'; msg.append(a, ' to continue.');
+    }
+  } catch (e) { msg.textContent = e.message; }
 };
 
 const since = t => { const s = Math.max(0, Math.floor(Date.now() / 1000 - t)); return s < 90 ? s + ' sec ago' : s < 5400 ? Math.round(s / 60) + ' min ago' : s < 129600 ? Math.round(s / 3600) + ' hours ago' : Math.round(s / 86400) + ' days ago'; };
@@ -193,12 +212,22 @@ function render(s) {
   $('setup').classList.toggle('hide', s.configured);
   $('dash').classList.toggle('hide', !s.configured);
   // Network help is always reachable on the box itself, including before setup.
-  $('wifiCard').classList.toggle('hide', !s.local);
+  viaHotspot = s.near && !s.local; homeLink = s.home_link;
+  // No network yet: connecting comes first, so move those cards above everything else.
+  const top = !s.net.ip, extras = $('extras');
+  if (top && extras.previousElementSibling !== document.querySelector('h1')) document.querySelector('h1').after(extras);
+  if (!top && extras.nextElementSibling !== $('foot')) $('foot').before(extras);
+  extras.style.marginBottom = top ? '16px' : '';
+  $('hotCard').classList.toggle('hide', !(s.local && s.hotspot));
+  if (s.local && s.hotspot && !hotQr) { hotQr = true; $('hotQr').src = '/api/qr?kind=hotspot'; }
+  $('wifiCard').classList.toggle('hide', !s.near);
+  if (s.wifi_error && Date.now() - joining > 20000) $('wifiMsg').textContent = s.wifi_error;
+  if (s.net.ip && joining) { joining = 0; $('wifiMsg').textContent = 'Connected.'; }
   $('pairCard').classList.toggle('hide', !s.local || !s.net.ip);
   if (s.local && s.net.ip && pairFor !== s.net.ip) { pairFor = s.net.ip; $('pairQr').src = '/api/qr?kind=pair&ip=' + s.net.ip; }
   if (!s.configured) loadPhrase();
   $('wifiState').textContent = s.net.kind === 'none' ? 'Not connected.' : (s.net.kind === 'wired' ? 'Connected by cable' : 'Connected by Wi-Fi') + (s.net.online ? ', internet is working.' : ', but the internet is not reachable.');
-  if (s.local && !wifiLoaded) { wifiLoaded = true; scanWifi(); }
+  if (s.near && !wifiLoaded) { wifiLoaded = true; scanWifi(); }
   if (!s.configured) return;
 
   const view = {

@@ -2,12 +2,12 @@
 
 pkgname=decentralchain-node
 pkgver=1.7.0
-pkgrel=5
+pkgrel=6
 pkgdesc="DecentralChain blockchain node with first-boot setup for DecentralOS"
 arch=('any')
 url="https://github.com/Decentral-America/node-scala"
 license=('MIT')
-depends=('java-runtime-headless>=25' 'curl' 'jq' 'python' 'qrencode' 'iproute2')
+depends=('java-runtime-headless>=25' 'curl' 'jq' 'python' 'qrencode' 'iproute2' 'networkmanager' 'dnsmasq' 'avahi')
 makedepends=('git' 'sbt' 'java-environment>=25')
 backup=('etc/decentralchain/node.env')
 install=decentralchain-node.install
@@ -27,6 +27,7 @@ source=("node-scala::git+$url.git#tag=v$pkgver"
         'decentralos-kiosk.service'
         'decentralchain-node.desktop'
         'network.rules'
+        'hotspot-dns.conf'
         'node.env'
         'sysusers.conf'
         'tmpfiles.conf'
@@ -34,7 +35,7 @@ source=("node-scala::git+$url.git#tag=v$pkgver"
         'seed-words.txt'
         'server.py'
         'index.html')
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 build() {
   cd node-scala
@@ -60,6 +61,7 @@ package() {
   install -d "$pkgdir/usr/lib/systemd/user/graphical-session.target.wants"
   ln -s ../decentralos-kiosk.service "$pkgdir/usr/lib/systemd/user/graphical-session.target.wants/decentralos-kiosk.service"
   install -Dm644 network.rules "$pkgdir/usr/share/polkit-1/rules.d/50-decentralos-network.rules"
+  install -Dm644 hotspot-dns.conf "$pkgdir/etc/NetworkManager/dnsmasq-shared.d/decentralos.conf"
   install -Dm644 decentralchain-node.desktop "$pkgdir/usr/share/applications/decentralchain-node.desktop"
   install -Dm644 node.env "$pkgdir/etc/decentralchain/node.env"
   install -Dm644 sysusers.conf "$pkgdir/usr/lib/sysusers.d/decentralchain.conf"

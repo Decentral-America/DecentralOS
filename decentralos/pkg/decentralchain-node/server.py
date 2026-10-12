@@ -36,6 +36,13 @@ TOKEN_FILE = os.path.join(DATA_DIR, "dashboard-token")
 NODE_API = "http://127.0.0.1:6869"
 PUBLIC_API = "https://mainnet-node.decentralchain.io"  # the wider network, for comparison
 SERVICE = "decentralchain-node.service"
+# First-time setup without a cable or keyboard: the box offers its own Wi-Fi
+# network, the owner joins it from a phone and picks their home Wi-Fi there.
+HOTSPOT = "decentralos-setup"
+HOTSPOT_SSID = "DecentralOS-Setup"
+HOTSPOT_PASSWORD = "decentralchain"
+HOTSPOT_NET = ipaddress.ip_network("10.42.0.0/24")  # NetworkManager's shared-connection range
+LOCAL_NAME = "decentralos.local"
 STAKE_NEEDED = 1000  # DCC held or leased before a node may generate blocks
 UNIT = 10**8
 
@@ -210,6 +217,117 @@ def watch_chain():
         time.sleep(30)
 
 
+wifi_seen = []   # networks found before the hotspot took over the radio
+wifi_error = ""
+
+
+def scan_wifi():
+    seen, nets = set(), []
+    for line in run("nmcli", "-t", "-f", "SSID,SIGNAL,SECURITY", "device", "wifi", "list", "--rescan", "yes", timeout=25).splitlines():
+        ssid, _, signal = line.rpartition(":")[0].rpartition(":")
+        ssid = ssid.replace("\\:", ":")
+        if ssid and ssid != HOTSPOT_SSID and ssid not in seen:
+            seen.add(ssid)
+            nets.append({"ssid": ssid, "signal": int(signal or 0)})
+    return sorted(nets, key=lambda n: -n["signal"])[:15]
+
+
+def wifi_device():
+    for line in run("nmcli", "-t", "-f", "DEVICE,TYPE", "device").splitlines():
+        dev, _, kind = line.partition(":")
+        if kind == "wifi":
+            return dev
+    return ""
+
+
+def hotspot_active():
+    return HOTSPOT in run("nmcli", "-t", "-f", "NAME", "connection", "show", "--active").splitlines()
+
+
+def knows_a_wifi():
+    lines = run("nmcli", "-t", "-f", "NAME,TYPE", "connection", "show").splitlines()
+    return any(l.endswith(":802-11-wireless") and not l.startswith(HOTSPOT + ":") for l in lines)
+
+
+def manage_hotspot():
+    """Offer the setup hotspot only while the box has never been given a network:
+    no cable and no saved Wi-Fi. Once it knows a Wi-Fi it keeps retrying that."""
+    global wifi_seen
+    time.sleep(25)  # let a cable or a known Wi-Fi come up first
+    while True:
+        try:
+            connected, active = network()["kind"] != "none", hotspot_active()
+            if active and connected:
+                run("nmcli", "connection", "down", HOTSPOT)
+            elif not active and not connected and not knows_a_wifi():
+                dev = wifi_device()
+                if dev:
+                    wifi_seen = scan_wifi() or wifi_seen
+                    run("nmcli", "device", "wifi", "hotspot", "ifname", dev, "con-name", HOTSPOT,
+                        "ssid", HOTSPOT_SSID, "password", HOTSPOT_PASSWORD, timeout=30)
+                    run("nmcli", "connection", "modify", HOTSPOT, "connection.autoconnect", "no")
+        except Exception:
+            pass
+        time.sleep(20)
+
+
+def join_wifi(ssid, password):
+    global wifi_error
+    wifi_error = ""
+    time.sleep(2)  # let the reply reach a phone on the hotspot before the hotspot goes away
+    run("nmcli", "connection", "down", HOTSPOT)
+    cmd = ["nmcli", "device", "wifi", "connect", ssid] + (["password", password] if password else [])
+    ok = False
+    for _ in range(2):
+        run("nmcli", "device", "wifi", "rescan")
+        time.sleep(5)
+        try:
+            ok = subprocess.run(cmd, capture_output=True, timeout=60).returncode == 0
+        except (OSError, subprocess.SubprocessError):
+            ok = False
+        if ok:
+            break
+    _cache.pop("net", None)
+    if not ok:
+        run("nmcli", "connection", "delete", "id", ssid)  # forget it, so the setup hotspot comes back
+        wifi_error = f"Could not join \u201c{ssid}\u201d. Check the password and try again."
+
+
+def publish_name():
+    """Answer to decentralos.local on the home network, so a phone can find the
+    box again after it moves from the setup hotspot to the home Wi-Fi."""
+    proc, current = None, ""
+    while True:
+        ip = cached("net", 10, network)["ip"]
+        if ip != current or (proc and proc.poll() is not None):
+            if proc:
+                proc.terminate()
+            proc, current = None, ip
+            if ip:
+                try:
+                    proc = subprocess.Popen(["avahi-publish", "-a", "-R", LOCAL_NAME, ip],
+                                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                except OSError:
+                    pass
+        time.sleep(15)
+
+
+class Portal(BaseHTTPRequestHandler):
+    """Port 80 on the setup hotspot: whatever page a phone asks for, send it to the dashboard.
+    That is what makes phones pop the dashboard open by themselves after joining."""
+
+    def do_GET(self):
+        self.send_response(302)
+        self.send_header("Location", f"http://10.42.0.1:{PORT}/")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    do_HEAD = do_POST = do_GET
+
+    def log_message(self, *args):
+        pass
+
+
 def new_phrase():
     with open(os.path.join(SHARE, "seed-words.txt")) as f:
         words = f.read().split()
@@ -257,7 +375,11 @@ def alerts(s):
         out.append({"level": level, "title": title, "fix": fix})
 
     net = s["net"]
-    if net["kind"] == "none":
+    if net["kind"] == "none" and s.get("hotspot"):
+        add("warn", "This box is waiting to be connected",
+            f"On your phone, join the Wi-Fi network \u201c{HOTSPOT_SSID}\u201d with the password \u201c{HOTSPOT_PASSWORD}\u201d, "
+            "then choose your home Wi-Fi. Or plug a cable from your router into the box.")
+    elif net["kind"] == "none":
         add("bad", "This box is not connected to a network",
             "Plug an Ethernet cable from your router into the box, or join Wi-Fi from the Network section below.")
     elif not net["online"]:
@@ -288,6 +410,8 @@ def status():
         "needed": STAKE_NEEDED, "version": "",
     }
     s["net"] = cached("net", 10, network)
+    s["hotspot"] = cached("hotspot", 5, hotspot_active)
+    s["wifi_error"] = wifi_error
     usage = shutil.disk_usage(DATA_DIR if os.path.isdir(DATA_DIR) else "/")
     s["disk"] = {"free_gb": usage.free // 2**30, "total_gb": usage.total // 2**30}
     if s["configured"]:
@@ -334,10 +458,15 @@ class Handler(BaseHTTPRequestHandler):
     def local(self):
         return ipaddress.ip_address(self.client_address[0]).is_loopback
 
+    def near(self):
+        """On the box's own screen, or a phone on the setup hotspot: allowed to change the network."""
+        addr = ipaddress.ip_address(self.client_address[0])
+        return addr.is_loopback or addr in HOTSPOT_NET
+
     def allowed(self, query):
         """Loopback is the kiosk. Anything else must be on the LAN and hold the pairing token."""
         addr = ipaddress.ip_address(self.client_address[0])
-        if addr.is_loopback:
+        if addr.is_loopback or addr in HOTSPOT_NET:  # joining the hotspot needed its password
             return True
         if not addr.is_private:
             return False
@@ -375,10 +504,14 @@ class Handler(BaseHTTPRequestHandler):
         if url.path == "/api/status":
             s = status()
             s["local"] = self.local()
+            s["near"] = self.near()
+            s["home_link"] = f"http://{LOCAL_NAME}:{PORT}/?t={token()}"
             return self.json(s)
         if url.path == "/api/qr":
             kind = query.get("kind", [""])[0]
-            if kind == "pair":
+            if kind == "hotspot":
+                text = f"WIFI:T:WPA;S:{HOTSPOT_SSID};P:{HOTSPOT_PASSWORD};;"
+            elif kind == "pair":
                 ip = cached("net", 10, network)["ip"]
                 text = f"http://{ip}:{PORT}/?t={token()}" if ip else ""
             else:
@@ -399,15 +532,10 @@ class Handler(BaseHTTPRequestHandler):
             except Exception:
                 return self.json({"error": "The node is not running yet. Try again in a minute."}, 503)
         if url.path == "/api/wifi":
-            if not self.local():
+            if not self.near():
                 return self.json({"error": "local only"}, 403)
-            seen, nets = set(), []
-            for line in run("nmcli", "-t", "-f", "SSID,SIGNAL,SECURITY", "device", "wifi", "list", timeout=20).splitlines():
-                ssid, _, rest = line.rpartition(":")[0].rpartition(":")
-                if ssid and ssid not in seen:
-                    seen.add(ssid)
-                    nets.append({"ssid": ssid.replace("\\:", ":"), "signal": int(rest or 0)})
-            return self.json({"networks": sorted(nets, key=lambda n: -n["signal"])[:15]})
+            # The radio cannot search while it is busy being the hotspot.
+            return self.json({"networks": wifi_seen if hotspot_active() else scan_wifi()})
         self.send(404, "{}")
 
     def do_POST(self):
@@ -431,17 +559,12 @@ class Handler(BaseHTTPRequestHandler):
                 Handler.pending_phrase = None
             return self.json({"ok": True})
         if url.path == "/api/wifi":
-            if not self.local():
+            if not self.near():
                 return self.json({"error": "local only"}, 403)
-            ssid, password = str(body.get("ssid") or ""), str(body.get("password") or "")
-            cmd = ["nmcli", "device", "wifi", "connect", ssid] + (["password", password] if password else [])
-            try:
-                r = subprocess.run(cmd, capture_output=True, text=True, timeout=45)
-            except (OSError, subprocess.SubprocessError):
-                return self.json({"error": "Could not join that network."}, 500)
-            _cache.pop("net", None)
-            if r.returncode:
-                return self.json({"error": "Could not join. Check the password and try again."}, 400)
+            ssid, password = str(body.get("ssid") or "").strip(), str(body.get("password") or "")
+            if not ssid:
+                return self.json({"error": "Choose a Wi-Fi network first."}, 400)
+            threading.Thread(target=join_wifi, args=(ssid, password), daemon=True).start()
             return self.json({"ok": True})
         self.send(404, "{}")
 
@@ -452,6 +575,12 @@ if __name__ == "__main__":
         assert base58(b"hello world") == "StV1DL6CwTryKyV" and unbase58("StV1DL6CwTryKyV") == b"hello world"
         print(base58(secure_hash(sys.argv[2].encode())) if len(sys.argv) > 2 else "ok")
         sys.exit(0)
-    threading.Thread(target=watch_chain, daemon=True).start()
+    for job in (watch_chain, manage_hotspot, publish_name):
+        threading.Thread(target=job, daemon=True).start()
+    try:
+        portal = ThreadingHTTPServer(("0.0.0.0", 80), Portal)
+        threading.Thread(target=portal.serve_forever, daemon=True).start()
+    except OSError:
+        pass  # no permission for port 80: phones just need the address typed in
     ThreadingHTTPServer.address_family = socket.AF_INET
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
