@@ -6,7 +6,14 @@ DecentralOS is a beautiful, fun & agentic Linux distribution, based on [Omarchy]
 
 The manual lives in [`manual/`](manual/), which is its authoritative source.
 
-- [Welcome to DecentralOS!](manual/01-welcome-to-omarchy.md)
+- [Welcome to DecentralOS!](manual/01-welcome-to-decentralos.md)
+
+**Your DecentralChain Node**
+
+- [Your DecentralChain Node](manual/52-your-decentralchain-node.md)
+- [Wallet & Recovery Phrase](manual/53-wallet-and-recovery-phrase.md)
+- [The Node Dashboard](manual/54-node-dashboard.md)
+- [Phone Pairing](manual/55-phone-pairing.md)
 
 **The Basics**
 
@@ -22,7 +29,7 @@ The manual lives in [`manual/`](manual/), which is its authoritative source.
 - [Text Extraction & Dictation](manual/11-text-extraction-dictation.md)
 - [Screenshots & Recording](manual/12-screenshots-recording.md)
 - [Toggles, idle & screensaver](manual/13-toggles-idle-screensaver.md)
-- [DecentralOS CLI](manual/14-omarchy-cli.md)
+- [DecentralOS CLI](manual/14-decentralos-cli.md)
 
 **The Applications**
 
@@ -66,7 +73,7 @@ The manual lives in [`manual/`](manual/), which is its authoritative source.
 - [FAQ](manual/46-faq.md)
 - [System snapshots](manual/47-system-snapshots.md)
 - [Security](manual/48-security.md)
-- [DecentralOS on...](manual/49-omarchy-on.md)
+- [DecentralOS on...](manual/49-decentralos-on.md)
 - [Dual Boot Install](manual/50-dual-boot-install.md)
 - [Unattended Installs](manual/51-unattended-installs.md)
 
