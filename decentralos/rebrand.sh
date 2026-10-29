@@ -17,6 +17,17 @@ git grep -lIz -e 'Omarchy' -e 'OMARCHY INSTALL LOG' -e 'Linux by DHH' -- . ':!de
 # Artwork and hand-written files that replace upstream's wholesale.
 cp -r decentralos/overlay/. .
 
+# Manual chapters keep upstream's content, but not its name in their file names:
+# 01-welcome-to-omarchy.md becomes 01-welcome-to-decentralos.md, and links to
+# them follow. Command names such as omarchy-theme-set never end in .md, so
+# they are left alone.
+for chapter in manual/*omarchy*.md; do
+  if [[ -e $chapter ]]; then
+    mv "$chapter" "${chapter//omarchy/decentralos}"
+  fi
+done
+perl -pi -e 's/\b(\d\d-[a-z0-9-]*?)omarchy([a-z0-9-]*\.md)/$1decentralos$2/g' README.md manual/*.md
+
 # Ship the DecentralChain node: make our package repository known to pacman and
 # add the node to the default package set. Our repository goes first, so the
 # DecentralOS builds of the OS packages win over upstream's on every update.
@@ -33,9 +44,9 @@ perl -pi -e 's/"screensaver": 150/"screensaver": 0/; s/"lock": 300/"lock": 0/' c
 # mouse after install, so USB approval stays off unless they turn it on in
 # Setup > Security. Left on, it locks them out of the very keyboard needed to
 # approve it.
-sed -i 's/^systemctl enable usbguard\.service$/systemctl disable usbguard.service/' install/config/usb-authorization.sh
+perl -pi -e 's/^systemctl enable usbguard\.service$/systemctl disable usbguard.service/' install/config/usb-authorization.sh
 
 # Make the DecentralOS theme the default and put the node widget on the bar.
-sed -i 's/omarchy-theme-set "Tokyo Night"/omarchy-theme-set "DecentralOS"/' install/user/theme.sh
+perl -pi -e 's/omarchy-theme-set "Tokyo Night"/omarchy-theme-set "DecentralOS"/' install/user/theme.sh
 grep -q 'omarchy.decentralchain-node' config/omarchy/shell.json ||
   perl -0pi -e 's/("right": \[)(\r?\n)(\s*)\{/$1$2$3\{$2$3  "id": "omarchy.decentralchain-node"$2$3\},$2$3\{/' config/omarchy/shell.json
